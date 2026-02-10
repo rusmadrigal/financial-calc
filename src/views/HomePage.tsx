@@ -223,7 +223,7 @@ export function HomePage() {
                 icon={calc.icon}
                 badges={calc.badges}
                 onOpen={() => router.push(`/calculators/${nameToSlug(calc.title)}`)}
-                className="border-[#e2e8f0]"
+                className="border-[#e2e8f0] dark:border-[#334155]"
               />
             ))}
           </div>
@@ -258,7 +258,7 @@ export function HomePage() {
               return (
                 <Card
                   key={category.name}
-                  className="group cursor-pointer transition-all hover:border-accent/50 hover:shadow-md"
+                  className="border-[#e2e8f0] dark:border-[#334155] group cursor-pointer transition-all hover:border-accent/50 hover:shadow-md"
                   onClick={() => router.push(`/calculators?category=${encodeURIComponent(category.name)}`)}
                 >
                   <CardContent className="flex flex-col items-center gap-4 p-6">
@@ -295,7 +295,7 @@ export function HomePage() {
             {benefits.map((benefit) => {
               const Icon = benefit.icon;
               return (
-                <Card key={benefit.title} className="border-2">
+                <Card key={benefit.title} className="border-2 border-[#e2e8f0] dark:border-[#334155]">
                   <CardContent className="p-6">
                     <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-accent/10">
                       <Icon className="size-6 text-accent" />
@@ -333,7 +333,7 @@ export function HomePage() {
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-2">
+              <Card key={index} className="border-2 border-[#e2e8f0] dark:border-[#334155]">
                 <CardContent className="p-6">
                   <div className="mb-4 flex gap-0.5">
                     {[...Array(testimonial.rating)].map((_, i) => (
