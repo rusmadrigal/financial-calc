@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Menu, X, Calculator, Moon, Sun } from 'lucide-react';
-import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, X, Calculator, Moon, Sun } from "lucide-react";
+import { Button } from "./ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 interface NavigationProps {
   isDarkMode: boolean;
@@ -13,16 +13,17 @@ interface NavigationProps {
 }
 
 const navItems = [
-  { label: 'Overview', href: '/overview' },
-  { label: 'Calculators', href: '/calculators' },
-  { label: 'About', href: '/about' },
-  { label: 'Design System', href: '/design-system' },
+  { label: "Overview", href: "/overview" },
+  { label: "Calculators", href: "/calculators" },
+  { label: "About", href: "/about" },
+  { label: "Design System", href: "/design-system" },
 ];
 
 function isActive(pathname: string, href: string): boolean {
-  if (href === '/') return pathname === '/';
-  if (href === '/calculators') return pathname === '/calculators' || pathname.startsWith('/calculators/');
-  return pathname === href || pathname.startsWith(href + '/');
+  if (href === "/") return pathname === "/";
+  if (href === "/calculators")
+    return pathname === "/calculators" || pathname.startsWith("/calculators/");
+  return pathname === href || pathname.startsWith(href + "/");
 }
 
 export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
@@ -50,13 +51,13 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
           {/* Desktop Navigation */}
           <div className="hidden items-center gap-8 md:flex">
             {navItems.map((item) => {
-              const active = isActive(pathname ?? '', item.href);
+              const active = isActive(pathname ?? "", item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={`relative text-sm font-medium transition-colors hover:text-foreground ${
-                    active ? 'text-foreground' : 'text-muted-foreground'
+                    active ? "text-foreground" : "text-muted-foreground"
                   }`}
                 >
                   {item.label}
@@ -88,9 +89,7 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
               </Button>
             </Link>
             <Link href="/calculators">
-              <Button className="h-9">
-                Open Calculators
-              </Button>
+              <Button className="h-9">Open Calculators</Button>
             </Link>
           </div>
 
@@ -121,7 +120,7 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
               <SheetContent side="right" className="w-[280px] sm:w-[320px]">
                 <div className="flex flex-col gap-6 pt-8">
                   {navItems.map((item) => {
-                    const active = isActive(pathname ?? '', item.href);
+                    const active = isActive(pathname ?? "", item.href);
                     return (
                       <Link
                         key={item.href}
@@ -129,8 +128,8 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
                         onClick={() => setMobileMenuOpen(false)}
                         className={`rounded-lg px-4 py-2 text-left text-base font-medium transition-colors ${
                           active
-                            ? 'bg-accent text-foreground'
-                            : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground'
+                            ? "bg-accent text-foreground"
+                            : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
                         }`}
                       >
                         {item.label}
@@ -138,12 +137,21 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
                     );
                   })}
                   <div className="mt-4 flex flex-col gap-3 border-t border-border pt-6">
-                    <Link href="/embed" onClick={() => setMobileMenuOpen(false)}>
-                      <Button variant="outline" className="w-full justify-start">
+                    <Link
+                      href="/embed"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start"
+                      >
                         Embed a Calculator
                       </Button>
                     </Link>
-                    <Link href="/calculators" onClick={() => setMobileMenuOpen(false)}>
+                    <Link
+                      href="/calculators"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
                       <Button className="w-full justify-start">
                         Open Calculators
                       </Button>

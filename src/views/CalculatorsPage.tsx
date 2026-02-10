@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Calculator,
   TrendingUp,
@@ -17,16 +17,28 @@ import {
   Receipt,
   SlidersHorizontal,
   X,
-} from 'lucide-react';
-import { CalculatorCard } from '@/components/CalculatorCard';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Badge } from '@/components/ui/badge';
-import { nameToSlug } from '@/lib/slugs';
+} from "lucide-react";
+import { CalculatorCard } from "@/components/CalculatorCard";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
+import { nameToSlug } from "@/lib/slugs";
 
 interface CalculatorsPageProps {
   initialCategory?: string;
@@ -34,146 +46,164 @@ interface CalculatorsPageProps {
 
 const allCalculators = [
   {
-    title: 'Mortgage Calculator',
-    description: 'Calculate monthly payments, total interest, and amortization schedules for home loans with customizable terms.',
+    title: "Mortgage Calculator",
+    description:
+      "Calculate monthly payments, total interest, and amortization schedules for home loans with customizable terms.",
     icon: Home,
-    category: 'Loans',
-    complexity: 'Simple',
-    badges: ['Amortization Table', 'Export PDF', 'Charts'],
+    category: "Loans",
+    complexity: "Simple",
+    badges: ["Amortization Table", "Export PDF", "Charts"],
   },
   {
-    title: '401(k) Calculator',
-    description: 'Estimate retirement savings growth with employer matching, contribution limits, and tax-deferred benefits.',
+    title: "401(k) Calculator",
+    description:
+      "Estimate retirement savings growth with employer matching, contribution limits, and tax-deferred benefits.",
     icon: PiggyBank,
-    category: 'Retirement',
-    complexity: 'Advanced',
-    badges: ['Tax Scenarios', 'Projections', 'Employer Match'],
+    category: "Retirement",
+    complexity: "Advanced",
+    badges: ["Tax Scenarios", "Projections", "Employer Match"],
   },
   {
-    title: 'Investment Return Calculator',
-    description: 'Calculate compound returns, ROI, and future value with monthly contributions and dividend reinvestment.',
+    title: "Investment Return Calculator",
+    description:
+      "Calculate compound returns, ROI, and future value with monthly contributions and dividend reinvestment.",
     icon: TrendingUp,
-    category: 'Investing',
-    complexity: 'Simple',
-    badges: ['Compound Interest', 'Charts', 'Export Excel'],
+    category: "Investing",
+    complexity: "Simple",
+    badges: ["Compound Interest", "Charts", "Export Excel"],
   },
   {
-    title: 'Credit Card Payoff Calculator',
-    description: 'Determine payoff timeline and total interest with minimum payments vs. accelerated strategies.',
+    title: "Credit Card Payoff Calculator",
+    description:
+      "Determine payoff timeline and total interest with minimum payments vs. accelerated strategies.",
     icon: CreditCard,
-    category: 'Debt',
-    complexity: 'Simple',
-    badges: ['Payoff Strategy', 'Interest Savings'],
+    category: "Debt",
+    complexity: "Simple",
+    badges: ["Payoff Strategy", "Interest Savings"],
   },
   {
-    title: 'Auto Loan Calculator',
-    description: 'Compare auto financing options with trade-in values, down payments, and APR calculations.',
+    title: "Auto Loan Calculator",
+    description:
+      "Compare auto financing options with trade-in values, down payments, and APR calculations.",
     icon: Building2,
-    category: 'Loans',
-    complexity: 'Simple',
-    badges: ['Trade-in Value', 'APR Comparison'],
+    category: "Loans",
+    complexity: "Simple",
+    badges: ["Trade-in Value", "APR Comparison"],
   },
   {
-    title: 'Retirement Savings Calculator',
-    description: 'Plan comprehensive retirement with Social Security, pensions, IRA, and investment income projections.',
+    title: "Retirement Savings Calculator",
+    description:
+      "Plan comprehensive retirement with Social Security, pensions, IRA, and investment income projections.",
     icon: Calendar,
-    category: 'Retirement',
-    complexity: 'Advanced',
-    badges: ['Multiple Income', 'Inflation Adjusted', 'Longevity'],
+    category: "Retirement",
+    complexity: "Advanced",
+    badges: ["Multiple Income", "Inflation Adjusted", "Longevity"],
   },
   {
-    title: 'Loan Amortization Calculator',
-    description: 'Generate detailed payment schedules showing principal and interest breakdown for any loan type.',
+    title: "Loan Amortization Calculator",
+    description:
+      "Generate detailed payment schedules showing principal and interest breakdown for any loan type.",
     icon: Receipt,
-    category: 'Loans',
-    complexity: 'Simple',
-    badges: ['Payment Schedule', 'Extra Payments'],
+    category: "Loans",
+    complexity: "Simple",
+    badges: ["Payment Schedule", "Extra Payments"],
   },
   {
-    title: 'Compound Interest Calculator',
-    description: 'Calculate compound growth with various compounding frequencies and additional contributions.',
+    title: "Compound Interest Calculator",
+    description:
+      "Calculate compound growth with various compounding frequencies and additional contributions.",
     icon: LineChart,
-    category: 'Investing',
-    complexity: 'Simple',
-    badges: ['Multiple Frequencies', 'Charts'],
+    category: "Investing",
+    complexity: "Simple",
+    badges: ["Multiple Frequencies", "Charts"],
   },
   {
-    title: 'Debt Consolidation Calculator',
-    description: 'Compare consolidating multiple debts into a single loan to analyze savings and payoff timeline.',
+    title: "Debt Consolidation Calculator",
+    description:
+      "Compare consolidating multiple debts into a single loan to analyze savings and payoff timeline.",
     icon: Banknote,
-    category: 'Debt',
-    complexity: 'Advanced',
-    badges: ['Multiple Debts', 'Comparison', 'Savings Analysis'],
+    category: "Debt",
+    complexity: "Advanced",
+    badges: ["Multiple Debts", "Comparison", "Savings Analysis"],
   },
   {
-    title: 'Roth IRA Calculator',
-    description: 'Project Roth IRA growth with contribution limits, tax-free withdrawals, and income phase-outs.',
+    title: "Roth IRA Calculator",
+    description:
+      "Project Roth IRA growth with contribution limits, tax-free withdrawals, and income phase-outs.",
     icon: Target,
-    category: 'Retirement',
-    complexity: 'Advanced',
-    badges: ['Tax-Free Growth', 'Contribution Limits'],
+    category: "Retirement",
+    complexity: "Advanced",
+    badges: ["Tax-Free Growth", "Contribution Limits"],
   },
   {
-    title: 'Personal Loan Calculator',
-    description: 'Calculate monthly payments and total interest for personal loans with fixed or variable rates.',
+    title: "Personal Loan Calculator",
+    description:
+      "Calculate monthly payments and total interest for personal loans with fixed or variable rates.",
     icon: DollarSign,
-    category: 'Loans',
-    complexity: 'Simple',
-    badges: ['Fixed/Variable Rates', 'APR'],
+    category: "Loans",
+    complexity: "Simple",
+    badges: ["Fixed/Variable Rates", "APR"],
   },
   {
-    title: 'Student Loan Calculator',
-    description: 'Estimate payments for federal and private student loans with various repayment plans and forgiveness options.',
+    title: "Student Loan Calculator",
+    description:
+      "Estimate payments for federal and private student loans with various repayment plans and forgiveness options.",
     icon: Calculator,
-    category: 'Debt',
-    complexity: 'Advanced',
-    badges: ['Repayment Plans', 'Forgiveness Options'],
+    category: "Debt",
+    complexity: "Advanced",
+    badges: ["Repayment Plans", "Forgiveness Options"],
   },
 ];
 
-const categories = ['All', 'Investing', 'Debt', 'Loans', 'Retirement', 'Taxes'];
-const complexityLevels = ['All', 'Simple', 'Advanced'];
+const categories = ["All", "Investing", "Debt", "Loans", "Retirement", "Taxes"];
+const complexityLevels = ["All", "Simple", "Advanced"];
 
 export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
   const router = useRouter();
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    initialCategory ? [initialCategory] : []
+    initialCategory ? [initialCategory] : [],
   );
   const [selectedComplexity, setSelectedComplexity] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState('popular');
+  const [sortBy, setSortBy] = useState("popular");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const toggleCategory = (category: string) => {
-    if (category === 'All') {
+    if (category === "All") {
       setSelectedCategories([]);
     } else {
       setSelectedCategories((prev) =>
-        prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+        prev.includes(category)
+          ? prev.filter((c) => c !== category)
+          : [...prev, category],
       );
     }
   };
 
   const toggleComplexity = (complexity: string) => {
-    if (complexity === 'All') {
+    if (complexity === "All") {
       setSelectedComplexity([]);
     } else {
       setSelectedComplexity((prev) =>
-        prev.includes(complexity) ? prev.filter((c) => c !== complexity) : [...prev, complexity]
+        prev.includes(complexity)
+          ? prev.filter((c) => c !== complexity)
+          : [...prev, complexity],
       );
     }
   };
 
   const filteredCalculators = allCalculators.filter((calc) => {
     const categoryMatch =
-      selectedCategories.length === 0 || selectedCategories.includes(calc.category);
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(calc.category);
     const complexityMatch =
-      selectedComplexity.length === 0 || selectedComplexity.includes(calc.complexity);
+      selectedComplexity.length === 0 ||
+      selectedComplexity.includes(calc.complexity);
     return categoryMatch && complexityMatch;
   });
 
   const sortedCalculators = [...filteredCalculators].sort((a, b) => {
-    if (sortBy === 'popular') return 0; // Keep original order
-    if (sortBy === 'name') return a.title.localeCompare(b.title);
+    if (sortBy === "popular") return 0; // Keep original order
+    if (sortBy === "name") return a.title.localeCompare(b.title);
     return 0;
   });
 
@@ -188,7 +218,7 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
               <Checkbox
                 id={`cat-${category}`}
                 checked={
-                  category === 'All'
+                  category === "All"
                     ? selectedCategories.length === 0
                     : selectedCategories.includes(category)
                 }
@@ -214,7 +244,7 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
               <Checkbox
                 id={`comp-${complexity}`}
                 checked={
-                  complexity === 'All'
+                  complexity === "All"
                     ? selectedComplexity.length === 0
                     : selectedComplexity.includes(complexity)
                 }
@@ -276,12 +306,16 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
           <div className="flex-1">
             {/* Mobile Filter Button & Sort */}
             <div className="mb-6 flex items-center justify-between gap-4">
-              <Sheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>
+              <Sheet
+                open={mobileFiltersOpen}
+                onOpenChange={setMobileFiltersOpen}
+              >
                 <SheetTrigger asChild>
                   <Button variant="outline" className="lg:hidden">
                     <SlidersHorizontal className="mr-2 size-4" />
                     Filters
-                    {(selectedCategories.length > 0 || selectedComplexity.length > 0) && (
+                    {(selectedCategories.length > 0 ||
+                      selectedComplexity.length > 0) && (
                       <Badge className="ml-2 size-5 rounded-full p-0 text-xs">
                         {selectedCategories.length + selectedComplexity.length}
                       </Badge>
@@ -299,7 +333,9 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
               </Sheet>
 
               <div className="flex flex-1 items-center justify-end gap-2">
-                <Label className="text-sm text-muted-foreground">Sort by:</Label>
+                <Label className="text-sm text-muted-foreground">
+                  Sort by:
+                </Label>
                 <Select value={sortBy} onValueChange={setSortBy}>
                   <SelectTrigger className="w-[140px]">
                     <SelectValue />
@@ -313,7 +349,8 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
             </div>
 
             {/* Active Filters */}
-            {(selectedCategories.length > 0 || selectedComplexity.length > 0) && (
+            {(selectedCategories.length > 0 ||
+              selectedComplexity.length > 0) && (
               <div className="mb-6 flex flex-wrap gap-2">
                 {selectedCategories.map((cat) => (
                   <Badge key={cat} variant="secondary" className="gap-1.5">
@@ -343,7 +380,8 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
             {/* Results Count */}
             <div className="mb-6">
               <p className="text-sm text-muted-foreground">
-                Showing {sortedCalculators.length} of {allCalculators.length} calculators
+                Showing {sortedCalculators.length} of {allCalculators.length}{" "}
+                calculators
               </p>
             </div>
 
@@ -356,7 +394,9 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
                   description={calc.description}
                   icon={calc.icon}
                   badges={calc.badges}
-                  onOpen={() => router.push(`/calculators/${nameToSlug(calc.title)}`)}
+                  onOpen={() =>
+                    router.push(`/calculators/${nameToSlug(calc.title)}`)
+                  }
                 />
               ))}
             </div>

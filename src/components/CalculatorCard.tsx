@@ -1,7 +1,13 @@
-import { LucideIcon, ArrowRight } from 'lucide-react';
-import { cn } from './ui/utils';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Badge } from './ui/badge';
+import { LucideIcon, ArrowRight } from "lucide-react";
+import { cn } from "./ui/utils";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Badge } from "./ui/badge";
 
 interface CalculatorCardProps {
   title: string;
@@ -24,14 +30,14 @@ export function CalculatorCard({
   return (
     <Card
       className={cn(
-        'group flex h-full cursor-pointer flex-col transition-all hover:border-accent/50 hover:shadow-md',
+        "group flex h-full cursor-pointer flex-col transition-all hover:border-accent/50 hover:shadow-md",
         className,
       )}
       onClick={onOpen}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           onOpen();
         }

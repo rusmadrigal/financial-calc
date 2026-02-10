@@ -3,34 +3,34 @@
  * Used to build slug <-> name maps for /calculators/[slug] routes.
  */
 const CALCULATOR_NAMES = [
-  'Mortgage Calculator',
-  '401(k) Calculator',
-  'Investment Return Calculator',
-  'Credit Card Payoff Calculator',
-  'Auto Loan Calculator',
-  'Retirement Savings Calculator',
-  'Loan Amortization Calculator',
-  'Compound Interest Calculator',
-  'Debt Consolidation Calculator',
-  'Roth IRA Calculator',
-  'Personal Loan Calculator',
-  'Student Loan Calculator',
+  "Mortgage Calculator",
+  "401(k) Calculator",
+  "Investment Return Calculator",
+  "Credit Card Payoff Calculator",
+  "Auto Loan Calculator",
+  "Retirement Savings Calculator",
+  "Loan Amortization Calculator",
+  "Compound Interest Calculator",
+  "Debt Consolidation Calculator",
+  "Roth IRA Calculator",
+  "Personal Loan Calculator",
+  "Student Loan Calculator",
 ] as const;
 
 /** Short names used in Footer etc. -> full calculator name */
 const SHORT_NAME_TO_FULL: Record<string, string> = {
-  'Credit Card Payoff': 'Credit Card Payoff Calculator',
-  'Investment Return': 'Investment Return Calculator',
-  'Loan Calculator': 'Personal Loan Calculator',
-  'Retirement Savings': 'Retirement Savings Calculator',
+  "Credit Card Payoff": "Credit Card Payoff Calculator",
+  "Investment Return": "Investment Return Calculator",
+  "Loan Calculator": "Personal Loan Calculator",
+  "Retirement Savings": "Retirement Savings Calculator",
 };
 
 function normalizeToSlug(name: string): string {
   return name
     .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[()]/g, '')
-    .replace(/[^a-z0-9-]/g, '');
+    .replace(/\s+/g, "-")
+    .replace(/[()]/g, "")
+    .replace(/[^a-z0-9-]/g, "");
 }
 
 const slugToNameMap = new Map<string, string>();
@@ -56,8 +56,14 @@ export function nameToSlug(name: string): string {
 
 /** Convert URL slug to calculator name for CalculatorDetailPage (e.g. "mortgage-calculator" -> "Mortgage Calculator") */
 export function slugToName(slug: string): string {
-  const normalized = slug.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '');
-  return slugToNameMap.get(normalized) ?? slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  const normalized = slug
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[()]/g, "");
+  return (
+    slugToNameMap.get(normalized) ??
+    slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+  );
 }
 
 export { CALCULATOR_NAMES };

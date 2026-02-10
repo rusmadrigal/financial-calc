@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { OverviewPage } from '@/views/OverviewPage';
+import { OverviewPage } from "@/views/OverviewPage";
 
 export default function Page() {
   return <OverviewPage />;

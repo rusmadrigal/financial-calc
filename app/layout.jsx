@@ -1,10 +1,10 @@
-import './globals.css';
-import { Providers } from './Providers';
-import { AppShell } from '@/components/AppShell';
+import "./globals.css";
+import { Providers } from "./Providers";
+import { AppShell } from "@/components/AppShell";
 
 export const metadata = {
-  title: 'Financial Calculators Website Design',
-  description: 'SmartCalcLab – Financial calculators, built for clarity.',
+  title: "Financial Calculators Website Design",
+  description: "SmartCalcLab – Financial calculators, built for clarity.",
 };
 
 export default function RootLayout({ children }) {

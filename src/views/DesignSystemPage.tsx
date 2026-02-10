@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Check,
   X,
@@ -14,31 +14,37 @@ import {
   TrendingUp,
   ChevronRight,
   Copy,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Switch } from '@/components/ui/switch';
-import { Slider } from '@/components/ui/slider';
+} from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -46,9 +52,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { toast } from 'sonner';
-import { Skeleton } from '@/components/ui/skeleton';
+} from "@/components/ui/table";
+import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -56,7 +62,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -64,8 +70,8 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import { Separator } from '@/components/ui/separator';
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 import {
   Pagination,
   PaginationContent,
@@ -74,12 +80,12 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
+} from "@/components/ui/pagination";
 
 export function DesignSystemPage() {
   const [sliderValue, setSliderValue] = useState([50]);
   const [switchChecked, setSwitchChecked] = useState(false);
-  const [selectedRadio, setSelectedRadio] = useState('option1');
+  const [selectedRadio, setSelectedRadio] = useState("option1");
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,8 +94,9 @@ export function DesignSystemPage() {
         <div className="mb-12">
           <h1 className="mb-3 text-foreground">SmartCalcLab Design System</h1>
           <p className="max-w-3xl text-lg text-muted-foreground">
-            A comprehensive design system for building trustworthy financial calculators. Built with
-            Tailwind CSS, shadcn/ui, and Radix UI primitives.
+            A comprehensive design system for building trustworthy financial
+            calculators. Built with Tailwind CSS, shadcn/ui, and Radix UI
+            primitives.
           </p>
         </div>
 
@@ -97,13 +104,15 @@ export function DesignSystemPage() {
           {/* Design Tokens Section */}
           <Section id="tokens" title="Design Tokens">
             <p className="mb-8 text-muted-foreground">
-              Core design tokens that define the visual language of SmartCalcLab.
+              Core design tokens that define the visual language of
+              SmartCalcLab.
             </p>
 
             {/* Color Palette */}
             <Subsection title="Color Palette">
               <p className="mb-6 text-sm text-muted-foreground">
-                Professional fintech palette with blue/teal accent. Optimized for trust and readability.
+                Professional fintech palette with blue/teal accent. Optimized
+                for trust and readability.
               </p>
 
               <div className="space-y-8">
@@ -139,7 +148,9 @@ export function DesignSystemPage() {
 
                 {/* Neutral Colors */}
                 <div>
-                  <h4 className="mb-4 text-sm font-semibold text-foreground">Neutrals</h4>
+                  <h4 className="mb-4 text-sm font-semibold text-foreground">
+                    Neutrals
+                  </h4>
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <ColorSwatch
                       name="Background"
@@ -251,7 +262,8 @@ export function DesignSystemPage() {
             {/* Typography */}
             <Subsection title="Typography">
               <p className="mb-6 text-sm text-muted-foreground">
-                Clear hierarchy with Inter-style system fonts. Optimized for financial data readability.
+                Clear hierarchy with Inter-style system fonts. Optimized for
+                financial data readability.
               </p>
 
               <div className="space-y-6">
@@ -259,22 +271,22 @@ export function DesignSystemPage() {
                   <div className="border-b border-border pb-4">
                     <h1>Heading 1 - 36px / 2.25rem</h1>
                     <code className="mt-2 block text-xs text-muted-foreground">
-                      font-size: 2.25rem; font-weight: 600; line-height: 1.2; letter-spacing:
-                      -0.025em;
+                      font-size: 2.25rem; font-weight: 600; line-height: 1.2;
+                      letter-spacing: -0.025em;
                     </code>
                   </div>
                   <div className="border-b border-border pb-4">
                     <h2>Heading 2 - 30px / 1.875rem</h2>
                     <code className="mt-2 block text-xs text-muted-foreground">
-                      font-size: 1.875rem; font-weight: 600; line-height: 1.25; letter-spacing:
-                      -0.02em;
+                      font-size: 1.875rem; font-weight: 600; line-height: 1.25;
+                      letter-spacing: -0.02em;
                     </code>
                   </div>
                   <div className="border-b border-border pb-4">
                     <h3>Heading 3 - 24px / 1.5rem</h3>
                     <code className="mt-2 block text-xs text-muted-foreground">
-                      font-size: 1.5rem; font-weight: 600; line-height: 1.3; letter-spacing:
-                      -0.015em;
+                      font-size: 1.5rem; font-weight: 600; line-height: 1.3;
+                      letter-spacing: -0.015em;
                     </code>
                   </div>
                   <div className="border-b border-border pb-4">
@@ -286,7 +298,8 @@ export function DesignSystemPage() {
                   <div className="border-b border-border pb-4">
                     <p>Body text - 16px / 1rem</p>
                     <code className="mt-2 block text-xs text-muted-foreground">
-                      font-size: 1rem; line-height: 1.625; color: muted-foreground;
+                      font-size: 1rem; line-height: 1.625; color:
+                      muted-foreground;
                     </code>
                   </div>
                   <div>
@@ -347,19 +360,24 @@ export function DesignSystemPage() {
               <div className="grid gap-6 sm:grid-cols-2">
                 <Card>
                   <CardContent className="p-6">
-                    <h4 className="mb-4 text-sm font-semibold">Spacing Scale (8px grid)</h4>
+                    <h4 className="mb-4 text-sm font-semibold">
+                      Spacing Scale (8px grid)
+                    </h4>
                     <div className="space-y-3">
                       {[
-                        { name: '1', px: '4px', rem: '0.25rem' },
-                        { name: '2', px: '8px', rem: '0.5rem' },
-                        { name: '3', px: '12px', rem: '0.75rem' },
-                        { name: '4', px: '16px', rem: '1rem' },
-                        { name: '6', px: '24px', rem: '1.5rem' },
-                        { name: '8', px: '32px', rem: '2rem' },
-                        { name: '12', px: '48px', rem: '3rem' },
-                        { name: '16', px: '64px', rem: '4rem' },
+                        { name: "1", px: "4px", rem: "0.25rem" },
+                        { name: "2", px: "8px", rem: "0.5rem" },
+                        { name: "3", px: "12px", rem: "0.75rem" },
+                        { name: "4", px: "16px", rem: "1rem" },
+                        { name: "6", px: "24px", rem: "1.5rem" },
+                        { name: "8", px: "32px", rem: "2rem" },
+                        { name: "12", px: "48px", rem: "3rem" },
+                        { name: "16", px: "64px", rem: "4rem" },
                       ].map((space) => (
-                        <div key={space.name} className="flex items-center gap-4">
+                        <div
+                          key={space.name}
+                          className="flex items-center gap-4"
+                        >
                           <div
                             className="h-6 bg-primary"
                             style={{ width: space.px }}
@@ -375,41 +393,63 @@ export function DesignSystemPage() {
 
                 <Card>
                   <CardContent className="p-6">
-                    <h4 className="mb-4 text-sm font-semibold">Border Radius</h4>
+                    <h4 className="mb-4 text-sm font-semibold">
+                      Border Radius
+                    </h4>
                     <div className="space-y-4">
                       <div className="flex items-center gap-4">
                         <div className="size-12 rounded-sm bg-primary" />
                         <div>
-                          <code className="text-xs font-medium">sm - 0.125rem (2px)</code>
-                          <p className="text-xs text-muted-foreground">Small elements</p>
+                          <code className="text-xs font-medium">
+                            sm - 0.125rem (2px)
+                          </code>
+                          <p className="text-xs text-muted-foreground">
+                            Small elements
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="size-12 rounded-md bg-primary" />
                         <div>
-                          <code className="text-xs font-medium">md - 0.375rem (6px)</code>
-                          <p className="text-xs text-muted-foreground">Medium elements</p>
+                          <code className="text-xs font-medium">
+                            md - 0.375rem (6px)
+                          </code>
+                          <p className="text-xs text-muted-foreground">
+                            Medium elements
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="size-12 rounded-lg bg-primary" />
                         <div>
-                          <code className="text-xs font-medium">lg - 0.5rem (8px)</code>
-                          <p className="text-xs text-muted-foreground">Cards, panels</p>
+                          <code className="text-xs font-medium">
+                            lg - 0.5rem (8px)
+                          </code>
+                          <p className="text-xs text-muted-foreground">
+                            Cards, panels
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="size-12 rounded-xl bg-primary" />
                         <div>
-                          <code className="text-xs font-medium">xl - 0.75rem (12px)</code>
-                          <p className="text-xs text-muted-foreground">Featured elements</p>
+                          <code className="text-xs font-medium">
+                            xl - 0.75rem (12px)
+                          </code>
+                          <p className="text-xs text-muted-foreground">
+                            Featured elements
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="size-12 rounded-full bg-primary" />
                         <div>
-                          <code className="text-xs font-medium">full - 9999px</code>
-                          <p className="text-xs text-muted-foreground">Pills, avatars</p>
+                          <code className="text-xs font-medium">
+                            full - 9999px
+                          </code>
+                          <p className="text-xs text-muted-foreground">
+                            Pills, avatars
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -432,7 +472,9 @@ export function DesignSystemPage() {
                 <Card className="shadow">
                   <CardContent className="p-6">
                     <p className="text-sm font-medium">Shadow Default</p>
-                    <code className="mt-2 block text-xs text-muted-foreground">shadow</code>
+                    <code className="mt-2 block text-xs text-muted-foreground">
+                      shadow
+                    </code>
                   </CardContent>
                 </Card>
                 <Card className="shadow-md">
@@ -513,7 +555,8 @@ export function DesignSystemPage() {
             {/* Form Inputs */}
             <Subsection title="Form Inputs">
               <p className="mb-6 text-sm text-muted-foreground">
-                Form elements with clear labels, helper text, and validation states.
+                Form elements with clear labels, helper text, and validation
+                states.
               </p>
 
               <div className="grid gap-8 lg:grid-cols-2">
@@ -521,7 +564,9 @@ export function DesignSystemPage() {
                 <div className="space-y-2">
                   <Label htmlFor="text-input">Text Input</Label>
                   <Input id="text-input" placeholder="Enter text..." />
-                  <p className="text-xs text-muted-foreground">Helper text goes here</p>
+                  <p className="text-xs text-muted-foreground">
+                    Helper text goes here
+                  </p>
                 </div>
 
                 {/* Number Input */}
@@ -544,7 +589,9 @@ export function DesignSystemPage() {
                       className="pl-7"
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground">Enter amount in dollars</p>
+                  <p className="text-xs text-muted-foreground">
+                    Enter amount in dollars
+                  </p>
                 </div>
 
                 {/* Percentage Input */}
@@ -594,7 +641,11 @@ export function DesignSystemPage() {
                 {/* Disabled State */}
                 <div className="space-y-2">
                   <Label htmlFor="disabled-input">Disabled Input</Label>
-                  <Input id="disabled-input" disabled placeholder="Disabled input" />
+                  <Input
+                    id="disabled-input"
+                    disabled
+                    placeholder="Disabled input"
+                  />
                 </div>
 
                 {/* Search Input */}
@@ -602,7 +653,11 @@ export function DesignSystemPage() {
                   <Label htmlFor="search-input">Search Input</Label>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input id="search-input" placeholder="Search..." className="pl-9" />
+                    <Input
+                      id="search-input"
+                      placeholder="Search..."
+                      className="pl-9"
+                    />
                   </div>
                 </div>
               </div>
@@ -654,7 +709,10 @@ export function DesignSystemPage() {
                 {/* Radio Group */}
                 <div className="space-y-4">
                   <Label>Radio Group</Label>
-                  <RadioGroup value={selectedRadio} onValueChange={setSelectedRadio}>
+                  <RadioGroup
+                    value={selectedRadio}
+                    onValueChange={setSelectedRadio}
+                  >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="option1" id="radio1" />
                       <Label htmlFor="radio1" className="font-normal">
@@ -682,17 +740,24 @@ export function DesignSystemPage() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between rounded-lg border border-border p-4">
                       <div>
-                        <p className="text-sm font-medium">Email notifications</p>
+                        <p className="text-sm font-medium">
+                          Email notifications
+                        </p>
                         <p className="text-xs text-muted-foreground">
                           Receive updates via email
                         </p>
                       </div>
-                      <Switch checked={switchChecked} onCheckedChange={setSwitchChecked} />
+                      <Switch
+                        checked={switchChecked}
+                        onCheckedChange={setSwitchChecked}
+                      />
                     </div>
                     <div className="flex items-center justify-between rounded-lg border border-border p-4">
                       <div>
                         <p className="text-sm font-medium">Marketing emails</p>
-                        <p className="text-xs text-muted-foreground">Promotional content</p>
+                        <p className="text-xs text-muted-foreground">
+                          Promotional content
+                        </p>
                       </div>
                       <Switch />
                     </div>
@@ -709,7 +774,9 @@ export function DesignSystemPage() {
                       max={100}
                       step={1}
                     />
-                    <p className="text-sm text-muted-foreground">Value: {sliderValue[0]}%</p>
+                    <p className="text-sm text-muted-foreground">
+                      Value: {sliderValue[0]}%
+                    </p>
                   </div>
                 </div>
               </div>
@@ -732,7 +799,8 @@ export function DesignSystemPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground">
-                      Used for general content organization and grouping related information.
+                      Used for general content organization and grouping related
+                      information.
                     </p>
                   </CardContent>
                 </Card>
@@ -741,11 +809,14 @@ export function DesignSystemPage() {
                 <Card className="border-2 border-accent/50 bg-accent/5">
                   <CardHeader>
                     <CardTitle>Featured Card</CardTitle>
-                    <CardDescription>Highlighted with accent color</CardDescription>
+                    <CardDescription>
+                      Highlighted with accent color
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground">
-                      Used to draw attention to important content or call-to-actions.
+                      Used to draw attention to important content or
+                      call-to-actions.
                     </p>
                   </CardContent>
                 </Card>
@@ -759,12 +830,20 @@ export function DesignSystemPage() {
                   <CardContent>
                     <div className="space-y-3">
                       <div>
-                        <p className="text-xs text-muted-foreground">Monthly Payment</p>
-                        <p className="text-2xl font-semibold text-foreground">$2,212</p>
+                        <p className="text-xs text-muted-foreground">
+                          Monthly Payment
+                        </p>
+                        <p className="text-2xl font-semibold text-foreground">
+                          $2,212
+                        </p>
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">Total Interest</p>
-                        <p className="text-2xl font-semibold text-foreground">$446,682</p>
+                        <p className="text-xs text-muted-foreground">
+                          Total Interest
+                        </p>
+                        <p className="text-2xl font-semibold text-foreground">
+                          $446,682
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -786,7 +865,9 @@ export function DesignSystemPage() {
                     <Badge variant="secondary">Secondary</Badge>
                     <Badge variant="outline">Outline</Badge>
                     <Badge variant="destructive">Destructive</Badge>
-                    <Badge className="bg-success text-success-foreground">Success</Badge>
+                    <Badge className="bg-success text-success-foreground">
+                      Success
+                    </Badge>
                   </div>
                 </div>
 
@@ -820,8 +901,8 @@ export function DesignSystemPage() {
                       <Card>
                         <CardContent className="p-6">
                           <p className="text-sm text-muted-foreground">
-                            Content for "How It Works" tab. Tabs provide a way to organize related
-                            content into separate views.
+                            Content for "How It Works" tab. Tabs provide a way
+                            to organize related content into separate views.
                           </p>
                         </CardContent>
                       </Card>
@@ -838,7 +919,9 @@ export function DesignSystemPage() {
                     <TabsContent value="tab3" className="mt-4">
                       <Card>
                         <CardContent className="p-6">
-                          <p className="text-sm text-muted-foreground">Content for "FAQs" tab.</p>
+                          <p className="text-sm text-muted-foreground">
+                            Content for "FAQs" tab.
+                          </p>
                         </CardContent>
                       </Card>
                     </TabsContent>
@@ -847,28 +930,38 @@ export function DesignSystemPage() {
 
                 {/* Accordion */}
                 <div>
-                  <h4 className="mb-4 text-sm font-semibold">Accordion (for FAQs)</h4>
+                  <h4 className="mb-4 text-sm font-semibold">
+                    Accordion (for FAQs)
+                  </h4>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="item-1">
-                      <AccordionTrigger>What is included in the monthly payment?</AccordionTrigger>
+                      <AccordionTrigger>
+                        What is included in the monthly payment?
+                      </AccordionTrigger>
                       <AccordionContent className="text-muted-foreground">
-                        The monthly payment includes principal and interest. Additional costs like
-                        property taxes, insurance, and HOA fees are not included in this
-                        calculation.
+                        The monthly payment includes principal and interest.
+                        Additional costs like property taxes, insurance, and HOA
+                        fees are not included in this calculation.
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="item-2">
-                      <AccordionTrigger>How is interest calculated?</AccordionTrigger>
+                      <AccordionTrigger>
+                        How is interest calculated?
+                      </AccordionTrigger>
                       <AccordionContent className="text-muted-foreground">
-                        Interest is calculated using the standard mortgage formula with monthly
-                        compounding. The annual rate is divided by 12 for monthly calculations.
+                        Interest is calculated using the standard mortgage
+                        formula with monthly compounding. The annual rate is
+                        divided by 12 for monthly calculations.
                       </AccordionContent>
                     </AccordionItem>
                     <AccordionItem value="item-3">
-                      <AccordionTrigger>Can I make extra payments?</AccordionTrigger>
+                      <AccordionTrigger>
+                        Can I make extra payments?
+                      </AccordionTrigger>
                       <AccordionContent className="text-muted-foreground">
-                        Yes, most mortgages allow extra payments toward principal, which can
-                        significantly reduce total interest paid and shorten the loan term.
+                        Yes, most mortgages allow extra payments toward
+                        principal, which can significantly reduce total interest
+                        paid and shorten the loan term.
                       </AccordionContent>
                     </AccordionItem>
                   </Accordion>
@@ -886,12 +979,13 @@ export function DesignSystemPage() {
                 {/* Alerts */}
                 <div className="space-y-4">
                   <h4 className="text-sm font-semibold">Alerts</h4>
-                  
+
                   <Alert>
                     <Info className="size-4" />
                     <AlertTitle>Information</AlertTitle>
                     <AlertDescription>
-                      This is an informational alert for general notices and helpful tips.
+                      This is an informational alert for general notices and
+                      helpful tips.
                     </AlertDescription>
                   </Alert>
 
@@ -907,16 +1001,18 @@ export function DesignSystemPage() {
                     <AlertCircle className="size-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                      Please enter a valid loan amount to continue with the calculation.
+                      Please enter a valid loan amount to continue with the
+                      calculation.
                     </AlertDescription>
                   </Alert>
 
                   <Alert className="border-2 border-destructive/50 bg-destructive/5">
                     <AlertCircle className="size-4" />
                     <AlertDescription>
-                      <strong>Disclaimer:</strong> This calculator is for educational purposes
-                      only. Results should not be considered financial advice. Always consult with
-                      qualified professionals.
+                      <strong>Disclaimer:</strong> This calculator is for
+                      educational purposes only. Results should not be
+                      considered financial advice. Always consult with qualified
+                      professionals.
                     </AlertDescription>
                   </Alert>
                 </div>
@@ -927,25 +1023,31 @@ export function DesignSystemPage() {
                   <div className="flex flex-wrap gap-3">
                     <Button
                       variant="outline"
-                      onClick={() => toast.success('Calculation saved successfully!')}
+                      onClick={() =>
+                        toast.success("Calculation saved successfully!")
+                      }
                     >
                       Success Toast
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={() => toast.error('Please enter a valid amount')}
+                      onClick={() => toast.error("Please enter a valid amount")}
                     >
                       Error Toast
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={() => toast.info('Calculator has been reset')}
+                      onClick={() => toast.info("Calculator has been reset")}
                     >
                       Info Toast
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={() => toast('Simple message', { description: 'With description' })}
+                      onClick={() =>
+                        toast("Simple message", {
+                          description: "With description",
+                        })
+                      }
                     >
                       Default Toast
                     </Button>
@@ -957,7 +1059,8 @@ export function DesignSystemPage() {
             {/* Tables */}
             <Subsection title="Tables">
               <p className="mb-6 text-sm text-muted-foreground">
-                Data tables with sticky headers and alternating row colors for readability.
+                Data tables with sticky headers and alternating row colors for
+                readability.
               </p>
 
               <div className="space-y-6">
@@ -977,9 +1080,13 @@ export function DesignSystemPage() {
                       {[1, 2, 3, 4, 5].map((month) => (
                         <TableRow key={month}>
                           <TableCell className="font-medium">{month}</TableCell>
-                          <TableCell className="text-right">$2,212.45</TableCell>
+                          <TableCell className="text-right">
+                            $2,212.45
+                          </TableCell>
                           <TableCell className="text-right">$733.45</TableCell>
-                          <TableCell className="text-right">$1,479.00</TableCell>
+                          <TableCell className="text-right">
+                            $1,479.00
+                          </TableCell>
                           <TableCell className="text-right font-medium">
                             ${(280000 - month * 733.45).toLocaleString()}
                           </TableCell>
@@ -995,9 +1102,12 @@ export function DesignSystemPage() {
                     <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-muted">
                       <AlertCircle className="size-6 text-muted-foreground" />
                     </div>
-                    <p className="mb-2 font-medium text-foreground">No data available</p>
+                    <p className="mb-2 font-medium text-foreground">
+                      No data available
+                    </p>
                     <p className="text-sm text-muted-foreground">
-                      Enter your loan details to generate an amortization schedule
+                      Enter your loan details to generate an amortization
+                      schedule
                     </p>
                   </CardContent>
                 </Card>
@@ -1014,7 +1124,8 @@ export function DesignSystemPage() {
                   <DialogHeader>
                     <DialogTitle>Export Results</DialogTitle>
                     <DialogDescription>
-                      Choose your preferred export format for the calculation results.
+                      Choose your preferred export format for the calculation
+                      results.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
@@ -1097,7 +1208,8 @@ export function DesignSystemPage() {
             {/* Skeleton Loaders */}
             <Subsection title="Loading States">
               <p className="mb-6 text-sm text-muted-foreground">
-                Skeleton loaders for async content and better perceived performance.
+                Skeleton loaders for async content and better perceived
+                performance.
               </p>
 
               <div className="grid gap-6 sm:grid-cols-2">
@@ -1131,8 +1243,8 @@ export function DesignSystemPage() {
           {/* Icons Section */}
           <Section id="icons" title="Icons">
             <p className="mb-6 text-muted-foreground">
-              Simple line icons from Lucide React with consistent 2px stroke width. Icons should be
-              clear and recognizable at all sizes.
+              Simple line icons from Lucide React with consistent 2px stroke
+              width. Icons should be clear and recognizable at all sizes.
             </p>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -1191,23 +1303,33 @@ export function DesignSystemPage() {
               <div className="flex flex-wrap items-end gap-6">
                 <div className="text-center">
                   <Home className="size-4" />
-                  <p className="mt-2 text-xs text-muted-foreground">size-4 (16px)</p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    size-4 (16px)
+                  </p>
                 </div>
                 <div className="text-center">
                   <Home className="size-5" />
-                  <p className="mt-2 text-xs text-muted-foreground">size-5 (20px)</p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    size-5 (20px)
+                  </p>
                 </div>
                 <div className="text-center">
                   <Home className="size-6" />
-                  <p className="mt-2 text-xs text-muted-foreground">size-6 (24px)</p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    size-6 (24px)
+                  </p>
                 </div>
                 <div className="text-center">
                   <Home className="size-8" />
-                  <p className="mt-2 text-xs text-muted-foreground">size-8 (32px)</p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    size-8 (32px)
+                  </p>
                 </div>
                 <div className="text-center">
                   <Home className="size-12" />
-                  <p className="mt-2 text-xs text-muted-foreground">size-12 (48px)</p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    size-12 (48px)
+                  </p>
                 </div>
               </div>
             </div>
@@ -1216,8 +1338,8 @@ export function DesignSystemPage() {
           {/* Accessibility */}
           <Section id="accessibility" title="Accessibility">
             <p className="mb-6 text-muted-foreground">
-              Built with accessibility in mind: WCAG 2.1 AA compliant colors, clear focus states, and
-              semantic HTML.
+              Built with accessibility in mind: WCAG 2.1 AA compliant colors,
+              clear focus states, and semantic HTML.
             </p>
 
             <div className="grid gap-6 sm:grid-cols-2">
@@ -1230,7 +1352,8 @@ export function DesignSystemPage() {
                   <Button className="w-full">Tab to focus this button</Button>
                   <Input placeholder="Focus shows ring indicator" />
                   <p className="text-xs text-muted-foreground">
-                    All interactive elements have visible focus rings with 2px offset for clarity.
+                    All interactive elements have visible focus rings with 2px
+                    offset for clarity.
                   </p>
                 </CardContent>
               </Card>
@@ -1242,8 +1365,12 @@ export function DesignSystemPage() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="flex items-center justify-between rounded-lg bg-primary p-3 text-primary-foreground">
-                    <span className="text-sm font-medium">Primary on Primary BG</span>
-                    <Badge className="bg-primary-foreground text-primary">4.5:1</Badge>
+                    <span className="text-sm font-medium">
+                      Primary on Primary BG
+                    </span>
+                    <Badge className="bg-primary-foreground text-primary">
+                      4.5:1
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between rounded-lg bg-muted p-3">
                     <span className="text-sm font-medium text-muted-foreground">
@@ -1287,7 +1414,9 @@ export function DesignSystemPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Screen Reader Support</CardTitle>
-                  <CardDescription>Accessible to assistive tech</CardDescription>
+                  <CardDescription>
+                    Accessible to assistive tech
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2 text-sm text-muted-foreground">
@@ -1336,7 +1465,13 @@ function Section({
   );
 }
 
-function Subsection({ title, children }: { title: string; children: React.ReactNode }) {
+function Subsection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="mb-12">
       <h3 className="mb-6 text-foreground">{title}</h3>

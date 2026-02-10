@@ -2,7 +2,7 @@
 
 :root {
   --font-size: 16px;
-  
+
   /* Fintech color palette - Light Mode */
   --background: #ffffff;
   --foreground: #0f172a;
@@ -10,55 +10,55 @@
   --card-foreground: #0f172a;
   --popover: #ffffff;
   --popover-foreground: #0f172a;
-  
+
   /* Primary: Professional blue */
   --primary: #0c4a6e;
   --primary-foreground: #ffffff;
-  
+
   /* Secondary: Subtle neutral */
   --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
-  
+
   /* Muted: Light gray for backgrounds */
   --muted: #f8fafc;
   --muted-foreground: #64748b;
-  
+
   /* Accent: Teal for highlights */
   --accent: #0891b2;
   --accent-foreground: #ffffff;
-  
+
   /* Success color for positive indicators */
   --success: #059669;
   --success-foreground: #ffffff;
-  
+
   /* Destructive: Error states */
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  
+
   /* Borders and inputs */
   --border: #e2e8f0;
   --input: #e2e8f0;
   --input-background: #f8fafc;
   --switch-background: #cbd5e1;
-  
+
   /* Focus ring */
   --ring: #0891b2;
-  
+
   /* Font weights */
   --font-weight-medium: 500;
   --font-weight-normal: 400;
   --font-weight-semibold: 600;
-  
+
   /* Chart colors */
   --chart-1: #0891b2;
   --chart-2: #0c4a6e;
   --chart-3: #06b6d4;
   --chart-4: #64748b;
   --chart-5: #10b981;
-  
+
   /* Border radius */
   --radius: 0.5rem;
-  
+
   /* Sidebar */
   --sidebar: #f8fafc;
   --sidebar-foreground: #0f172a;
@@ -78,47 +78,47 @@
   --card-foreground: #f8fafc;
   --popover: #1e293b;
   --popover-foreground: #f8fafc;
-  
+
   /* Primary: Lighter blue for dark mode */
   --primary: #38bdf8;
   --primary-foreground: #0f172a;
-  
+
   /* Secondary: Dark neutral */
   --secondary: #1e293b;
   --secondary-foreground: #f8fafc;
-  
+
   /* Muted: Darker gray */
   --muted: #1e293b;
   --muted-foreground: #94a3b8;
-  
+
   /* Accent: Bright teal */
   --accent: #06b6d4;
   --accent-foreground: #0f172a;
-  
+
   /* Success */
   --success: #10b981;
   --success-foreground: #0f172a;
-  
+
   /* Destructive */
   --destructive: #ef4444;
   --destructive-foreground: #f8fafc;
-  
+
   /* Borders and inputs */
   --border: #334155;
   --input: #334155;
   --input-background: #1e293b;
   --switch-background: #475569;
-  
+
   /* Focus ring */
   --ring: #06b6d4;
-  
+
   /* Chart colors for dark mode */
   --chart-1: #06b6d4;
   --chart-2: #38bdf8;
   --chart-3: #22d3ee;
   --chart-4: #94a3b8;
   --chart-5: #34d399;
-  
+
   /* Sidebar */
   --sidebar: #1e293b;
   --sidebar-foreground: #f8fafc;
@@ -180,7 +180,8 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI",
+      "Roboto", "Helvetica Neue", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

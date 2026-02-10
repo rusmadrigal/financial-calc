@@ -1,5 +1,5 @@
 /* unused candidate: not imported anywhere; app/globals.css uses tailwindcss directly */
-@import 'tailwindcss' source(none);
+@import "tailwindcss" source(none);
 @source '../**/*.{js,ts,jsx,tsx}';
 
-@import 'tw-animate-css';
+@import "tw-animate-css";

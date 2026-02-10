@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { CalculatorsPage } from '@/views/CalculatorsPage';
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { CalculatorsPage } from "@/views/CalculatorsPage";
 
 function CalculatorsContent() {
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get('category') ?? undefined;
+  const initialCategory = searchParams.get("category") ?? undefined;
   return <CalculatorsPage initialCategory={initialCategory} />;
 }
 

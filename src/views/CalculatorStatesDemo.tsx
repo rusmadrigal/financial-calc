@@ -1,9 +1,15 @@
-import { AlertCircle, FileX, Loader2, TrendingUp } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertCircle, FileX, Loader2, TrendingUp } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function CalculatorStatesDemo() {
   return (
@@ -57,7 +63,9 @@ export function CalculatorStatesDemo() {
                       <Loader2 className="size-5 animate-spin text-primary" />
                       Calculating...
                     </CardTitle>
-                    <CardDescription>Please wait while we process your inputs</CardDescription>
+                    <CardDescription>
+                      Please wait while we process your inputs
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="grid gap-6 sm:grid-cols-3">
@@ -131,10 +139,12 @@ export function CalculatorStatesDemo() {
                     <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted">
                       <TrendingUp className="size-8 text-muted-foreground" />
                     </div>
-                    <h3 className="mb-2 font-semibold text-foreground">No Results Yet</h3>
+                    <h3 className="mb-2 font-semibold text-foreground">
+                      No Results Yet
+                    </h3>
                     <p className="mb-6 text-sm text-muted-foreground">
-                      Enter your loan amount, interest rate, and term to calculate your monthly
-                      payment
+                      Enter your loan amount, interest rate, and term to
+                      calculate your monthly payment
                     </p>
                     <Button>Start Calculating</Button>
                   </CardContent>
@@ -143,14 +153,17 @@ export function CalculatorStatesDemo() {
                 <Card className="border-2 border-dashed">
                   <CardHeader>
                     <CardTitle>Payment Breakdown</CardTitle>
-                    <CardDescription>Chart will appear after calculation</CardDescription>
+                    <CardDescription>
+                      Chart will appear after calculation
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="py-16 text-center">
                     <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-muted">
                       <AlertCircle className="size-6 text-muted-foreground" />
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      No data to display. Complete the form to generate your chart.
+                      No data to display. Complete the form to generate your
+                      chart.
                     </p>
                   </CardContent>
                 </Card>
@@ -158,14 +171,17 @@ export function CalculatorStatesDemo() {
                 <Card className="border-2 border-dashed">
                   <CardHeader>
                     <CardTitle>Amortization Schedule</CardTitle>
-                    <CardDescription>Payment schedule will appear here</CardDescription>
+                    <CardDescription>
+                      Payment schedule will appear here
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="py-16 text-center">
                     <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-muted">
                       <FileX className="size-6 text-muted-foreground" />
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Enter loan details to generate a detailed amortization table
+                      Enter loan details to generate a detailed amortization
+                      table
                     </p>
                   </CardContent>
                 </Card>
@@ -181,7 +197,9 @@ export function CalculatorStatesDemo() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Calculator Inputs</CardTitle>
-                    <CardDescription>Please correct the errors below</CardDescription>
+                    <CardDescription>
+                      Please correct the errors below
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {/* Validation errors shown */}
@@ -212,7 +230,8 @@ export function CalculatorStatesDemo() {
                       Unable to Calculate Results
                     </h3>
                     <p className="mb-2 text-sm text-muted-foreground">
-                      We encountered an error processing your inputs. Please check the following:
+                      We encountered an error processing your inputs. Please
+                      check the following:
                     </p>
                     <ul className="mx-auto mb-6 max-w-md space-y-2 text-left text-sm text-muted-foreground">
                       <li className="flex items-start gap-2">
@@ -246,7 +265,8 @@ export function CalculatorStatesDemo() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground">
-                        Loan amount cannot be negative or zero. Please enter a valid amount.
+                        Loan amount cannot be negative or zero. Please enter a
+                        valid amount.
                       </p>
                     </CardContent>
                   </Card>
@@ -260,7 +280,8 @@ export function CalculatorStatesDemo() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground">
-                        Interest rate of 45% exceeds maximum allowed rate of 30%.
+                        Interest rate of 45% exceeds maximum allowed rate of
+                        30%.
                       </p>
                     </CardContent>
                   </Card>
@@ -274,7 +295,8 @@ export function CalculatorStatesDemo() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground">
-                        Loan term is required. Please specify the length of your loan.
+                        Loan term is required. Please specify the length of your
+                        loan.
                       </p>
                     </CardContent>
                   </Card>
@@ -288,7 +310,8 @@ export function CalculatorStatesDemo() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted-foreground">
-                        Please enter a numeric value. Special characters are not allowed.
+                        Please enter a numeric value. Special characters are not
+                        allowed.
                       </p>
                     </CardContent>
                   </Card>
@@ -299,9 +322,10 @@ export function CalculatorStatesDemo() {
                   <AlertCircle className="size-4" />
                   <AlertTitle>Calculation Error</AlertTitle>
                   <AlertDescription>
-                    The values you entered result in a calculation that exceeds system limits. Try
-                    adjusting your loan amount or term to more typical values. If you continue to
-                    experience issues, please contact support.
+                    The values you entered result in a calculation that exceeds
+                    system limits. Try adjusting your loan amount or term to
+                    more typical values. If you continue to experience issues,
+                    please contact support.
                   </AlertDescription>
                 </Alert>
               </div>
@@ -318,7 +342,9 @@ export function CalculatorStatesDemo() {
           <CardContent>
             <div className="grid gap-6 sm:grid-cols-3">
               <div>
-                <h4 className="mb-2 font-semibold text-foreground">Loading State</h4>
+                <h4 className="mb-2 font-semibold text-foreground">
+                  Loading State
+                </h4>
                 <p className="text-sm text-muted-foreground">
                   Show skeleton loaders or spinner when:
                 </p>
@@ -329,7 +355,9 @@ export function CalculatorStatesDemo() {
                 </ul>
               </div>
               <div>
-                <h4 className="mb-2 font-semibold text-foreground">Empty State</h4>
+                <h4 className="mb-2 font-semibold text-foreground">
+                  Empty State
+                </h4>
                 <p className="text-sm text-muted-foreground">
                   Display empty state when:
                 </p>
@@ -340,7 +368,9 @@ export function CalculatorStatesDemo() {
                 </ul>
               </div>
               <div>
-                <h4 className="mb-2 font-semibold text-foreground">Error State</h4>
+                <h4 className="mb-2 font-semibold text-foreground">
+                  Error State
+                </h4>
                 <p className="text-sm text-muted-foreground">
                   Show error messages when:
                 </p>

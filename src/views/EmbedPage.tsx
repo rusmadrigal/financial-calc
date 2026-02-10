@@ -1,44 +1,50 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Copy, Check, Code2, Palette, Settings } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { useState } from "react";
+import { Copy, Check, Code2, Palette, Settings } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from 'sonner';
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 
 export function EmbedPage() {
-  const [selectedCalculator, setSelectedCalculator] = useState('mortgage');
-  const [theme, setTheme] = useState('light');
-  const [width, setWidth] = useState('100%');
-  const [height, setHeight] = useState('800px');
+  const [selectedCalculator, setSelectedCalculator] = useState("mortgage");
+  const [theme, setTheme] = useState("light");
+  const [width, setWidth] = useState("100%");
+  const [height, setHeight] = useState("800px");
   const [showBranding, setShowBranding] = useState(true);
   const [copied, setCopied] = useState(false);
 
   const calculators = [
-    { value: 'mortgage', label: 'Mortgage Calculator' },
-    { value: '401k', label: '401(k) Calculator' },
-    { value: 'investment', label: 'Investment Return Calculator' },
-    { value: 'credit-card', label: 'Credit Card Payoff Calculator' },
-    { value: 'loan', label: 'Loan Calculator' },
-    { value: 'retirement', label: 'Retirement Savings Calculator' },
+    { value: "mortgage", label: "Mortgage Calculator" },
+    { value: "401k", label: "401(k) Calculator" },
+    { value: "investment", label: "Investment Return Calculator" },
+    { value: "credit-card", label: "Credit Card Payoff Calculator" },
+    { value: "loan", label: "Loan Calculator" },
+    { value: "retirement", label: "Retirement Savings Calculator" },
   ];
 
   const generateEmbedCode = () => {
     const params = new URLSearchParams({
       calc: selectedCalculator,
       theme,
-      branding: showBranding ? '1' : '0',
+      branding: showBranding ? "1" : "0",
     });
 
     return `<iframe
@@ -54,7 +60,7 @@ export function EmbedPage() {
   const handleCopy = () => {
     navigator.clipboard.writeText(generateEmbedCode());
     setCopied(true);
-    toast.success('Embed code copied to clipboard!');
+    toast.success("Embed code copied to clipboard!");
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -65,7 +71,8 @@ export function EmbedPage() {
         <div className="mb-8">
           <h1 className="mb-2 text-foreground">Embed a Calculator</h1>
           <p className="text-lg text-muted-foreground">
-            Add SmartCalcLab calculators to your website or blog with a simple iframe embed.
+            Add SmartCalcLab calculators to your website or blog with a simple
+            iframe embed.
           </p>
         </div>
 
@@ -81,7 +88,10 @@ export function EmbedPage() {
                 {/* Calculator Selection */}
                 <div className="space-y-2">
                   <Label htmlFor="calculator">Calculator</Label>
-                  <Select value={selectedCalculator} onValueChange={setSelectedCalculator}>
+                  <Select
+                    value={selectedCalculator}
+                    onValueChange={setSelectedCalculator}
+                  >
                     <SelectTrigger id="calculator">
                       <SelectValue />
                     </SelectTrigger>
@@ -105,7 +115,9 @@ export function EmbedPage() {
                     <SelectContent>
                       <SelectItem value="light">Light</SelectItem>
                       <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="auto">Auto (matches user preference)</SelectItem>
+                      <SelectItem value="auto">
+                        Auto (matches user preference)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -133,7 +145,9 @@ export function EmbedPage() {
                     onChange={(e) => setHeight(e.target.value)}
                     placeholder="e.g., 800px"
                   />
-                  <p className="text-xs text-muted-foreground">Recommended: 800px minimum</p>
+                  <p className="text-xs text-muted-foreground">
+                    Recommended: 800px minimum
+                  </p>
                 </div>
 
                 {/* Show Branding */}
@@ -181,20 +195,24 @@ export function EmbedPage() {
                   <CardContent>
                     <div
                       className="overflow-hidden rounded-lg border-2 border-dashed border-border bg-muted/30 p-8"
-                      style={{ minHeight: '600px' }}
+                      style={{ minHeight: "600px" }}
                     >
                       {/* Mock Preview */}
                       <div
                         className={`mx-auto rounded-lg border border-border bg-card shadow-lg ${
-                          theme === 'dark' ? 'dark' : ''
+                          theme === "dark" ? "dark" : ""
                         }`}
-                        style={{ maxWidth: width === '100%' ? '100%' : width }}
+                        style={{ maxWidth: width === "100%" ? "100%" : width }}
                       >
                         <div className="space-y-4 p-6">
                           {/* Header */}
                           <div>
                             <h3 className="text-xl font-semibold text-foreground">
-                              {calculators.find((c) => c.value === selectedCalculator)?.label}
+                              {
+                                calculators.find(
+                                  (c) => c.value === selectedCalculator,
+                                )?.label
+                              }
                             </h3>
                             <p className="mt-1 text-sm text-muted-foreground">
                               Calculate your monthly payments and total interest
@@ -219,8 +237,10 @@ export function EmbedPage() {
                           {showBranding && (
                             <div className="border-t border-border pt-4 text-center">
                               <p className="text-xs text-muted-foreground">
-                                Powered by{' '}
-                                <span className="font-medium text-primary">SmartCalcLab</span>
+                                Powered by{" "}
+                                <span className="font-medium text-primary">
+                                  SmartCalcLab
+                                </span>
                               </p>
                             </div>
                           )}
@@ -242,7 +262,9 @@ export function EmbedPage() {
                   <CardContent>
                     <div className="relative">
                       <pre className="overflow-x-auto rounded-lg border border-border bg-muted p-4 text-sm">
-                        <code className="font-mono text-foreground">{generateEmbedCode()}</code>
+                        <code className="font-mono text-foreground">
+                          {generateEmbedCode()}
+                        </code>
                       </pre>
                       <Button
                         size="sm"
@@ -272,10 +294,19 @@ export function EmbedPage() {
                             Implementation Notes
                           </p>
                           <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
-                            <li>• The iframe is fully responsive when width is set to 100%</li>
-                            <li>• All calculations happen client-side for privacy</li>
-                            <li>• No external scripts or tracking on your site</li>
-                            <li>• Automatically updates with our improvements</li>
+                            <li>
+                              • The iframe is fully responsive when width is set
+                              to 100%
+                            </li>
+                            <li>
+                              • All calculations happen client-side for privacy
+                            </li>
+                            <li>
+                              • No external scripts or tracking on your site
+                            </li>
+                            <li>
+                              • Automatically updates with our improvements
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -293,31 +324,40 @@ export function EmbedPage() {
               <CardContent>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <h4 className="font-medium text-foreground">Always Up-to-Date</h4>
+                    <h4 className="font-medium text-foreground">
+                      Always Up-to-Date
+                    </h4>
                     <p className="text-sm text-muted-foreground">
-                      Embedded calculators automatically receive updates, improvements, and bug fixes
-                      without any action on your part.
+                      Embedded calculators automatically receive updates,
+                      improvements, and bug fixes without any action on your
+                      part.
                     </p>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="font-medium text-foreground">Privacy Protected</h4>
+                    <h4 className="font-medium text-foreground">
+                      Privacy Protected
+                    </h4>
                     <p className="text-sm text-muted-foreground">
-                      We don't track your users. All calculations happen in the browser with no data
-                      sent to our servers.
+                      We don't track your users. All calculations happen in the
+                      browser with no data sent to our servers.
                     </p>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="font-medium text-foreground">Free Forever</h4>
+                    <h4 className="font-medium text-foreground">
+                      Free Forever
+                    </h4>
                     <p className="text-sm text-muted-foreground">
-                      No registration, no API keys, no usage limits. Embed as many calculators as you
-                      need on any site.
+                      No registration, no API keys, no usage limits. Embed as
+                      many calculators as you need on any site.
                     </p>
                   </div>
                   <div className="space-y-2">
-                    <h4 className="font-medium text-foreground">Professional Quality</h4>
+                    <h4 className="font-medium text-foreground">
+                      Professional Quality
+                    </h4>
                     <p className="text-sm text-muted-foreground">
-                      Built with accurate formulas, clean design, and full mobile responsiveness that
-                      matches your brand.
+                      Built with accurate formulas, clean design, and full
+                      mobile responsiveness that matches your brand.
                     </p>
                   </div>
                 </div>
@@ -331,25 +371,30 @@ export function EmbedPage() {
               </CardHeader>
               <CardContent className="prose prose-sm max-w-none dark:prose-invert">
                 <p className="text-sm text-muted-foreground">
-                  You're free to embed SmartCalcLab calculators on any website, including commercial
-                  sites, under the following conditions:
+                  You're free to embed SmartCalcLab calculators on any website,
+                  including commercial sites, under the following conditions:
                 </p>
                 <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                   <li>
-                    If you remove our branding, please add a text attribution like "Calculator
-                    powered by SmartCalcLab" with a link back to smartcalclab.com
+                    If you remove our branding, please add a text attribution
+                    like "Calculator powered by SmartCalcLab" with a link back
+                    to smartcalclab.com
                   </li>
                   <li>
-                    Don't modify the iframe contents or present the calculators as your own creation
+                    Don't modify the iframe contents or present the calculators
+                    as your own creation
                   </li>
                   <li>
-                    Don't use our calculators in apps or contexts that provide illegal, misleading,
-                    or predatory financial advice
+                    Don't use our calculators in apps or contexts that provide
+                    illegal, misleading, or predatory financial advice
                   </li>
                 </ul>
                 <p className="mt-4 text-sm text-muted-foreground">
-                  Questions about embedding? Contact us at{' '}
-                  <a href="mailto:hello@smartcalclab.com" className="text-accent hover:underline">
+                  Questions about embedding? Contact us at{" "}
+                  <a
+                    href="mailto:hello@smartcalclab.com"
+                    className="text-accent hover:underline"
+                  >
                     hello@smartcalclab.com
                   </a>
                 </p>

@@ -1,55 +1,78 @@
-import { useState, useRef, useEffect } from 'react';
-import { Search, Calculator, TrendingUp, Home, CreditCard, PiggyBank, Clock } from 'lucide-react';
-import { Input } from './ui/input';
-import { Card } from './ui/card';
+import { useState, useRef, useEffect } from "react";
+import {
+  Search,
+  Calculator,
+  TrendingUp,
+  Home,
+  CreditCard,
+  PiggyBank,
+  Clock,
+} from "lucide-react";
+import { Input } from "./ui/input";
+import { Card } from "./ui/card";
 
 interface SearchBarProps {
   onSelect?: (calculator: string) => void;
 }
 
 const popularCalculators = [
-  { name: 'Mortgage Calculator', icon: Home, category: 'Loans' },
-  { name: '401(k) Calculator', icon: PiggyBank, category: 'Retirement' },
-  { name: 'Investment Return Calculator', icon: TrendingUp, category: 'Investing' },
-  { name: 'Credit Card Payoff Calculator', icon: CreditCard, category: 'Debt' },
-  { name: 'Loan Amortization Calculator', icon: Calculator, category: 'Loans' },
-  { name: 'Retirement Savings Calculator', icon: Clock, category: 'Retirement' },
-  { name: 'Compound Interest Calculator', icon: TrendingUp, category: 'Investing' },
-  { name: 'Debt Consolidation Calculator', icon: CreditCard, category: 'Debt' },
+  { name: "Mortgage Calculator", icon: Home, category: "Loans" },
+  { name: "401(k) Calculator", icon: PiggyBank, category: "Retirement" },
+  {
+    name: "Investment Return Calculator",
+    icon: TrendingUp,
+    category: "Investing",
+  },
+  { name: "Credit Card Payoff Calculator", icon: CreditCard, category: "Debt" },
+  { name: "Loan Amortization Calculator", icon: Calculator, category: "Loans" },
+  {
+    name: "Retirement Savings Calculator",
+    icon: Clock,
+    category: "Retirement",
+  },
+  {
+    name: "Compound Interest Calculator",
+    icon: TrendingUp,
+    category: "Investing",
+  },
+  { name: "Debt Consolidation Calculator", icon: CreditCard, category: "Debt" },
 ];
 
 export function SearchBar({ onSelect }: SearchBarProps) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [filteredResults, setFilteredResults] = useState(popularCalculators);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setIsFocused(false);
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
-    if (query.trim() === '') {
+    if (query.trim() === "") {
       setFilteredResults(popularCalculators);
     } else {
       const filtered = popularCalculators.filter(
         (calc) =>
           calc.name.toLowerCase().includes(query.toLowerCase()) ||
-          calc.category.toLowerCase().includes(query.toLowerCase())
+          calc.category.toLowerCase().includes(query.toLowerCase()),
       );
       setFilteredResults(filtered);
     }
   }, [query]);
 
   const handleSelect = (calculatorName: string) => {
-    setQuery('');
+    setQuery("");
     setIsFocused(false);
     onSelect?.(calculatorName);
   };
@@ -69,19 +92,19 @@ export function SearchBar({ onSelect }: SearchBarProps) {
         {!isFocused && !query && (
           <div className="pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 sm:block">
             <p className="text-xs text-muted-foreground">
-              Try: <span className="font-medium">mortgage</span>,{' '}
-              <span className="font-medium">401k</span>,{' '}
+              Try: <span className="font-medium">mortgage</span>,{" "}
+              <span className="font-medium">401k</span>,{" "}
               <span className="font-medium">debt payoff</span>
             </p>
           </div>
         )}
       </div>
-      
+
       {/* Helper text for mobile */}
       {!isFocused && !query && (
         <p className="mt-2 text-center text-xs text-muted-foreground sm:hidden">
-          Try: <span className="font-medium">mortgage</span>,{' '}
-          <span className="font-medium">401k</span>,{' '}
+          Try: <span className="font-medium">mortgage</span>,{" "}
+          <span className="font-medium">401k</span>,{" "}
           <span className="font-medium">debt payoff</span>
         </p>
       )}
@@ -92,7 +115,7 @@ export function SearchBar({ onSelect }: SearchBarProps) {
           <div className="max-h-[400px] overflow-y-auto">
             {filteredResults.length > 0 ? (
               <div className="p-2">
-                {query.trim() === '' && (
+                {query.trim() === "" && (
                   <div className="px-4 pb-2 pt-3">
                     <p className="text-xs font-medium text-muted-foreground">
                       POPULAR CALCULATORS
@@ -111,8 +134,12 @@ export function SearchBar({ onSelect }: SearchBarProps) {
                         <Icon className="size-5 text-primary" />
                       </div>
                       <div className="flex-1">
-                        <div className="text-sm font-medium text-foreground">{calc.name}</div>
-                        <div className="text-xs text-muted-foreground">{calc.category}</div>
+                        <div className="text-sm font-medium text-foreground">
+                          {calc.name}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {calc.category}
+                        </div>
                       </div>
                     </button>
                   );

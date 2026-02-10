@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write \"app/**/*.{js,jsx}\" \"src/**/*.{ts,tsx,css}\" \"*.{json,mjs,md}\""
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
@@ -68,6 +69,7 @@
     "vaul": "1.1.2"
   },
   "devDependencies": {
+    "prettier": "3.4.2",
     "@tailwindcss/postcss": "4.1.12",
     "@types/node": "25.2.2",
     "@types/react": "18.3.12",
