@@ -223,6 +223,7 @@ export function HomePage() {
                 icon={calc.icon}
                 badges={calc.badges}
                 onOpen={() => router.push(`/calculators/${nameToSlug(calc.title)}`)}
+                className="border-[#e2e8f0]"
               />
             ))}
           </div>

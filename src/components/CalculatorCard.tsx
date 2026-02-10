@@ -1,7 +1,7 @@
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, ArrowRight } from 'lucide-react';
+import { cn } from './ui/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
-import { ArrowRight } from 'lucide-react';
 
 interface CalculatorCardProps {
   title: string;
@@ -9,6 +9,8 @@ interface CalculatorCardProps {
   icon: LucideIcon;
   badges?: string[];
   onOpen: () => void;
+  /** Optional class for the card container (e.g. to match Figma background on home) */
+  className?: string;
 }
 
 export function CalculatorCard({
@@ -17,10 +19,14 @@ export function CalculatorCard({
   icon: Icon,
   badges = [],
   onOpen,
+  className,
 }: CalculatorCardProps) {
   return (
     <Card
-      className="group flex h-full cursor-pointer flex-col transition-all hover:border-accent/50 hover:shadow-md"
+      className={cn(
+        'group flex h-full cursor-pointer flex-col transition-all hover:border-accent/50 hover:shadow-md',
+        className,
+      )}
       onClick={onOpen}
       role="button"
       tabIndex={0}
