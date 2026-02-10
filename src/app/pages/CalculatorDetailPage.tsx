@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Download, Copy, FileSpreadsheet, Calendar, Info, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -30,33 +30,90 @@ interface CalculatorDetailPageProps {
   calculatorName?: string;
 }
 
+/** Monthly payment from principal, annual rate %, and years. Standard mortgage formula. */
+function calcMonthlyPayment(principal: number, annualRatePercent: number, years: number): number {
+  if (principal <= 0 || years <= 0) return 0;
+  const r = annualRatePercent / 100 / 12;
+  const n = years * 12;
+  if (r === 0) return principal / n;
+  return principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+}
+
+/** Build amortization schedule (month-by-month) and yearly chart data. */
+function buildAmortization(
+  principal: number,
+  monthlyPayment: number,
+  annualRatePercent: number,
+  years: number
+): { schedule: { month: number; payment: number; principal: number; interest: number; balance: number }[]; chartData: { year: number; principal: number; interest: number; balance: number }[] } {
+  const schedule: { month: number; payment: number; principal: number; interest: number; balance: number }[] = [];
+  const monthlyRate = annualRatePercent / 100 / 12;
+  const numMonths = years * 12;
+  let balance = principal;
+
+  for (let month = 1; month <= numMonths && balance > 0; month++) {
+    const interestPayment = balance * monthlyRate;
+    const principalPayment = Math.min(monthlyPayment - interestPayment, balance);
+    balance = Math.max(0, balance - principalPayment);
+    const payment = principalPayment + interestPayment;
+    schedule.push({
+      month,
+      payment,
+      principal: principalPayment,
+      interest: interestPayment,
+      balance,
+    });
+  }
+
+  const chartData: { year: number; principal: number; interest: number; balance: number }[] = [];
+  for (let year = 1; year <= years; year++) {
+    const startMonth = (year - 1) * 12;
+    const endMonth = Math.min(year * 12, schedule.length);
+    let principalSum = 0;
+    let interestSum = 0;
+    let endBalance = 0;
+    for (let i = startMonth; i < endMonth; i++) {
+      const row = schedule[i];
+      if (row) {
+        principalSum += row.principal;
+        interestSum += row.interest;
+        endBalance = row.balance;
+      }
+    }
+    chartData.push({ year, principal: principalSum, interest: interestSum, balance: endBalance });
+  }
+  return { schedule, chartData };
+}
+
 export function CalculatorDetailPage({ calculatorName = 'Mortgage Calculator' }: CalculatorDetailPageProps) {
   const [loanAmount, setLoanAmount] = useState('350000');
   const [interestRate, setInterestRate] = useState('6.5');
   const [loanTerm, setLoanTerm] = useState('30');
   const [downPayment, setDownPayment] = useState('70000');
 
-  // Mock calculations
-  const monthlyPayment = 2212.45;
-  const totalInterest = 446681.56;
-  const totalPayment = 796681.56;
+  const principal = useMemo(() => {
+    const price = parseFloat(loanAmount) || 0;
+    const down = parseFloat(downPayment) || 0;
+    return Math.max(0, price - down);
+  }, [loanAmount, downPayment]);
 
-  // Mock chart data
-  const chartData = Array.from({ length: 30 }, (_, i) => ({
-    year: i + 1,
-    principal: 280000 - (i * 9333),
-    interest: totalInterest - (i * 14889),
-    balance: 280000 - (i * 9333),
-  }));
+  const rate = useMemo(() => Math.max(0, parseFloat(interestRate) || 0), [interestRate]);
+  const years = useMemo(() => Math.max(0.5, Math.min(50, parseFloat(loanTerm) || 30)), [loanTerm]);
 
-  // Mock amortization schedule
-  const amortizationData = Array.from({ length: 12 }, (_, i) => ({
-    month: i + 1,
-    payment: monthlyPayment,
-    principal: 733.45 + (i * 2),
-    interest: 1479.00 - (i * 2),
-    balance: 280000 - ((i + 1) * 733.45),
-  }));
+  const monthlyPayment = useMemo(
+    () => calcMonthlyPayment(principal, rate, years),
+    [principal, rate, years]
+  );
+
+  const totalPayment = useMemo(() => monthlyPayment * (years * 12), [monthlyPayment, years]);
+  const totalInterest = useMemo(() => Math.max(0, totalPayment - principal), [totalPayment, principal]);
+
+  const { schedule: fullSchedule, chartData } = useMemo(
+    () => buildAmortization(principal, monthlyPayment, rate, years),
+    [principal, monthlyPayment, rate, years]
+  );
+
+  const amortizationData = useMemo(() => fullSchedule.slice(0, 12), [fullSchedule]);
 
   const handleCopyResults = () => {
     toast.success('Results copied to clipboard!');
