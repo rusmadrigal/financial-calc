@@ -1,5 +1,5 @@
 import { Shield, Eye, Target, Award, Users, TrendingUp } from 'lucide-react';
-import { Card, CardContent } from '../components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 
 export function AboutPage() {
   const values = [

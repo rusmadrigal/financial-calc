@@ -1,8 +1,8 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { CalculatorDetailPage } from '@/app/pages/CalculatorDetailPage';
-import { slugToName } from '@/app/lib/slugs';
+import { CalculatorDetailPage } from '@/views/CalculatorDetailPage';
+import { slugToName } from '@/lib/slugs';
 
 export default function CalculatorPage() {
   const params = useParams();

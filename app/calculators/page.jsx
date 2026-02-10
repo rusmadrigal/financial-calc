@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CalculatorsPage } from '@/app/pages/CalculatorsPage';
+import { CalculatorsPage } from '@/views/CalculatorsPage';
 
 function CalculatorsContent() {
   const searchParams = useSearchParams();

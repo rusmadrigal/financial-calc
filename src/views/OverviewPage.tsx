@@ -2,9 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { Home, Calculator, FileText, Info, Code, Palette, MonitorSmartphone } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 function pageToPath(page: string): string {
   if (page === 'home') return '/';
   if (page === 'calculator') return '/calculators/mortgage-calculator';

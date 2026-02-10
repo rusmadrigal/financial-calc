@@ -50,7 +50,7 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
           {/* Desktop Navigation */}
           <div className="hidden items-center gap-8 md:flex">
             {navItems.map((item) => {
-              const active = isActive(pathname, item.href);
+              const active = isActive(pathname ?? '', item.href);
               return (
                 <Link
                   key={item.href}
@@ -121,7 +121,7 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
               <SheetContent side="right" className="w-[280px] sm:w-[320px]">
                 <div className="flex flex-col gap-6 pt-8">
                   {navItems.map((item) => {
-                    const active = isActive(pathname, item.href);
+                    const active = isActive(pathname ?? '', item.href);
                     return (
                       <Link
                         key={item.href}

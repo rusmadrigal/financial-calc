@@ -18,15 +18,15 @@ import {
   SlidersHorizontal,
   X,
 } from 'lucide-react';
-import { CalculatorCard } from '../components/CalculatorCard';
-import { Button } from '../components/ui/button';
-import { Card, CardContent } from '../components/ui/card';
-import { Label } from '../components/ui/label';
-import { Checkbox } from '../components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../components/ui/sheet';
-import { Badge } from '../components/ui/badge';
-import { nameToSlug } from '../lib/slugs';
+import { CalculatorCard } from '@/components/CalculatorCard';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Badge } from '@/components/ui/badge';
+import { nameToSlug } from '@/lib/slugs';
 
 interface CalculatorsPageProps {
   initialCategory?: string;

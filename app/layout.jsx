@@ -1,6 +1,6 @@
 import './globals.css';
 import { Providers } from './Providers';
-import { AppShell } from '@/app/components/AppShell';
+import { AppShell } from '@/components/AppShell';
 
 export const metadata = {
   title: 'Financial Calculators Website Design',

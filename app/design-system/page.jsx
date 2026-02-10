@@ -1,4 +1,4 @@
-import { DesignSystemPage } from '@/app/pages/DesignSystemPage';
+import { DesignSystemPage } from '@/views/DesignSystemPage';
 
 export default function Page() {
   return <DesignSystemPage />;

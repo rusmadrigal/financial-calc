@@ -17,11 +17,11 @@ import {
   Star,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { SearchBar } from '../components/SearchBar';
-import { CalculatorCard } from '../components/CalculatorCard';
-import { Card, CardContent } from '../components/ui/card';
-import { Button } from '../components/ui/button';
-import { nameToSlug } from '../lib/slugs';
+import { SearchBar } from '@/components/SearchBar';
+import { CalculatorCard } from '@/components/CalculatorCard';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { nameToSlug } from '@/lib/slugs';
 
 const featuredCalculators = [
   {

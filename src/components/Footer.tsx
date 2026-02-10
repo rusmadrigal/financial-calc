@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Calculator } from 'lucide-react';
-import { nameToSlug } from '../lib/slugs';
+import { nameToSlug } from '@/lib/slugs';
 
 const popularCalculators = [
   'Mortgage Calculator',
