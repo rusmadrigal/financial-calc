@@ -1,0 +1,6 @@
+@import '../src/styles/fonts.css';
+@import '../src/styles/theme.css';
+@import 'tailwindcss';
+@source 'src/**/*.{js,ts,jsx,tsx}';
+@source 'app/**/*.{js,ts,jsx,tsx}';
+@import 'tw-animate-css';
