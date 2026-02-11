@@ -1,4 +1,8 @@
 import type { SchemaTypeDefinition } from "sanity";
+import { toolCategory } from "./toolCategory";
+import { calculatorPage } from "./calculatorPage";
 
-/** Schema types for the studio. Add calculatorPage and others here later. */
-export const schemaTypes: SchemaTypeDefinition[] = [];
+export const schemaTypes: SchemaTypeDefinition[] = [
+  toolCategory,
+  calculatorPage,
+];

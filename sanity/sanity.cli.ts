@@ -18,13 +18,13 @@ export default defineCliConfig({
     projectId,
     dataset,
   },
-  vite: (config) => ({
+  vite: (config: Record<string, unknown>) => ({
     ...config,
     // Load .env from sanity folder so SANITY_PROJECT_ID is available in the browser
     envDir: process.cwd(),
     envPrefix: ["VITE_", "SANITY_"],
     define: {
-      ...config.define,
+      ...(typeof config.define === "object" && config.define !== null ? config.define : {}),
       "process.env.SANITY_PROJECT_ID": JSON.stringify(projectId),
       "process.env.SANITY_DATASET": JSON.stringify(dataset),
       "process.env.SANITY_API_VERSION": JSON.stringify(apiVersion),
