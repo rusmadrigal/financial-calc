@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write \"app/**/*.{js,jsx}\" \"src/**/*.{ts,tsx,css}\" \"*.{json,mjs,md}\""
+    "format": "prettier --write \"app/**/*.{js,jsx}\" \"src/**/*.{ts,tsx,css}\" \"*.{json,mjs,md}\"",
+    "sanity:dev": "pnpm -C sanity dev",
+    "sanity:build": "pnpm -C sanity build"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
