@@ -29,9 +29,15 @@ export const calculatorPage = defineType({
       name: "calculatorType",
       title: "Calculator Type",
       type: "string",
+      description:
+        "Must match the registry key. Slug (no leading slash) → calculatorType: mortgage-calculator → mortgage, refinance-calculator → refinance, rent-vs-buy-calculator → rentVsBuy, loan-amortization-calculator → amortization, auto-loan-calculator → autoLoan.",
       options: {
         list: [
           { title: "Mortgage", value: "mortgage" },
+          { title: "Refinance", value: "refinance" },
+          { title: "Rent vs Buy", value: "rentVsBuy" },
+          { title: "Loan Amortization", value: "amortization" },
+          { title: "Auto Loan", value: "autoLoan" },
         ],
       },
       validation: (Rule) => Rule.required(),

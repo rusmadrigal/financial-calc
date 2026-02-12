@@ -42,96 +42,14 @@ import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
 import { exportToExcel } from "@/lib/exports/exportToExcel";
 import { exportToCSV } from "@/lib/exports/exportToCSV";
+import { calculateMortgage } from "@/lib/helpers/financial/calculateMortgage";
 
-function calcMonthlyPayment(
-  principal: number,
-  annualRatePercent: number,
-  years: number,
-): number {
-  if (principal <= 0 || years <= 0) return 0;
-  const r = annualRatePercent / 100 / 12;
-  const n = years * 12;
-  if (r === 0) return principal / n;
-  return (principal * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
-}
-
-function buildAmortization(
-  principal: number,
-  monthlyPayment: number,
-  annualRatePercent: number,
-  years: number,
-): {
-  schedule: {
-    month: number;
-    payment: number;
-    principal: number;
-    interest: number;
-    balance: number;
-  }[];
-  chartData: {
-    year: number;
-    principal: number;
-    interest: number;
-    balance: number;
-  }[];
-} {
-  const schedule: {
-    month: number;
-    payment: number;
-    principal: number;
-    interest: number;
-    balance: number;
-  }[] = [];
-  const monthlyRate = annualRatePercent / 100 / 12;
-  const numMonths = years * 12;
-  let balance = principal;
-
-  for (let month = 1; month <= numMonths && balance > 0; month++) {
-    const interestPayment = balance * monthlyRate;
-    const principalPayment = Math.min(
-      monthlyPayment - interestPayment,
-      balance,
-    );
-    balance = Math.max(0, balance - principalPayment);
-    const payment = principalPayment + interestPayment;
-    schedule.push({
-      month,
-      payment,
-      principal: principalPayment,
-      interest: interestPayment,
-      balance,
-    });
-  }
-
-  const chartData: {
-    year: number;
-    principal: number;
-    interest: number;
-    balance: number;
-  }[] = [];
-  for (let year = 1; year <= years; year++) {
-    const startMonth = (year - 1) * 12;
-    const endMonth = Math.min(year * 12, schedule.length);
-    let principalSum = 0;
-    let interestSum = 0;
-    let endBalance = 0;
-    for (let i = startMonth; i < endMonth; i++) {
-      const row = schedule[i];
-      if (row) {
-        principalSum += row.principal;
-        interestSum += row.interest;
-        endBalance = row.balance;
-      }
-    }
-    chartData.push({
-      year,
-      principal: principalSum,
-      interest: interestSum,
-      balance: endBalance,
-    });
-  }
-  return { schedule, chartData };
-}
+const usd = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 0,
+  minimumFractionDigits: 0,
+});
 
 export function MortgageCalculator() {
   const [loanAmount, setLoanAmount] = useState("350000");
@@ -139,72 +57,65 @@ export function MortgageCalculator() {
   const [loanTerm, setLoanTerm] = useState("30");
   const [downPayment, setDownPayment] = useState("70000");
 
-  const principal = useMemo(() => {
-    const price = parseFloat(loanAmount) || 0;
-    const down = parseFloat(downPayment) || 0;
-    return Math.max(0, price - down);
-  }, [loanAmount, downPayment]);
+  const result = useMemo(() => {
+    const homePrice = Math.max(0, parseFloat(loanAmount) || 0);
+    const down = Math.max(0, parseFloat(downPayment) || 0);
+    const apr = Math.max(0, parseFloat(interestRate) || 0);
+    const years = Math.max(0.5, Math.min(50, parseFloat(loanTerm) || 30));
+    return calculateMortgage({
+      homePrice,
+      downPayment: down,
+      aprPercent: apr,
+      termYears: years,
+    });
+  }, [loanAmount, downPayment, interestRate, loanTerm]);
 
-  const rate = useMemo(
-    () => Math.max(0, parseFloat(interestRate) || 0),
-    [interestRate],
-  );
-  const years = useMemo(
-    () => Math.max(0.5, Math.min(50, parseFloat(loanTerm) || 30)),
-    [loanTerm],
-  );
+  const chartData = useMemo(() => {
+    const years = Math.ceil(result.schedule.length / 12);
+    const data: { year: number; principal: number; interest: number; balance: number }[] = [];
+    for (let year = 1; year <= years; year++) {
+      const start = (year - 1) * 12;
+      const end = Math.min(year * 12, result.schedule.length);
+      let principalSum = 0;
+      let interestSum = 0;
+      let endBalance = 0;
+      for (let i = start; i < end; i++) {
+        const row = result.schedule[i];
+        if (row) {
+          principalSum += row.principal;
+          interestSum += row.interest;
+          endBalance = row.balance;
+        }
+      }
+      data.push({ year, principal: principalSum, interest: interestSum, balance: endBalance });
+    }
+    return data;
+  }, [result.schedule]);
 
-  const monthlyPayment = useMemo(
-    () => calcMonthlyPayment(principal, rate, years),
-    [principal, rate, years],
-  );
-
-  const totalPayment = useMemo(
-    () => monthlyPayment * (years * 12),
-    [monthlyPayment, years],
-  );
-  const totalInterest = useMemo(
-    () => Math.max(0, totalPayment - principal),
-    [totalPayment, principal],
-  );
-
-  const { schedule: fullSchedule, chartData } = useMemo(
-    () => buildAmortization(principal, monthlyPayment, rate, years),
-    [principal, monthlyPayment, rate, years],
-  );
-
-  const amortizationData = useMemo(
-    () => fullSchedule.slice(0, 12),
-    [fullSchedule],
-  );
-
-  const tableHeaders = useMemo(
-    () => ["Month", "Payment", "Principal", "Interest", "Balance"],
-    [],
+  const amortizationPreview = useMemo(
+    () => result.schedule.slice(0, 12),
+    [result.schedule],
   );
 
-  const tableRows = useMemo(
-    () =>
-      fullSchedule.map((row) => [
-        row.month,
-        Number(row.payment.toFixed(2)),
-        Number(row.principal.toFixed(2)),
-        Number(row.interest.toFixed(2)),
-        Number(row.balance.toFixed(2)),
-      ] as (string | number)[]),
-    [fullSchedule],
-  );
+  const tableHeaders = ["Month", "Payment", "Principal", "Interest", "Balance"];
+  const tableRows = result.schedule.map((row) => [
+    row.period,
+    Number(row.payment.toFixed(2)),
+    Number(row.principal.toFixed(2)),
+    Number(row.interest.toFixed(2)),
+    Number(row.balance.toFixed(2)),
+  ] as (string | number)[]);
 
-  const summaryData = useMemo(
-    (): Record<string, string | number> => ({
-      "Loan Amount": `$${principal.toLocaleString()}`,
-      "Interest Rate": `${rate}%`,
-      "Loan Term": `${years} years`,
-      "Monthly Payment": `$${monthlyPayment.toLocaleString()}`,
-      "Total Interest": `$${totalInterest.toLocaleString()}`,
-      "Total Payment": `$${totalPayment.toLocaleString()}`,
+  const summaryData: Record<string, string | number> = useMemo(
+    () => ({
+      "Loan Amount": usd.format(result.principal),
+      "Interest Rate": `${Math.max(0, parseFloat(interestRate) || 0)}%`,
+      "Loan Term": `${Math.max(0.5, parseFloat(loanTerm) || 30)} years`,
+      "Monthly Payment": usd.format(result.monthlyPayment),
+      "Total Interest": usd.format(result.totalInterest),
+      "Total Payment": usd.format(result.totalPayment),
     }),
-    [principal, rate, years, monthlyPayment, totalInterest, totalPayment],
+    [result, interestRate, loanTerm],
   );
 
   const handleCopyResults = () => {
@@ -257,6 +168,7 @@ export function MortgageCalculator() {
                   <Input
                     id="loanAmount"
                     type="number"
+                    min={0}
                     value={loanAmount}
                     onChange={(e) => setLoanAmount(e.target.value)}
                     className="pl-7"
@@ -276,6 +188,7 @@ export function MortgageCalculator() {
                   <Input
                     id="downPayment"
                     type="number"
+                    min={0}
                     value={downPayment}
                     onChange={(e) => setDownPayment(e.target.value)}
                     className="pl-7"
@@ -292,6 +205,7 @@ export function MortgageCalculator() {
                   <Input
                     id="interestRate"
                     type="number"
+                    min={0}
                     step="0.01"
                     value={interestRate}
                     onChange={(e) => setInterestRate(e.target.value)}
@@ -312,6 +226,7 @@ export function MortgageCalculator() {
                   <Input
                     id="loanTerm"
                     type="number"
+                    min={1}
                     value={loanTerm}
                     onChange={(e) => setLoanTerm(e.target.value)}
                     className="pr-16"
@@ -350,7 +265,7 @@ export function MortgageCalculator() {
                     Monthly Payment
                   </p>
                   <p className="mt-1 text-3xl font-semibold text-foreground">
-                    ${monthlyPayment.toLocaleString()}
+                    {usd.format(result.monthlyPayment)}
                   </p>
                 </div>
                 <div>
@@ -358,13 +273,13 @@ export function MortgageCalculator() {
                     Total Interest
                   </p>
                   <p className="mt-1 text-3xl font-semibold text-foreground">
-                    ${totalInterest.toLocaleString()}
+                    {usd.format(result.totalInterest)}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Total Payment</p>
                   <p className="mt-1 text-3xl font-semibold text-foreground">
-                    ${totalPayment.toLocaleString()}
+                    {usd.format(result.totalPayment)}
                   </p>
                 </div>
               </div>
@@ -488,22 +403,22 @@ export function MortgageCalculator() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {amortizationData.map((row) => (
-                      <TableRow key={row.month}>
+                    {amortizationPreview.map((row) => (
+                      <TableRow key={row.period}>
                         <TableCell className="font-medium">
-                          {row.month}
+                          {row.period}
                         </TableCell>
                         <TableCell className="text-right">
-                          ${row.payment.toLocaleString()}
+                          {usd.format(row.payment)}
                         </TableCell>
                         <TableCell className="text-right">
-                          ${row.principal.toLocaleString()}
+                          {usd.format(row.principal)}
                         </TableCell>
                         <TableCell className="text-right">
-                          ${row.interest.toLocaleString()}
+                          {usd.format(row.interest)}
                         </TableCell>
                         <TableCell className="text-right font-medium">
-                          ${row.balance.toLocaleString()}
+                          {usd.format(row.balance)}
                         </TableCell>
                       </TableRow>
                     ))}

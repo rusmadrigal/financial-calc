@@ -1,6 +1,9 @@
 @import "../src/styles/fonts.css";
 @import "../src/styles/theme.css";
+
+/* Tailwind v4: scan these so utility classes (cards, buttons, etc.) are generated */
+@source "src/**/*.{js,ts,jsx,tsx}";
+@source "app/**/*.{js,ts,jsx,tsx}";
+
 @import "tailwindcss";
-@source 'src/**/*.{js,ts,jsx,tsx}';
-@source 'app/**/*.{js,ts,jsx,tsx}';
 @import "tw-animate-css";

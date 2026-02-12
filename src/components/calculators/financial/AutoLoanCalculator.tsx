@@ -1,0 +1,406 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import {
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { toast } from "sonner";
+import { exportToPDF } from "@/lib/exports/exportToPDF";
+import { exportToExcel } from "@/lib/exports/exportToExcel";
+import { exportToCSV } from "@/lib/exports/exportToCSV";
+import { calculateAutoLoan } from "@/lib/helpers/financial/calculateAutoLoan";
+
+const usd = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 0,
+  minimumFractionDigits: 0,
+});
+
+export function AutoLoanCalculator() {
+  const [vehiclePrice, setVehiclePrice] = useState("35000");
+  const [downPayment, setDownPayment] = useState("5000");
+  const [tradeIn, setTradeIn] = useState("0");
+  const [salesTaxPct, setSalesTaxPct] = useState("7");
+  const [fees, setFees] = useState("500");
+  const [apr, setApr] = useState("7.5");
+  const [termMonths, setTermMonths] = useState("60");
+
+  const result = useMemo(() => {
+    return calculateAutoLoan({
+      vehiclePrice: Math.max(0, parseFloat(vehiclePrice) || 0),
+      downPayment: Math.max(0, parseFloat(downPayment) || 0),
+      tradeIn: Math.max(0, parseFloat(tradeIn) || 0),
+      salesTaxPercent: Math.max(0, parseFloat(salesTaxPct) || 0),
+      fees: Math.max(0, parseFloat(fees) || 0),
+      aprPercent: Math.max(0, parseFloat(apr) || 0),
+      termMonths: Math.max(1, parseInt(termMonths, 10) || 60),
+    });
+  }, [vehiclePrice, downPayment, tradeIn, salesTaxPct, fees, apr, termMonths]);
+
+  const chartData = useMemo(
+    () =>
+      result.schedule.map((row) => ({
+        month: row.period,
+        balance: row.balance,
+      })),
+    [result.schedule],
+  );
+
+  const tableHeaders = [
+    "Month",
+    "Payment",
+    "Principal",
+    "Interest",
+    "Balance",
+  ];
+  const tableRows = result.schedule.map((row) => [
+    row.period,
+    Number(row.payment.toFixed(2)),
+    Number(row.principal.toFixed(2)),
+    Number(row.interest.toFixed(2)),
+    Number(row.balance.toFixed(2)),
+  ] as (string | number)[]);
+
+  const summaryData: Record<string, string | number> = useMemo(
+    () => ({
+      "Amount Financed": usd.format(result.amountFinanced),
+      "Monthly Payment": usd.format(result.payment),
+      "Total Payment": usd.format(result.totalPayment),
+      "Total Interest": usd.format(result.totalInterest),
+    }),
+    [result],
+  );
+
+  const handleExportPDF = () => {
+    exportToPDF("Auto Loan Calculator", summaryData, tableHeaders, tableRows);
+    toast.success("PDF downloaded");
+  };
+
+  const handleExportExcel = () => {
+    exportToExcel("Auto Loan Schedule", tableHeaders, tableRows);
+    toast.success("Excel file downloaded");
+  };
+
+  const handleDownloadFullSchedule = () => {
+    exportToCSV("Auto-Loan-Full-Schedule", tableHeaders, tableRows);
+    toast.success("Full schedule downloaded");
+  };
+
+  const handleReset = () => {
+    setVehiclePrice("35000");
+    setDownPayment("5000");
+    setTradeIn("0");
+    setSalesTaxPct("7");
+    setFees("500");
+    setApr("7.5");
+    setTermMonths("60");
+    toast.info("Calculator reset");
+  };
+
+  const previewRows = result.schedule.slice(0, 12);
+
+  return (
+    <>
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="lg:col-span-1">
+          <Card className="sticky top-24">
+            <CardHeader>
+              <CardTitle>Calculator Inputs</CardTitle>
+              <CardDescription>Vehicle and loan details</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="vehiclePrice">Vehicle Price ($)</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    id="vehiclePrice"
+                    type="number"
+                    min={0}
+                    value={vehiclePrice}
+                    onChange={(e) => setVehiclePrice(e.target.value)}
+                    className="pl-7"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="downPayment">Down Payment ($)</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    id="downPayment"
+                    type="number"
+                    min={0}
+                    value={downPayment}
+                    onChange={(e) => setDownPayment(e.target.value)}
+                    className="pl-7"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="tradeIn">Trade-in Value ($)</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    id="tradeIn"
+                    type="number"
+                    min={0}
+                    value={tradeIn}
+                    onChange={(e) => setTradeIn(e.target.value)}
+                    className="pl-7"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="salesTaxPct">Sales Tax (%)</Label>
+                <Input
+                  id="salesTaxPct"
+                  type="number"
+                  min={0}
+                  step="0.1"
+                  value={salesTaxPct}
+                  onChange={(e) => setSalesTaxPct(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="fees">Fees ($)</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    id="fees"
+                    type="number"
+                    min={0}
+                    value={fees}
+                    onChange={(e) => setFees(e.target.value)}
+                    className="pl-7"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="apr">APR (%)</Label>
+                <Input
+                  id="apr"
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={apr}
+                  onChange={(e) => setApr(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="termMonths">Term (months)</Label>
+                <Input
+                  id="termMonths"
+                  type="number"
+                  min={1}
+                  value={termMonths}
+                  onChange={(e) => setTermMonths(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <Button className="flex-1">Calculate</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-6 lg:col-span-2">
+          <Card className="border-2">
+            <CardHeader>
+              <CardTitle>Results</CardTitle>
+              <CardDescription>Payment and totals</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Amount Financed</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.amountFinanced)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Monthly Payment</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.payment)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Interest</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.totalInterest)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Total Payment</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.totalPayment)}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={handleExportPDF}>
+                  <Download className="mr-2 size-4" />
+                  Export PDF
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleExportExcel}>
+                  <FileSpreadsheet className="mr-2 size-4" />
+                  Export Excel
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Alert>
+            <Info className="size-4" />
+            <AlertDescription>
+              Amount financed = vehicle price minus down payment and trade-in,
+              plus sales tax and fees.
+            </AlertDescription>
+          </Alert>
+
+          {chartData.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Remaining Balance Over Time</CardTitle>
+                <CardDescription>By month</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="month" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Balance"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Payment Schedule</CardTitle>
+              <CardDescription>First 12 months</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-20">Month</TableHead>
+                      <TableHead className="text-right">Payment</TableHead>
+                      <TableHead className="text-right">Principal</TableHead>
+                      <TableHead className="text-right">Interest</TableHead>
+                      <TableHead className="text-right">Balance</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {previewRows.map((row) => (
+                      <TableRow key={row.period}>
+                        <TableCell className="font-medium">{row.period}</TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.payment)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.principal)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.interest)}
+                        </TableCell>
+                        <TableCell className="text-right font-medium">
+                          {usd.format(row.balance)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              <div className="mt-4 text-center">
+                <Button variant="outline" size="sm" onClick={handleDownloadFullSchedule}>
+                  <Download className="mr-2 size-4" />
+                  Download Full Schedule
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
+        <AlertCircle className="size-4" />
+        <AlertDescription>
+          <strong>Disclaimer:</strong> Estimates only. Dealer and lender terms
+          may vary.
+        </AlertDescription>
+      </Alert>
+
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 p-4 backdrop-blur lg:hidden">
+        <div className="flex gap-3">
+          <Button className="flex-1">Calculate</Button>
+          <Button onClick={handleReset} variant="outline">
+            Reset
+          </Button>
+        </div>
+      </div>
+      <div className="h-20 lg:hidden" />
+    </>
+  );
+}
