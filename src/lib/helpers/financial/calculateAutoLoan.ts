@@ -61,10 +61,7 @@ export function calculateAutoLoan(input: AutoLoanInput): AutoLoanOutput {
   const apr = Math.max(0, input.aprPercent);
   const termMonths = Math.max(1, Math.round(input.termMonths));
 
-  const afterDownAndTrade = Math.max(
-    0,
-    vehiclePrice - downPayment - tradeIn,
-  );
+  const afterDownAndTrade = Math.max(0, vehiclePrice - downPayment - tradeIn);
   const taxAmount = afterDownAndTrade * salesTaxPercent;
   const amountFinanced = afterDownAndTrade + taxAmount + fees;
 

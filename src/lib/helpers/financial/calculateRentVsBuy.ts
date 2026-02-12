@@ -81,7 +81,7 @@ export function calculateRentVsBuy(input: RentVsBuyInput): RentVsBuyOutput {
   const closingCosts = Math.max(0, input.closingCostsBuy);
   const rentMonthly = Math.max(0, input.rentMonthly);
   const rentGrowth = Math.max(0, input.rentGrowthPercent) / 100;
-  const appreciation = (Math.max(0, input.homeAppreciationPercent) / 100);
+  const appreciation = Math.max(0, input.homeAppreciationPercent) / 100;
   const investmentReturn = Math.max(0, input.investmentReturnPercent) / 100;
   const years = Math.max(1, Math.min(50, Math.round(input.yearsToStay)));
 

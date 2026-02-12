@@ -30,7 +30,7 @@ export const calculatorPage = defineType({
       title: "Calculator Type",
       type: "string",
       description:
-        "Must match the registry key. Slug (no leading slash) → calculatorType: mortgage-calculator → mortgage, refinance-calculator → refinance, rent-vs-buy-calculator → rentVsBuy, loan-amortization-calculator → amortization, auto-loan-calculator → autoLoan.",
+        "Must match the registry key. Slug (no leading slash) → calculatorType: mortgage-calculator → mortgage, refinance-calculator → refinance, rent-vs-buy-calculator → rentVsBuy, loan-amortization-calculator → amortization, auto-loan-calculator → autoLoan, car-lease-calculator → carLease, personal-loan-calculator → personalLoan, credit-card-payoff-calculator → creditCardPayoff, debt-snowball-calculator → debtSnowball, debt-avalanche-calculator → debtAvalanche.",
       options: {
         list: [
           { title: "Mortgage", value: "mortgage" },
@@ -38,6 +38,11 @@ export const calculatorPage = defineType({
           { title: "Rent vs Buy", value: "rentVsBuy" },
           { title: "Loan Amortization", value: "amortization" },
           { title: "Auto Loan", value: "autoLoan" },
+          { title: "Car Lease", value: "carLease" },
+          { title: "Personal Loan", value: "personalLoan" },
+          { title: "Credit Card Payoff", value: "creditCardPayoff" },
+          { title: "Debt Snowball", value: "debtSnowball" },
+          { title: "Debt Avalanche", value: "debtAvalanche" },
         ],
       },
       validation: (Rule) => Rule.required(),

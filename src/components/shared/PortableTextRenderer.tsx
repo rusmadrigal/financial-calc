@@ -1,5 +1,9 @@
 import React from "react";
-import type { PortableTextBlock, PortableTextLinkMark, PortableTextSpan } from "@/lib/sanity/types";
+import type {
+  PortableTextBlock,
+  PortableTextLinkMark,
+  PortableTextSpan,
+} from "@/lib/sanity/types";
 
 function getBlockTag(style: string | undefined): keyof JSX.IntrinsicElements {
   switch (style) {

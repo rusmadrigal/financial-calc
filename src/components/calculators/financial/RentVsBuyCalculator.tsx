@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Download,
-  FileSpreadsheet,
-  Info,
-  AlertCircle,
-} from "lucide-react";
+import { Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -115,13 +110,16 @@ export function RentVsBuyCalculator() {
     "Rent Cumulative",
     "Buy Cumulative",
   ];
-  const tableRows = result.yearlyBreakdown.map((row) => [
-    row.year,
-    Number(row.rentCost.toFixed(0)),
-    Number(row.buyCost.toFixed(0)),
-    Number(row.rentCumulative.toFixed(0)),
-    Number(row.buyCumulative.toFixed(0)),
-  ] as (string | number)[]);
+  const tableRows = result.yearlyBreakdown.map(
+    (row) =>
+      [
+        row.year,
+        Number(row.rentCost.toFixed(0)),
+        Number(row.buyCost.toFixed(0)),
+        Number(row.rentCumulative.toFixed(0)),
+        Number(row.buyCumulative.toFixed(0)),
+      ] as (string | number)[],
+  );
 
   const summaryData: Record<string, string | number> = useMemo(
     () => ({
@@ -327,25 +325,33 @@ export function RentVsBuyCalculator() {
             <CardContent>
               <div className="grid gap-6 sm:grid-cols-2">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Cost (Rent)</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Cost (Rent)
+                  </p>
                   <p className="mt-1 text-2xl font-semibold">
                     {usd.format(result.totalCostRent)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Cost (Buy)</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Cost (Buy)
+                  </p>
                   <p className="mt-1 text-2xl font-semibold">
                     {usd.format(result.totalCostBuy)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Recommendation</p>
+                  <p className="text-sm text-muted-foreground">
+                    Recommendation
+                  </p>
                   <p className="mt-1 text-2xl font-semibold capitalize">
                     {result.recommendation}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Net Difference</p>
+                  <p className="text-sm text-muted-foreground">
+                    Net Difference
+                  </p>
                   <p className="mt-1 text-2xl font-semibold">
                     {usd.format(result.netDifference)}
                   </p>
@@ -367,8 +373,8 @@ export function RentVsBuyCalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              MVP comparison. Does not include opportunity cost of down
-              payment invested elsewhere in the rent scenario.
+              MVP comparison. Does not include opportunity cost of down payment
+              invested elsewhere in the rent scenario.
             </AlertDescription>
           </Alert>
 
@@ -381,7 +387,10 @@ export function RentVsBuyCalculator() {
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      className="stroke-border"
+                    />
                     <XAxis dataKey="year" className="text-xs" />
                     <YAxis className="text-xs" />
                     <Tooltip
@@ -422,14 +431,20 @@ export function RentVsBuyCalculator() {
                       <TableHead>Year</TableHead>
                       <TableHead className="text-right">Rent Cost</TableHead>
                       <TableHead className="text-right">Buy Cost</TableHead>
-                      <TableHead className="text-right">Rent Cumulative</TableHead>
-                      <TableHead className="text-right">Buy Cumulative</TableHead>
+                      <TableHead className="text-right">
+                        Rent Cumulative
+                      </TableHead>
+                      <TableHead className="text-right">
+                        Buy Cumulative
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {result.yearlyBreakdown.map((row) => (
                       <TableRow key={row.year}>
-                        <TableCell className="font-medium">{row.year}</TableCell>
+                        <TableCell className="font-medium">
+                          {row.year}
+                        </TableCell>
                         <TableCell className="text-right">
                           {usd.format(row.rentCost)}
                         </TableCell>
@@ -448,7 +463,11 @@ export function RentVsBuyCalculator() {
                 </Table>
               </div>
               <div className="mt-4 text-center">
-                <Button variant="outline" size="sm" onClick={handleDownloadFullSchedule}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadFullSchedule}
+                >
                   <Download className="mr-2 size-4" />
                   Download Full Schedule
                 </Button>

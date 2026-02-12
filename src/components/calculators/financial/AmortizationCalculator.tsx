@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Download,
-  FileSpreadsheet,
-  Info,
-  AlertCircle,
-} from "lucide-react";
+import { Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -82,14 +77,23 @@ export function AmortizationCalculator() {
     });
   }, [result.schedule]);
 
-  const tableHeaders = ["Period", "Payment", "Principal", "Interest", "Balance"];
-  const tableRows = result.schedule.map((row) => [
-    row.period,
-    Number(row.payment.toFixed(2)),
-    Number(row.principal.toFixed(2)),
-    Number(row.interest.toFixed(2)),
-    Number(row.balance.toFixed(2)),
-  ] as (string | number)[]);
+  const tableHeaders = [
+    "Period",
+    "Payment",
+    "Principal",
+    "Interest",
+    "Balance",
+  ];
+  const tableRows = result.schedule.map(
+    (row) =>
+      [
+        row.period,
+        Number(row.payment.toFixed(2)),
+        Number(row.principal.toFixed(2)),
+        Number(row.interest.toFixed(2)),
+        Number(row.balance.toFixed(2)),
+      ] as (string | number)[],
+  );
 
   const summaryData: Record<string, string | number> = useMemo(
     () => ({
@@ -193,13 +197,17 @@ export function AmortizationCalculator() {
             <CardContent>
               <div className="grid gap-6 sm:grid-cols-3">
                 <div>
-                  <p className="text-sm text-muted-foreground">Monthly Payment</p>
+                  <p className="text-sm text-muted-foreground">
+                    Monthly Payment
+                  </p>
                   <p className="mt-1 text-3xl font-semibold">
                     {usd.format(result.payment)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Interest</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Interest
+                  </p>
                   <p className="mt-1 text-3xl font-semibold">
                     {usd.format(result.totalInterest)}
                   </p>
@@ -242,7 +250,10 @@ export function AmortizationCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -252,8 +263,16 @@ export function AmortizationCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="principal" fill="var(--chart-1)" name="Principal" />
-                      <Bar dataKey="interest" fill="var(--chart-2)" name="Interest" />
+                      <Bar
+                        dataKey="principal"
+                        fill="var(--chart-1)"
+                        name="Principal"
+                      />
+                      <Bar
+                        dataKey="interest"
+                        fill="var(--chart-2)"
+                        name="Interest"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -281,7 +300,9 @@ export function AmortizationCalculator() {
                   <TableBody>
                     {previewRows.map((row) => (
                       <TableRow key={row.period}>
-                        <TableCell className="font-medium">{row.period}</TableCell>
+                        <TableCell className="font-medium">
+                          {row.period}
+                        </TableCell>
                         <TableCell className="text-right">
                           {usd.format(row.payment)}
                         </TableCell>
@@ -300,7 +321,11 @@ export function AmortizationCalculator() {
                 </Table>
               </div>
               <div className="mt-4 text-center">
-                <Button variant="outline" size="sm" onClick={handleDownloadFullSchedule}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadFullSchedule}
+                >
                   <Download className="mr-2 size-4" />
                   Download Full Schedule
                 </Button>
@@ -313,8 +338,8 @@ export function AmortizationCalculator() {
       <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
         <AlertCircle className="size-4" />
         <AlertDescription>
-          <strong>Disclaimer:</strong> For educational use. Actual loan terms may
-          vary.
+          <strong>Disclaimer:</strong> For educational use. Actual loan terms
+          may vary.
         </AlertDescription>
       </Alert>
 

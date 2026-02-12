@@ -8,10 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalculatorSlot } from "../registry/calculatorRegistry";
 import { PortableTextRenderer } from "@/components/shared/PortableTextRenderer";
-import type {
-  CalculatorPageFaq,
-  PortableTextBlock,
-} from "@/lib/sanity/types";
+import type { CalculatorPageFaq, PortableTextBlock } from "@/lib/sanity/types";
 
 export interface CalculatorDetailShellProps {
   title: string;
@@ -22,7 +19,9 @@ export interface CalculatorDetailShellProps {
   faqs?: CalculatorPageFaq[] | null;
 }
 
-function hasHowItWorks(howItWorks: PortableTextBlock[] | null | undefined): boolean {
+function hasHowItWorks(
+  howItWorks: PortableTextBlock[] | null | undefined,
+): boolean {
   return Array.isArray(howItWorks) && howItWorks.length > 0;
 }
 

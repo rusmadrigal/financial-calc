@@ -72,7 +72,12 @@ export function MortgageCalculator() {
 
   const chartData = useMemo(() => {
     const years = Math.ceil(result.schedule.length / 12);
-    const data: { year: number; principal: number; interest: number; balance: number }[] = [];
+    const data: {
+      year: number;
+      principal: number;
+      interest: number;
+      balance: number;
+    }[] = [];
     for (let year = 1; year <= years; year++) {
       const start = (year - 1) * 12;
       const end = Math.min(year * 12, result.schedule.length);
@@ -87,7 +92,12 @@ export function MortgageCalculator() {
           endBalance = row.balance;
         }
       }
-      data.push({ year, principal: principalSum, interest: interestSum, balance: endBalance });
+      data.push({
+        year,
+        principal: principalSum,
+        interest: interestSum,
+        balance: endBalance,
+      });
     }
     return data;
   }, [result.schedule]);
@@ -98,13 +108,16 @@ export function MortgageCalculator() {
   );
 
   const tableHeaders = ["Month", "Payment", "Principal", "Interest", "Balance"];
-  const tableRows = result.schedule.map((row) => [
-    row.period,
-    Number(row.payment.toFixed(2)),
-    Number(row.principal.toFixed(2)),
-    Number(row.interest.toFixed(2)),
-    Number(row.balance.toFixed(2)),
-  ] as (string | number)[]);
+  const tableRows = result.schedule.map(
+    (row) =>
+      [
+        row.period,
+        Number(row.payment.toFixed(2)),
+        Number(row.principal.toFixed(2)),
+        Number(row.interest.toFixed(2)),
+        Number(row.balance.toFixed(2)),
+      ] as (string | number)[],
+  );
 
   const summaryData: Record<string, string | number> = useMemo(
     () => ({

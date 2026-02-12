@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Download,
-  FileSpreadsheet,
-  Info,
-  AlertCircle,
-} from "lucide-react";
+import { Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -78,20 +73,17 @@ export function AutoLoanCalculator() {
     [result.schedule],
   );
 
-  const tableHeaders = [
-    "Month",
-    "Payment",
-    "Principal",
-    "Interest",
-    "Balance",
-  ];
-  const tableRows = result.schedule.map((row) => [
-    row.period,
-    Number(row.payment.toFixed(2)),
-    Number(row.principal.toFixed(2)),
-    Number(row.interest.toFixed(2)),
-    Number(row.balance.toFixed(2)),
-  ] as (string | number)[]);
+  const tableHeaders = ["Month", "Payment", "Principal", "Interest", "Balance"];
+  const tableRows = result.schedule.map(
+    (row) =>
+      [
+        row.period,
+        Number(row.payment.toFixed(2)),
+        Number(row.principal.toFixed(2)),
+        Number(row.interest.toFixed(2)),
+        Number(row.balance.toFixed(2)),
+      ] as (string | number)[],
+  );
 
   const summaryData: Record<string, string | number> = useMemo(
     () => ({
@@ -256,19 +248,25 @@ export function AutoLoanCalculator() {
             <CardContent>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">Amount Financed</p>
+                  <p className="text-sm text-muted-foreground">
+                    Amount Financed
+                  </p>
                   <p className="mt-1 text-2xl font-semibold">
                     {usd.format(result.amountFinanced)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Monthly Payment</p>
+                  <p className="text-sm text-muted-foreground">
+                    Monthly Payment
+                  </p>
                   <p className="mt-1 text-2xl font-semibold">
                     {usd.format(result.payment)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Interest</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Interest
+                  </p>
                   <p className="mt-1 text-2xl font-semibold">
                     {usd.format(result.totalInterest)}
                   </p>
@@ -311,7 +309,10 @@ export function AutoLoanCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="month" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -355,7 +356,9 @@ export function AutoLoanCalculator() {
                   <TableBody>
                     {previewRows.map((row) => (
                       <TableRow key={row.period}>
-                        <TableCell className="font-medium">{row.period}</TableCell>
+                        <TableCell className="font-medium">
+                          {row.period}
+                        </TableCell>
                         <TableCell className="text-right">
                           {usd.format(row.payment)}
                         </TableCell>
@@ -374,7 +377,11 @@ export function AutoLoanCalculator() {
                 </Table>
               </div>
               <div className="mt-4 text-center">
-                <Button variant="outline" size="sm" onClick={handleDownloadFullSchedule}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadFullSchedule}
+                >
                   <Download className="mr-2 size-4" />
                   Download Full Schedule
                 </Button>

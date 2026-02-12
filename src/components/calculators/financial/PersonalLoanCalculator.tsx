@@ -1,13 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Download,
-  Copy,
-  FileSpreadsheet,
-  Info,
-  AlertCircle,
-} from "lucide-react";
+import { Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -40,7 +34,7 @@ import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
 import { exportToExcel } from "@/lib/exports/exportToExcel";
 import { exportToCSV } from "@/lib/exports/exportToCSV";
-import { calculateRefinance } from "@/lib/helpers/financial/calculateRefinance";
+import { calculatePersonalLoan } from "@/lib/helpers/financial/calculatePersonalLoan";
 
 const usd = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -49,62 +43,42 @@ const usd = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 0,
 });
 
-export function RefinanceCalculator() {
-  const [currentBalance, setCurrentBalance] = useState("300000");
-  const [currentRate, setCurrentRate] = useState("7");
-  const [remainingYears, setRemainingYears] = useState("25");
-  const [newRate, setNewRate] = useState("6");
-  const [newTermYears, setNewTermYears] = useState("30");
-  const [closingCosts, setClosingCosts] = useState("5000");
+export function PersonalLoanCalculator() {
+  const [principal, setPrincipal] = useState("15000");
+  const [apr, setApr] = useState("12");
+  const [termMonths, setTermMonths] = useState("36");
 
   const result = useMemo(() => {
-    const balance = Math.max(0, parseFloat(currentBalance) || 0);
-    const remMonths = Math.max(1, (parseFloat(remainingYears) || 0) * 12);
-    const newTermMonths = Math.max(1, (parseFloat(newTermYears) || 0) * 12);
-    return calculateRefinance({
-      currentBalance: balance,
-      currentAprPercent: Math.max(0, parseFloat(currentRate) || 0),
-      remainingTermMonths: remMonths,
-      newAprPercent: Math.max(0, parseFloat(newRate) || 0),
-      newTermMonths,
-      closingCosts: Math.max(0, parseFloat(closingCosts) || 0),
+    return calculatePersonalLoan({
+      principal: Math.max(0, parseFloat(principal) || 0),
+      aprPercent: Math.max(0, parseFloat(apr) || 0),
+      termMonths: Math.max(1, parseInt(termMonths, 10) || 36),
     });
-  }, [
-    currentBalance,
-    currentRate,
-    remainingYears,
-    newRate,
-    newTermYears,
-    closingCosts,
-  ]);
+  }, [principal, apr, termMonths]);
 
   const chartData = useMemo(() => {
-    const maxLen = Math.max(
-      result.scheduleCurrent.length,
-      result.scheduleNew.length,
-    );
-    const years = Math.ceil(maxLen / 12);
+    const years = Math.ceil(result.schedule.length / 12);
     return Array.from({ length: Math.min(years, 10) }, (_, i) => {
-      const y = i + 1;
       const start = i * 12;
-      let currInt = 0;
-      let newInt = 0;
-      for (let m = 0; m < 12; m++) {
-        const rowCurr = result.scheduleCurrent[start + m];
-        const rowNew = result.scheduleNew[start + m];
-        if (rowCurr) currInt += rowCurr.interest;
-        if (rowNew) newInt += rowNew.interest;
+      let principalSum = 0;
+      let interestSum = 0;
+      for (let m = 0; m < 12 && start + m < result.schedule.length; m++) {
+        const row = result.schedule[start + m];
+        if (row) {
+          principalSum += row.principal;
+          interestSum += row.interest;
+        }
       }
       return {
-        year: y,
-        current: Math.round(currInt),
-        new: Math.round(newInt),
+        year: i + 1,
+        principal: Math.round(principalSum),
+        interest: Math.round(interestSum),
       };
     });
-  }, [result.scheduleCurrent, result.scheduleNew]);
+  }, [result.schedule]);
 
   const tableHeaders = ["Month", "Payment", "Principal", "Interest", "Balance"];
-  const tableRows = result.scheduleNew.map(
+  const tableRows = result.schedule.map(
     (row) =>
       [
         row.period,
@@ -117,43 +91,48 @@ export function RefinanceCalculator() {
 
   const summaryData: Record<string, string | number> = useMemo(
     () => ({
-      "Current Payment": usd.format(result.currentPayment),
-      "New Payment": usd.format(result.newPayment),
-      "Monthly Savings": usd.format(result.monthlySavings),
-      "Break-even (months)": result.breakEvenMonths,
-      "Total Interest (current)": usd.format(result.totalInterestCurrent),
-      "Total Interest (new)": usd.format(result.totalInterestNew),
-      "Lifetime Savings": usd.format(result.lifetimeSavings),
+      Principal: usd.format(parseFloat(principal) || 0),
+      "APR (%)": parseFloat(apr) || 0,
+      "Monthly Payment": usd.format(result.monthlyPayment),
+      "Total Interest": usd.format(result.totalInterest),
+      "Total Paid": usd.format(result.totalPaid),
     }),
-    [result],
+    [principal, apr, result],
   );
 
+  const hasResults = result.schedule.length > 0;
+
   const handleExportPDF = () => {
-    exportToPDF("Refinance Calculator", summaryData, tableHeaders, tableRows);
+    if (!hasResults) return;
+    exportToPDF(
+      "Personal Loan Calculator",
+      summaryData,
+      tableHeaders,
+      tableRows,
+    );
     toast.success("PDF downloaded");
   };
 
   const handleExportExcel = () => {
-    exportToExcel("Refinance Schedule", tableHeaders, tableRows);
+    if (!hasResults) return;
+    exportToExcel("Personal Loan Schedule", tableHeaders, tableRows);
     toast.success("Excel file downloaded");
   };
 
   const handleDownloadFullSchedule = () => {
-    exportToCSV("Refinance-Full-Schedule", tableHeaders, tableRows);
+    if (!hasResults) return;
+    exportToCSV("Personal-Loan-Full-Schedule", tableHeaders, tableRows);
     toast.success("Full schedule downloaded");
   };
 
   const handleReset = () => {
-    setCurrentBalance("300000");
-    setCurrentRate("7");
-    setRemainingYears("25");
-    setNewRate("6");
-    setNewTermYears("30");
-    setClosingCosts("5000");
+    setPrincipal("15000");
+    setApr("12");
+    setTermMonths("36");
     toast.info("Calculator reset");
   };
 
-  const previewRows = result.scheduleNew.slice(0, 12);
+  const previewRows = result.schedule.slice(0, 12);
 
   return (
     <>
@@ -162,82 +141,45 @@ export function RefinanceCalculator() {
           <Card className="sticky top-24">
             <CardHeader>
               <CardTitle>Calculator Inputs</CardTitle>
-              <CardDescription>Current loan vs new loan</CardDescription>
+              <CardDescription>Loan amount and terms</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="currentBalance">Current Balance</Label>
+                <Label htmlFor="principal">Principal ($)</Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                     $
                   </span>
                   <Input
-                    id="currentBalance"
+                    id="principal"
                     type="number"
                     min={0}
-                    value={currentBalance}
-                    onChange={(e) => setCurrentBalance(e.target.value)}
+                    value={principal}
+                    onChange={(e) => setPrincipal(e.target.value)}
                     className="pl-7"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="currentRate">Current APR (%)</Label>
+                <Label htmlFor="apr">APR (%)</Label>
                 <Input
-                  id="currentRate"
+                  id="apr"
                   type="number"
                   min={0}
                   step="0.01"
-                  value={currentRate}
-                  onChange={(e) => setCurrentRate(e.target.value)}
+                  value={apr}
+                  onChange={(e) => setApr(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="remainingYears">Remaining Term (years)</Label>
+                <Label htmlFor="termMonths">Term (months)</Label>
                 <Input
-                  id="remainingYears"
+                  id="termMonths"
                   type="number"
                   min={1}
-                  value={remainingYears}
-                  onChange={(e) => setRemainingYears(e.target.value)}
+                  value={termMonths}
+                  onChange={(e) => setTermMonths(e.target.value)}
                 />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newRate">New APR (%)</Label>
-                <Input
-                  id="newRate"
-                  type="number"
-                  min={0}
-                  step="0.01"
-                  value={newRate}
-                  onChange={(e) => setNewRate(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="newTermYears">New Term (years)</Label>
-                <Input
-                  id="newTermYears"
-                  type="number"
-                  min={1}
-                  value={newTermYears}
-                  onChange={(e) => setNewTermYears(e.target.value)}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="closingCosts">Closing Costs</Label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                    $
-                  </span>
-                  <Input
-                    id="closingCosts"
-                    type="number"
-                    min={0}
-                    value={closingCosts}
-                    onChange={(e) => setClosingCosts(e.target.value)}
-                    className="pl-7"
-                  />
-                </div>
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
@@ -252,56 +194,50 @@ export function RefinanceCalculator() {
         <div className="space-y-6 lg:col-span-2">
           <Card className="border-2">
             <CardHeader>
-              <CardTitle>Refinance Results</CardTitle>
-              <CardDescription>Comparison and savings</CardDescription>
+              <CardTitle>Results</CardTitle>
+              <CardDescription>Payment and totals</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-6 sm:grid-cols-3">
                 <div>
                   <p className="text-sm text-muted-foreground">
-                    Current Payment
+                    Monthly Payment
                   </p>
                   <p className="mt-1 text-2xl font-semibold">
-                    {usd.format(result.currentPayment)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">New Payment</p>
-                  <p className="mt-1 text-2xl font-semibold">
-                    {usd.format(result.newPayment)}
+                    {usd.format(result.monthlyPayment)}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">
-                    Monthly Savings
+                    Total Interest
                   </p>
-                  <p className="mt-1 text-2xl font-semibold text-green-600 dark:text-green-400">
-                    {usd.format(result.monthlySavings)}
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.totalInterest)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Break-even</p>
+                  <p className="text-sm text-muted-foreground">Total Paid</p>
                   <p className="mt-1 text-2xl font-semibold">
-                    {result.breakEvenMonths} months
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    Lifetime Savings
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold">
-                    {usd.format(result.lifetimeSavings)}
+                    {usd.format(result.totalPaid)}
                   </p>
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleExportPDF}>
-                  <Download className="mr-2 size-4" />
-                  Export PDF
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
+                  <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel}>
-                  <FileSpreadsheet className="mr-2 size-4" />
-                  Export Excel
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
+                  <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
             </CardContent>
@@ -310,17 +246,15 @@ export function RefinanceCalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              Break-even is how many months of savings it takes to recover
-              closing costs. Lifetime savings = interest saved minus closing
-              costs.
+              Fixed monthly payment. Early payments are mostly interest.
             </AlertDescription>
           </Alert>
 
           {chartData.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Interest Comparison by Year</CardTitle>
-                <CardDescription>Current vs new loan interest</CardDescription>
+                <CardTitle>Principal vs Interest by Year</CardTitle>
+                <CardDescription>First 10 years</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
@@ -340,11 +274,15 @@ export function RefinanceCalculator() {
                         }}
                       />
                       <Bar
-                        dataKey="current"
-                        fill="var(--chart-2)"
-                        name="Current"
+                        dataKey="principal"
+                        fill="var(--chart-1)"
+                        name="Principal"
                       />
-                      <Bar dataKey="new" fill="var(--chart-1)" name="New" />
+                      <Bar
+                        dataKey="interest"
+                        fill="var(--chart-2)"
+                        name="Interest"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -354,7 +292,7 @@ export function RefinanceCalculator() {
 
           <Card>
             <CardHeader>
-              <CardTitle>New Loan Schedule (preview)</CardTitle>
+              <CardTitle>Payment Schedule</CardTitle>
               <CardDescription>First 12 months</CardDescription>
             </CardHeader>
             <CardContent>
@@ -397,9 +335,9 @@ export function RefinanceCalculator() {
                   variant="outline"
                   size="sm"
                   onClick={handleDownloadFullSchedule}
+                  disabled={!hasResults}
                 >
-                  <Download className="mr-2 size-4" />
-                  Download Full Schedule
+                  <Download className="mr-2 size-4" /> Download Full Schedule
                 </Button>
               </div>
             </CardContent>
@@ -410,8 +348,7 @@ export function RefinanceCalculator() {
       <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
         <AlertCircle className="size-4" />
         <AlertDescription>
-          <strong>Disclaimer:</strong> Estimates only. Consult a lender for
-          actual refinance terms and closing costs.
+          Estimates only. Actual rates and terms depend on the lender.
         </AlertDescription>
       </Alert>
 

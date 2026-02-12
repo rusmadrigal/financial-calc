@@ -7,7 +7,12 @@ function buildCSVString(
 ): string {
   function escape(value: string | number): string {
     const s = String(value);
-    if (s.includes('"') || s.includes(",") || s.includes("\n") || s.includes("\r")) {
+    if (
+      s.includes('"') ||
+      s.includes(",") ||
+      s.includes("\n") ||
+      s.includes("\r")
+    ) {
       return `"${s.replace(/"/g, '""')}"`;
     }
     return s;

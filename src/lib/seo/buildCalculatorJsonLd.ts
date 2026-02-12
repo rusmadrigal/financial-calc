@@ -88,7 +88,9 @@ export type CalculatorJsonLdItem =
  * Converts Portable Text blocks to a single plain-text string.
  * Extracts children.text from each block; no HTML.
  */
-function portableTextToPlainText(blocks: PortableTextBlock[] | null | undefined): string {
+function portableTextToPlainText(
+  blocks: PortableTextBlock[] | null | undefined,
+): string {
   if (!Array.isArray(blocks) || blocks.length === 0) return "";
   const parts: string[] = [];
   for (const block of blocks) {
@@ -160,8 +162,18 @@ export function buildCalculatorJsonLd(
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: `${CANONICAL_BASE}/` },
-        { "@type": "ListItem", position: 2, name: "Calculators", item: `${CANONICAL_BASE}/calculators` },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: `${CANONICAL_BASE}/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Calculators",
+          item: `${CANONICAL_BASE}/calculators`,
+        },
         { "@type": "ListItem", position: 3, name: page.title },
       ],
     } satisfies BreadcrumbListSchema,

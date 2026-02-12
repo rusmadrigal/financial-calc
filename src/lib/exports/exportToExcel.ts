@@ -31,7 +31,12 @@ export function exportToExcel(
 }
 
 function sanitizeSheetName(name: string): string {
-  return name.replace(/[\\/*?:\[\]]/g, " ").slice(0, 31).trim() || "Sheet1";
+  return (
+    name
+      .replace(/[\\/*?:\[\]]/g, " ")
+      .slice(0, 31)
+      .trim() || "Sheet1"
+  );
 }
 
 function sanitizeFilename(name: string): string {

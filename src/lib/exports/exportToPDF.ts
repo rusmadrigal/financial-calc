@@ -34,7 +34,8 @@ export function exportToPDF(
       styles: { fontSize: 9 },
       headStyles: { fillColor: [66, 66, 66] },
     });
-    const lastTable = (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable;
+    const lastTable = (doc as unknown as { lastAutoTable?: { finalY: number } })
+      .lastAutoTable;
     y = lastTable ? lastTable.finalY + 10 : y + 10;
   }
 
