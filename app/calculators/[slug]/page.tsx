@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { fetchCalculatorPageBySlug } from "@/lib/sanity/fetchCalculatorPageBySlug";
+import { buildCalculatorJsonLd } from "@/lib/seo/buildCalculatorJsonLd";
 import { CalculatorDetailShell } from "@/components/calculators/shell/CalculatorDetailShell";
+import { SEOJsonLd } from "@/components/shared/SEOJsonLd";
 
 const CANONICAL_BASE = "https://www.smartcalclab.com";
 
@@ -40,14 +42,19 @@ export default async function CalculatorPage({
   const page = await fetchCalculatorPageBySlug(slug);
   if (!page) notFound();
 
+  const jsonLd = buildCalculatorJsonLd(page, slug);
+
   return (
-    <CalculatorDetailShell
-      title={page.title}
-      shortDescription={page.shortDescription}
-      calculatorType={page.calculatorType}
-      howItWorks={page.howItWorks}
-      sources={page.sources}
-      faqs={page.faqs}
-    />
+    <>
+      <SEOJsonLd data={jsonLd} />
+      <CalculatorDetailShell
+        title={page.title}
+        shortDescription={page.shortDescription}
+        calculatorType={page.calculatorType}
+        howItWorks={page.howItWorks}
+        sources={page.sources}
+        faqs={page.faqs}
+      />
+    </>
   );
 }
