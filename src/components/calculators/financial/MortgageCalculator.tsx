@@ -39,6 +39,9 @@ import {
   Bar,
 } from "recharts";
 import { toast } from "sonner";
+import { exportToPDF } from "@/lib/exports/exportToPDF";
+import { exportToExcel } from "@/lib/exports/exportToExcel";
+import { exportToCSV } from "@/lib/exports/exportToCSV";
 
 function calcMonthlyPayment(
   principal: number,
@@ -175,16 +178,52 @@ export function MortgageCalculator() {
     [fullSchedule],
   );
 
+  const tableHeaders = useMemo(
+    () => ["Month", "Payment", "Principal", "Interest", "Balance"],
+    [],
+  );
+
+  const tableRows = useMemo(
+    () =>
+      fullSchedule.map((row) => [
+        row.month,
+        Number(row.payment.toFixed(2)),
+        Number(row.principal.toFixed(2)),
+        Number(row.interest.toFixed(2)),
+        Number(row.balance.toFixed(2)),
+      ] as (string | number)[]),
+    [fullSchedule],
+  );
+
+  const summaryData = useMemo(
+    (): Record<string, string | number> => ({
+      "Loan Amount": `$${principal.toLocaleString()}`,
+      "Interest Rate": `${rate}%`,
+      "Loan Term": `${years} years`,
+      "Monthly Payment": `$${monthlyPayment.toLocaleString()}`,
+      "Total Interest": `$${totalInterest.toLocaleString()}`,
+      "Total Payment": `$${totalPayment.toLocaleString()}`,
+    }),
+    [principal, rate, years, monthlyPayment, totalInterest, totalPayment],
+  );
+
   const handleCopyResults = () => {
     toast.success("Results copied to clipboard!");
   };
 
   const handleExportPDF = () => {
-    toast.success("Exporting to PDF...");
+    exportToPDF("Mortgage Calculator", summaryData, tableHeaders, tableRows);
+    toast.success("PDF downloaded");
   };
 
   const handleExportExcel = () => {
-    toast.success("Exporting to Excel...");
+    exportToExcel("Amortization Schedule", tableHeaders, tableRows);
+    toast.success("Excel file downloaded");
+  };
+
+  const handleDownloadFullSchedule = () => {
+    exportToCSV("Full-Schedule", tableHeaders, tableRows);
+    toast.success("Full schedule downloaded");
   };
 
   const handleCalculate = () => {
@@ -472,7 +511,11 @@ export function MortgageCalculator() {
                 </Table>
               </div>
               <div className="mt-4 text-center">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadFullSchedule}
+                >
                   <Download className="mr-2 size-4" />
                   Download Full Schedule
                 </Button>
