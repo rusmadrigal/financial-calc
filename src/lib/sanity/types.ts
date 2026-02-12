@@ -7,14 +7,36 @@ export interface ToolCategory {
   hidden?: boolean | null;
 }
 
-/** FAQ item. */
-export interface CalculatorPageFaq {
-  question: string;
-  answer: string;
+/** Portable Text span (inline). */
+export interface PortableTextSpan {
+  _type: string;
+  _key?: string;
+  text?: string;
+  marks?: string[];
 }
 
-/** Portable Text block (minimal). */
-export type PortableTextBlock = unknown;
+/** Link annotation (mark definition). */
+export interface PortableTextLinkMark {
+  _key: string;
+  _type: string;
+  href?: string;
+  blank?: boolean;
+}
+
+/** Portable Text block (block content from Sanity). */
+export interface PortableTextBlock {
+  _type: string;
+  _key?: string;
+  style?: string;
+  children?: PortableTextSpan[];
+  markDefs?: PortableTextLinkMark[];
+}
+
+/** FAQ item with rich-text answer. */
+export interface CalculatorPageFaq {
+  question: string;
+  answer: PortableTextBlock[];
+}
 
 /** Calculator page from Sanity (calculatorPage). */
 export interface CalculatorPage {
@@ -26,6 +48,8 @@ export interface CalculatorPage {
   metaDescription?: string | null;
   noindex?: boolean | null;
   content?: PortableTextBlock[] | null;
+  howItWorks?: PortableTextBlock[] | null;
+  sources?: PortableTextBlock[] | null;
   faqs?: CalculatorPageFaq[] | null;
   category: ToolCategory | null;
 }

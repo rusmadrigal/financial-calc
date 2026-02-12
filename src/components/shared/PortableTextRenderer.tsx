@@ -1,20 +1,5 @@
 import React from "react";
-
-/** Minimal Portable Text block (Sanity). */
-interface PortableTextSpan {
-  _type: string;
-  _key?: string;
-  text?: string;
-  marks?: string[];
-}
-
-interface PortableTextBlock {
-  _type: string;
-  _key?: string;
-  style?: string;
-  children?: PortableTextSpan[];
-  markDefs?: { _key: string; _type: string; href?: string }[];
-}
+import type { PortableTextBlock, PortableTextLinkMark, PortableTextSpan } from "@/lib/sanity/types";
 
 function getBlockTag(style: string | undefined): keyof JSX.IntrinsicElements {
   switch (style) {
@@ -32,7 +17,7 @@ function getBlockTag(style: string | undefined): keyof JSX.IntrinsicElements {
 
 function renderSpans(
   children: PortableTextSpan[] | undefined,
-  markDefs: { _key: string; _type: string; href?: string }[] | undefined,
+  markDefs: PortableTextLinkMark[] | undefined,
 ): React.ReactNode {
   if (!children?.length) return null;
   const defMap = new Map((markDefs ?? []).map((d) => [d._key, d]));
@@ -41,11 +26,15 @@ function renderSpans(
     const marks = span.marks ?? [];
     for (const mark of marks) {
       const def = defMap.get(mark);
-      if (def?.href) {
+      if (def != null && "href" in def && def.href) {
+        const target = def.blank ? "_blank" : undefined;
+        const rel = def.blank ? "noopener noreferrer" : undefined;
         node = (
           <a
             key={i}
             href={def.href}
+            target={target}
+            rel={rel}
             className="text-primary underline hover:no-underline"
           >
             {node}
@@ -55,6 +44,8 @@ function renderSpans(
         node = <strong key={i}>{node}</strong>;
       } else if (mark === "em") {
         node = <em key={i}>{node}</em>;
+      } else if (mark === "underline") {
+        node = <u key={i}>{node}</u>;
       }
     }
     return <React.Fragment key={span._key ?? i}>{node}</React.Fragment>;

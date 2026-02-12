@@ -8,7 +8,12 @@ export const calculatorPageBySlugQuery = `*[_type == "calculatorPage" && slug.cu
   metaDescription,
   noindex,
   content,
-  faqs,
+  howItWorks,
+  sources,
+  faqs[]{
+    question,
+    answer
+  },
   category->{
     title,
     slug,

@@ -1,4 +1,4 @@
-import { defineArrayMember, defineField, defineType } from "sanity";
+import { defineField, defineType } from "sanity";
 
 export const calculatorPage = defineType({
   name: "calculatorPage",
@@ -60,38 +60,47 @@ export const calculatorPage = defineType({
     defineField({
       name: "content",
       title: "Content",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "block",
-          styles: [
-            { title: "Normal", value: "normal" },
-            { title: "H2", value: "h2" },
-            { title: "H3", value: "h3" },
-            { title: "Bullet", value: "bullet" },
-            { title: "Numbered", value: "number" },
-          ],
-          marks: {
-            decorators: [
-              { title: "Strong", value: "strong" },
-              { title: "Emphasis", value: "em" },
-            ],
-            annotations: [{ type: "object", name: "link", fields: [{ name: "href", type: "url" }] }],
-          },
-        }),
-      ],
+      type: "blockContent",
+    }),
+    defineField({
+      name: "howItWorks",
+      title: "How It Works",
+      type: "blockContent",
+      description: "Rich text for the “How It Works” tab.",
+    }),
+    defineField({
+      name: "sources",
+      title: "Sources",
+      type: "blockContent",
+      description: "Rich text for the “Sources” tab.",
     }),
     defineField({
       name: "faqs",
-      title: "FAQs",
+      title: "Frequently Asked Questions",
       type: "array",
       of: [
         {
           type: "object",
           fields: [
-            { name: "question", title: "Question", type: "string", validation: (Rule: { required: () => unknown }) => Rule.required() },
-            { name: "answer", title: "Answer", type: "text", validation: (Rule: { required: () => unknown }) => Rule.required() },
+            {
+              name: "question",
+              title: "Question",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "answer",
+              title: "Answer",
+              type: "blockContent",
+              validation: (Rule) => Rule.required(),
+            },
           ],
+          preview: {
+            select: { question: "question" },
+            prepare: ({ question }: { question?: string }) => ({
+              title: question ?? "FAQ",
+            }),
+          },
         },
       ],
     }),

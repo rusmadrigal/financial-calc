@@ -44,9 +44,10 @@ export default async function CalculatorPage({
     <CalculatorDetailShell
       title={page.title}
       shortDescription={page.shortDescription}
-      content={page.content}
-      faqs={page.faqs}
       calculatorType={page.calculatorType}
+      howItWorks={page.howItWorks}
+      sources={page.sources}
+      faqs={page.faqs}
     />
   );
 }

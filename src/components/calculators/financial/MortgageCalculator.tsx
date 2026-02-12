@@ -18,7 +18,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Table,
@@ -481,114 +480,6 @@ export function MortgageCalculator() {
             </CardContent>
           </Card>
         </div>
-      </div>
-
-      <div className="mt-8">
-        <Tabs defaultValue="how-it-works" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="how-it-works">How It Works</TabsTrigger>
-            <TabsTrigger value="assumptions">Assumptions</TabsTrigger>
-            <TabsTrigger value="sources">Sources</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="how-it-works" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>How the Mortgage Calculator Works</CardTitle>
-              </CardHeader>
-              <CardContent className="prose prose-sm max-w-none dark:prose-invert">
-                <p className="text-muted-foreground">
-                  This calculator uses the standard mortgage payment formula to
-                  determine your monthly principal and interest payment:
-                </p>
-                <div className="my-4 rounded-lg bg-muted p-4 font-mono text-sm">
-                  M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1]
-                </div>
-                <p className="text-muted-foreground">
-                  Where: <br />
-                  • M = Monthly mortgage payment <br />
-                  • P = Principal loan amount <br />
-                  • i = Monthly interest rate (annual rate / 12) <br />• n =
-                  Number of payments (years × 12)
-                </p>
-                <p className="mt-4 text-muted-foreground">
-                  The calculator generates an amortization schedule showing how
-                  each payment is split between principal and interest over the
-                  life of the loan.
-                </p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="assumptions" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Key Assumptions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-sm text-muted-foreground">
-                  <li className="flex gap-2">
-                    <span className="text-primary">•</span>
-                    <span>Fixed interest rate for the entire loan term</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-primary">•</span>
-                    <span>
-                      Monthly payment frequency (12 payments per year)
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-primary">•</span>
-                    <span>
-                      Does not include property taxes, insurance, HOA fees, or
-                      PMI
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-primary">•</span>
-                    <span>Assumes no extra principal payments</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-primary">•</span>
-                    <span>Interest is compounded monthly</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="sources" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Sources & References</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-sm text-muted-foreground">
-                  <li>
-                    <a href="#" className="text-accent hover:underline">
-                      Federal Housing Finance Agency - Mortgage Calculations
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-accent hover:underline">
-                      Consumer Financial Protection Bureau - Mortgages
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-accent hover:underline">
-                      IRS Publication 936 - Home Mortgage Interest Deduction
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-accent hover:underline">
-                      Freddie Mac - Understanding Mortgage Payments
-                    </a>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
       </div>
 
       <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
