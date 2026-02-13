@@ -1,22 +1,17 @@
 "use client";
 
-import { SearchBar } from "@/components/SearchBar";
+import { CalculatorSearch } from "@/components/home/CalculatorSearch";
+import type { SearchCalculatorItem } from "@/components/home/CalculatorSearch";
 import { Button } from "@/components/ui/button";
-import type { LucideIcon } from "lucide-react";
 import type { TrustIndicatorItem } from "./homeData";
 
-export interface SearchCalculatorItem {
-  name: string;
-  slug: string;
-  category: string;
-  icon: LucideIcon;
-}
+export type { SearchCalculatorItem };
 
 export interface HomeHeroProps {
   headline: string;
   subheadline: string;
   trustIndicators: TrustIndicatorItem[];
-  /** List of calculators for search (only tools that exist). */
+  /** List of calculators for search (from central dataset; same as /calculators). */
   searchCalculators: SearchCalculatorItem[];
   /** Called with slug when user selects a calculator from search */
   onSearchSelect: (slug: string) => void;
@@ -45,7 +40,7 @@ export function HomeHero({
           </p>
 
           <div className="mx-auto mt-8 max-w-2xl">
-            <SearchBar
+            <CalculatorSearch
               calculators={searchCalculators}
               onSelect={onSearchSelect}
             />

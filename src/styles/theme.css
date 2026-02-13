@@ -245,3 +245,14 @@
     line-height: 1.5;
   }
 }
+
+/* Hero search: subtle fintech pulse on focus only (2.5s cycle) */
+@keyframes search-glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px var(--accent), 0 0 20px 4px rgba(8, 145, 178, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 0 1px var(--accent), 0 0 24px 6px rgba(8, 145, 178, 0.18);
+  }
+}

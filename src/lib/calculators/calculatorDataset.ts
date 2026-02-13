@@ -303,3 +303,22 @@ const CALCULATORS: CalculatorEntry[] = [
 export function getCalculatorsList(): CalculatorEntry[] {
   return [...CALCULATORS];
 }
+
+/**
+ * Returns the number of registered calculators per category.
+ * Server-safe; uses the same source as getCalculatorsList().
+ */
+export function getCategoryCounts(): Record<CalculatorCategory, number> {
+  const list = getCalculatorsList();
+  const counts: Record<CalculatorCategory, number> = {
+    Investing: 0,
+    Debt: 0,
+    Loans: 0,
+    Retirement: 0,
+    Taxes: 0,
+  };
+  for (const entry of list) {
+    counts[entry.category] = (counts[entry.category] ?? 0) + 1;
+  }
+  return counts;
+}
