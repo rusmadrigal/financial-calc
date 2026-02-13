@@ -15,6 +15,9 @@ import {
   RefreshCw,
   Snowflake,
   TrendingDown,
+  GraduationCap,
+  PiggyBank,
+  TrendingUp,
 } from "lucide-react";
 import { CalculatorCard } from "@/components/CalculatorCard";
 import { Button } from "@/components/ui/button";
@@ -54,6 +57,9 @@ const ICON_MAP: Record<string, LucideIcon> = {
   RefreshCw,
   Snowflake,
   TrendingDown,
+  GraduationCap,
+  PiggyBank,
+  TrendingUp,
 };
 
 const categories = ["All", ...CALCULATOR_CATEGORIES];

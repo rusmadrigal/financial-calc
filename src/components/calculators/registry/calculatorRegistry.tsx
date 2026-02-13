@@ -9,6 +9,11 @@ import { PersonalLoanCalculator } from "../financial/PersonalLoanCalculator";
 import { CreditCardPayoffCalculator } from "../financial/CreditCardPayoffCalculator";
 import { DebtSnowballCalculator } from "../financial/DebtSnowballCalculator";
 import { DebtAvalancheCalculator } from "../financial/DebtAvalancheCalculator";
+import { StudentLoanCalculator } from "../financial/StudentLoanCalculator";
+import { Calculator401k } from "../financial/Calculator401k";
+import { IRACalculator } from "../financial/IRACalculator";
+import { RothIRACalculator } from "../financial/RothIRACalculator";
+import { RetirementCalculator } from "../financial/RetirementCalculator";
 
 export type CalculatorType =
   | "mortgage"
@@ -20,7 +25,12 @@ export type CalculatorType =
   | "personalLoan"
   | "creditCardPayoff"
   | "debtSnowball"
-  | "debtAvalanche";
+  | "debtAvalanche"
+  | "studentLoan"
+  | "calculator401k"
+  | "ira"
+  | "rothIra"
+  | "retirement";
 
 const registry: Record<string, ComponentType<object>> = {
   mortgage: MortgageCalculator as ComponentType<object>,
@@ -33,6 +43,11 @@ const registry: Record<string, ComponentType<object>> = {
   creditCardPayoff: CreditCardPayoffCalculator as ComponentType<object>,
   debtSnowball: DebtSnowballCalculator as ComponentType<object>,
   debtAvalanche: DebtAvalancheCalculator as ComponentType<object>,
+  studentLoan: StudentLoanCalculator as ComponentType<object>,
+  calculator401k: Calculator401k as ComponentType<object>,
+  ira: IRACalculator as ComponentType<object>,
+  rothIra: RothIRACalculator as ComponentType<object>,
+  retirement: RetirementCalculator as ComponentType<object>,
 };
 
 export function getCalculatorComponent(

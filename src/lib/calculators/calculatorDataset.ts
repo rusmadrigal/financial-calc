@@ -177,6 +177,66 @@ const CALCULATORS: CalculatorEntry[] = [
     componentType: "debtAvalanche",
     iconKey: "TrendingDown",
   },
+  {
+    title: "Student Loan Calculator",
+    slug: "student-loan-calculator",
+    category: "Loans",
+    complexity: "Simple",
+    description:
+      "Estimate monthly payments, total interest, and payoff timeline for student loans.",
+    features: ["Amortization", "Charts", "Export"],
+    popularity: 78,
+    componentType: "studentLoan",
+    iconKey: "GraduationCap",
+  },
+  {
+    title: "401k Calculator",
+    slug: "401k-calculator",
+    category: "Retirement",
+    complexity: "Simple",
+    description:
+      "Project 401(k) growth with contributions, employer match, and expected return.",
+    features: ["Employer Match", "Charts", "Export"],
+    popularity: 88,
+    componentType: "calculator401k",
+    iconKey: "PiggyBank",
+  },
+  {
+    title: "IRA Calculator",
+    slug: "ira-calculator",
+    category: "Retirement",
+    complexity: "Simple",
+    description:
+      "Project traditional IRA balance growth with annual contributions and return assumptions.",
+    features: ["Yearly Breakdown", "Charts", "Export"],
+    popularity: 76,
+    componentType: "ira",
+    iconKey: "PiggyBank",
+  },
+  {
+    title: "Roth IRA Calculator",
+    slug: "roth-ira-calculator",
+    category: "Retirement",
+    complexity: "Simple",
+    description:
+      "Project Roth IRA balance growth; qualified withdrawals are tax-free.",
+    features: ["Yearly Breakdown", "Charts", "Export"],
+    popularity: 77,
+    componentType: "rothIra",
+    iconKey: "PiggyBank",
+  },
+  {
+    title: "Retirement Calculator",
+    slug: "retirement-calculator",
+    category: "Retirement",
+    complexity: "Advanced",
+    description:
+      "Project savings to retirement and drawdown; see if your plan can meet target income.",
+    features: ["Accumulation & Drawdown", "Charts", "Export"],
+    popularity: 85,
+    componentType: "retirement",
+    iconKey: "TrendingUp",
+  },
 ];
 
 /** Returns all calculators (only those implemented and in registry). */
