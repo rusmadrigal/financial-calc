@@ -30,7 +30,8 @@ export interface Calculate401kOutput {
 export function calculate401k(input: Calculate401kInput): Calculate401kOutput {
   const currentBalance = Math.max(0, input.currentBalance);
   const monthlyContribution = Math.max(0, input.monthlyContribution);
-  const employerMatchPct = Math.max(0, Math.min(100, input.employerMatchPercent)) / 100;
+  const employerMatchPct =
+    Math.max(0, Math.min(100, input.employerMatchPercent)) / 100;
   const years = Math.max(1, Math.min(50, Math.round(input.years)));
   const annualReturn = Math.max(0, input.expectedReturnPercent) / 100;
   const monthlyReturn = annualReturn / 12;
@@ -64,7 +65,10 @@ export function calculate401k(input: Calculate401kInput): Calculate401kOutput {
     });
   }
 
-  const totalEarnings = Math.max(0, balance - currentBalance - totalContributions - totalEmployerMatch);
+  const totalEarnings = Math.max(
+    0,
+    balance - currentBalance - totalContributions - totalEmployerMatch,
+  );
 
   return {
     finalBalance: balance,

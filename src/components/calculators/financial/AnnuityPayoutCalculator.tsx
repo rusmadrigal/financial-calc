@@ -42,7 +42,7 @@ import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
 import { exportToExcel } from "@/lib/exports/exportToExcel";
 import { exportToCSV } from "@/lib/exports/exportToCSV";
-import { calculate401k } from "@/lib/helpers/financial/calculate401k";
+import { calculateAnnuityPayout } from "@/lib/helpers/financial/calculateAnnuityPayout";
 
 const usd = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -51,28 +51,20 @@ const usd = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 0,
 });
 
-export function Calculator401k() {
-  const [currentBalance, setCurrentBalance] = useState("50000");
-  const [monthlyContribution, setMonthlyContribution] = useState("500");
-  const [employerMatchPercent, setEmployerMatchPercent] = useState("50");
+export function AnnuityPayoutCalculator() {
+  const [principal, setPrincipal] = useState("300000");
+  const [annualRate, setAnnualRate] = useState("5");
   const [years, setYears] = useState("25");
-  const [expectedReturn, setExpectedReturn] = useState("7");
+  const [monthly, setMonthly] = useState(true);
 
   const result = useMemo(() => {
-    return calculate401k({
-      currentBalance: Math.max(0, parseFloat(currentBalance) || 0),
-      monthlyContribution: Math.max(0, parseFloat(monthlyContribution) || 0),
-      employerMatchPercent: Math.max(0, parseFloat(employerMatchPercent) || 0),
+    return calculateAnnuityPayout({
+      principal: Math.max(0, parseFloat(principal) || 0),
+      annualRatePercent: Math.max(0, parseFloat(annualRate) || 0),
       years: Math.max(1, parseInt(years, 10) || 25),
-      expectedReturnPercent: Math.max(0, parseFloat(expectedReturn) || 0),
+      monthly: Boolean(monthly),
     });
-  }, [
-    currentBalance,
-    monthlyContribution,
-    employerMatchPercent,
-    years,
-    expectedReturn,
-  ]);
+  }, [principal, annualRate, years, monthly]);
 
   const chartDataLine = useMemo(
     () =>
@@ -87,37 +79,35 @@ export function Calculator401k() {
     () =>
       result.yearlyBreakdown.slice(0, 15).map((row) => ({
         year: row.year,
-        contributions: Math.round(row.contributions),
-        employerMatch: Math.round(row.employerMatch),
-        earnings: Math.round(row.earnings),
+        payments: Math.round(row.payments),
+        interest: Math.round(row.interest),
       })),
     [result.yearlyBreakdown],
   );
 
   const tableHeaders = [
     "Year",
+    "Payments",
+    "Interest",
+    "Principal Paid",
     "Balance",
-    "Contributions",
-    "Employer Match",
-    "Earnings",
   ];
   const tableRows = result.yearlyBreakdown.map(
     (row) =>
       [
         row.year,
+        Number(row.payments.toFixed(2)),
+        Number(row.interest.toFixed(2)),
+        Number((row.payments - row.interest).toFixed(2)),
         Number(row.balance.toFixed(2)),
-        Number(row.contributions.toFixed(2)),
-        Number(row.employerMatch.toFixed(2)),
-        Number(row.earnings.toFixed(2)),
       ] as (string | number)[],
   );
 
   const summaryData: Record<string, string | number> = useMemo(
     () => ({
-      "Final Balance": usd.format(result.finalBalance),
-      "Total Contributions": usd.format(result.totalContributions),
-      "Total Employer Match": usd.format(result.totalEmployerMatch),
-      "Total Earnings": usd.format(result.totalEarnings),
+      "Payment per period": usd.format(result.paymentPerPeriod),
+      "Total payments": usd.format(result.totalPayments),
+      "Total interest": usd.format(result.totalInterest),
     }),
     [result],
   );
@@ -137,28 +127,32 @@ export function Calculator401k() {
 
   const handleExportPDF = () => {
     if (!hasResults) return;
-    exportToPDF("401(k) Calculator", summaryData, tableHeaders, tableRows);
+    exportToPDF(
+      "Annuity Payout Calculator",
+      summaryData,
+      tableHeaders,
+      tableRows,
+    );
     toast.success("PDF downloaded");
   };
 
   const handleExportExcel = () => {
     if (!hasResults) return;
-    exportToExcel("401k Schedule", tableHeaders, tableRows);
+    exportToExcel("Annuity Schedule", tableHeaders, tableRows);
     toast.success("Excel file downloaded");
   };
 
   const handleDownloadFullSchedule = () => {
     if (!hasResults) return;
-    exportToCSV("401k-Full-Schedule", tableHeaders, tableRows);
+    exportToCSV("Annuity-Payout-Schedule", tableHeaders, tableRows);
     toast.success("Full schedule downloaded");
   };
 
   const handleReset = () => {
-    setCurrentBalance("50000");
-    setMonthlyContribution("500");
-    setEmployerMatchPercent("50");
+    setPrincipal("300000");
+    setAnnualRate("5");
     setYears("25");
-    setExpectedReturn("7");
+    setMonthly(true);
     toast.info("Calculator reset");
   };
 
@@ -169,11 +163,11 @@ export function Calculator401k() {
           <Card className="sticky top-24">
             <CardHeader>
               <CardTitle>Calculator Inputs</CardTitle>
-              <CardDescription>401(k) assumptions</CardDescription>
+              <CardDescription>Annuity assumptions</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <Label>Current Balance ($)</Label>
+                <Label>Principal ($)</Label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                     $
@@ -181,39 +175,24 @@ export function Calculator401k() {
                   <Input
                     type="number"
                     min={0}
-                    value={currentBalance}
-                    onChange={(e) => setCurrentBalance(e.target.value)}
+                    value={principal}
+                    onChange={(e) => setPrincipal(e.target.value)}
                     className="pl-7"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Monthly Contribution ($)</Label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                    $
-                  </span>
-                  <Input
-                    type="number"
-                    min={0}
-                    value={monthlyContribution}
-                    onChange={(e) => setMonthlyContribution(e.target.value)}
-                    className="pl-7"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Employer Match (%)</Label>
+                <Label>Annual rate (%)</Label>
                 <Input
                   type="number"
                   min={0}
-                  max={100}
-                  value={employerMatchPercent}
-                  onChange={(e) => setEmployerMatchPercent(e.target.value)}
+                  step="0.1"
+                  value={annualRate}
+                  onChange={(e) => setAnnualRate(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Years</Label>
+                <Label>Payout period (years)</Label>
                 <Input
                   type="number"
                   min={1}
@@ -221,15 +200,15 @@ export function Calculator401k() {
                   onChange={(e) => setYears(e.target.value)}
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Expected Return (%/year)</Label>
-                <Input
-                  type="number"
-                  min={0}
-                  step="0.1"
-                  value={expectedReturn}
-                  onChange={(e) => setExpectedReturn(e.target.value)}
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="monthly"
+                  checked={monthly}
+                  onChange={(e) => setMonthly(e.target.checked)}
+                  className="h-4 w-4 rounded border-input"
                 />
+                <Label htmlFor="monthly">Monthly payments</Label>
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
@@ -245,38 +224,32 @@ export function Calculator401k() {
           <Card className="border-2">
             <CardHeader>
               <CardTitle>Results</CardTitle>
-              <CardDescription>Projected growth</CardDescription>
+              <CardDescription>Payout summary</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
-                  <p className="text-sm text-muted-foreground">Final Balance</p>
+                  <p className="text-sm text-muted-foreground">
+                    Payment per period
+                  </p>
                   <p className="mt-1 text-2xl font-semibold">
-                    {usd.format(result.finalBalance)}
+                    {usd.format(result.paymentPerPeriod)}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">
-                    Total Contributions
+                    Total payments
                   </p>
                   <p className="mt-1 text-2xl font-semibold">
-                    {usd.format(result.totalContributions)}
+                    {usd.format(result.totalPayments)}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">
-                    Employer Match
+                    Total interest
                   </p>
                   <p className="mt-1 text-2xl font-semibold">
-                    {usd.format(result.totalEmployerMatch)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    Total Earnings
-                  </p>
-                  <p className="mt-1 text-2xl font-semibold">
-                    {usd.format(result.totalEarnings)}
+                    {usd.format(result.totalInterest)}
                   </p>
                 </div>
               </div>
@@ -312,16 +285,15 @@ export function Calculator401k() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              Growth is hypothetical. Employer match is applied to your
-              contribution.
+              Fixed-period annuity. Payment assumed at end of each period.
             </AlertDescription>
           </Alert>
 
           {chartDataLine.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Balance Growth Over Time</CardTitle>
-                <CardDescription>Projected balance by year</CardDescription>
+                <CardTitle>Remaining Balance Over Time</CardTitle>
+                <CardDescription>Balance after each year</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
@@ -357,7 +329,7 @@ export function Calculator401k() {
           {chartDataBar.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Contributions vs Earnings by Year</CardTitle>
+                <CardTitle>Payments vs Interest by Year</CardTitle>
                 <CardDescription>First 15 years</CardDescription>
               </CardHeader>
               <CardContent>
@@ -378,21 +350,14 @@ export function Calculator401k() {
                         }}
                       />
                       <Bar
-                        dataKey="contributions"
+                        dataKey="payments"
                         fill="var(--chart-1)"
-                        name="Contributions"
-                        stackId="a"
+                        name="Payments"
                       />
                       <Bar
-                        dataKey="employerMatch"
+                        dataKey="interest"
                         fill="var(--chart-2)"
-                        name="Employer Match"
-                        stackId="a"
-                      />
-                      <Bar
-                        dataKey="earnings"
-                        fill="var(--chart-3)"
-                        name="Earnings"
+                        name="Interest"
                       />
                     </BarChart>
                   </ResponsiveContainer>
@@ -412,14 +377,10 @@ export function Calculator401k() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Year</TableHead>
+                      <TableHead className="text-right">Payments</TableHead>
+                      <TableHead className="text-right">Interest</TableHead>
+                      <TableHead className="text-right">Principal</TableHead>
                       <TableHead className="text-right">Balance</TableHead>
-                      <TableHead className="text-right">
-                        Contributions
-                      </TableHead>
-                      <TableHead className="text-right">
-                        Employer Match
-                      </TableHead>
-                      <TableHead className="text-right">Earnings</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -429,16 +390,16 @@ export function Calculator401k() {
                           {row.year}
                         </TableCell>
                         <TableCell className="text-right">
+                          {usd.format(row.payments)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.interest)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.payments - row.interest)}
+                        </TableCell>
+                        <TableCell className="text-right">
                           {usd.format(row.balance)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {usd.format(row.contributions)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {usd.format(row.employerMatch)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          {usd.format(row.earnings)}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -463,7 +424,7 @@ export function Calculator401k() {
       <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
         <AlertCircle className="size-4" />
         <AlertDescription>
-          Estimates only. Actual returns and limits vary.
+          Estimates only. Actual annuity terms may vary.
         </AlertDescription>
       </Alert>
 

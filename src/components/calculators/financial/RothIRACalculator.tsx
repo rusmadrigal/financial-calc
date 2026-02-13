@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Download,
-  FileSpreadsheet,
-  Info,
-  AlertCircle,
-} from "lucide-react";
+import { Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -85,12 +80,15 @@ export function RothIRACalculator() {
   );
 
   const tableHeaders = ["Year", "Balance", "Contributions", "Earnings"];
-  const tableRows = result.yearlyBreakdown.map((row) => [
-    row.year,
-    Number(row.balance.toFixed(2)),
-    Number(row.contributions.toFixed(2)),
-    Number(row.earnings.toFixed(2)),
-  ] as (string | number)[]);
+  const tableRows = result.yearlyBreakdown.map(
+    (row) =>
+      [
+        row.year,
+        Number(row.balance.toFixed(2)),
+        Number(row.contributions.toFixed(2)),
+        Number(row.earnings.toFixed(2)),
+      ] as (string | number)[],
+  );
 
   const summaryData: Record<string, string | number> = useMemo(
     () => ({
@@ -153,28 +151,57 @@ export function RothIRACalculator() {
               <div className="space-y-2">
                 <Label>Current Balance ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={currentBalance} onChange={(e) => setCurrentBalance(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={currentBalance}
+                    onChange={(e) => setCurrentBalance(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Annual Contribution ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={annualContribution} onChange={(e) => setAnnualContribution(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={annualContribution}
+                    onChange={(e) => setAnnualContribution(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Years</Label>
-                <Input type="number" min={1} value={years} onChange={(e) => setYears(e.target.value)} />
+                <Input
+                  type="number"
+                  min={1}
+                  value={years}
+                  onChange={(e) => setYears(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Expected Return (%/year)</Label>
-                <Input type="number" min={0} step="0.1" value={expectedReturn} onChange={(e) => setExpectedReturn(e.target.value)} />
+                <Input
+                  type="number"
+                  min={0}
+                  step="0.1"
+                  value={expectedReturn}
+                  onChange={(e) => setExpectedReturn(e.target.value)}
+                />
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
-                <Button onClick={handleReset} variant="outline">Reset</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -190,25 +217,50 @@ export function RothIRACalculator() {
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                   <p className="text-sm text-muted-foreground">Final Balance</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.finalBalance)}</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.finalBalance)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Contributions</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.totalContributions)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Contributions
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.totalContributions)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Earnings</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.totalEarnings)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Earnings
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.totalEarnings)}
+                  </p>
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopyResults} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
                   <Copy className="mr-2 size-4" /> Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
                   <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
@@ -218,7 +270,8 @@ export function RothIRACalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              Roth IRA: contributions are after-tax; qualified withdrawals are tax-free.
+              Roth IRA: contributions are after-tax; qualified withdrawals are
+              tax-free.
             </AlertDescription>
           </Alert>
 
@@ -232,11 +285,26 @@ export function RothIRACalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
-                      <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: "8px" }} />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Balance"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -254,12 +322,29 @@ export function RothIRACalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
-                      <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: "8px" }} />
-                      <Bar dataKey="contributions" fill="var(--chart-1)" name="Contributions" />
-                      <Bar dataKey="earnings" fill="var(--chart-3)" name="Earnings" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Bar
+                        dataKey="contributions"
+                        fill="var(--chart-1)"
+                        name="Contributions"
+                      />
+                      <Bar
+                        dataKey="earnings"
+                        fill="var(--chart-3)"
+                        name="Earnings"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -279,24 +364,39 @@ export function RothIRACalculator() {
                     <TableRow>
                       <TableHead>Year</TableHead>
                       <TableHead className="text-right">Balance</TableHead>
-                      <TableHead className="text-right">Contributions</TableHead>
+                      <TableHead className="text-right">
+                        Contributions
+                      </TableHead>
                       <TableHead className="text-right">Earnings</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {previewRows.map((row) => (
                       <TableRow key={row.year}>
-                        <TableCell className="font-medium">{row.year}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.contributions)}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.earnings)}</TableCell>
+                        <TableCell className="font-medium">
+                          {row.year}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.balance)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.contributions)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.earnings)}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </div>
               <div className="mt-4 text-center">
-                <Button variant="outline" size="sm" onClick={handleDownloadFullSchedule} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadFullSchedule}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Download Full Schedule
                 </Button>
               </div>
@@ -307,13 +407,17 @@ export function RothIRACalculator() {
 
       <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
         <AlertCircle className="size-4" />
-        <AlertDescription>Estimates only. Contribution limits and eligibility rules apply.</AlertDescription>
+        <AlertDescription>
+          Estimates only. Contribution limits and eligibility rules apply.
+        </AlertDescription>
       </Alert>
 
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/95 p-4 backdrop-blur lg:hidden">
         <div className="flex gap-3">
           <Button className="flex-1">Calculate</Button>
-          <Button onClick={handleReset} variant="outline">Reset</Button>
+          <Button onClick={handleReset} variant="outline">
+            Reset
+          </Button>
         </div>
       </div>
       <div className="h-20 lg:hidden" />

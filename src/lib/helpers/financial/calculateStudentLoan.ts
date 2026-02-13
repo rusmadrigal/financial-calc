@@ -35,7 +35,9 @@ function monthlyPayment(
   return (principal * (monthlyRate * factor)) / (factor - 1);
 }
 
-export function calculateStudentLoan(input: StudentLoanInput): StudentLoanOutput {
+export function calculateStudentLoan(
+  input: StudentLoanInput,
+): StudentLoanOutput {
   const principal = Math.max(0, input.principal);
   const apr = Math.max(0, input.aprPercent);
   const termYears = Math.max(1 / 12, Math.min(50, input.termYears));

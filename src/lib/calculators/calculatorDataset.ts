@@ -237,6 +237,66 @@ const CALCULATORS: CalculatorEntry[] = [
     componentType: "retirement",
     iconKey: "TrendingUp",
   },
+  {
+    title: "Social Security Calculator",
+    slug: "social-security-calculator",
+    category: "Retirement",
+    complexity: "Simple",
+    description:
+      "Estimate Social Security benefits by claiming age and project yearly benefits.",
+    features: ["Claiming Age", "Charts", "Export"],
+    popularity: 82,
+    componentType: "socialSecurity",
+    iconKey: "Landmark",
+  },
+  {
+    title: "Annuity Payout Calculator",
+    slug: "annuity-payout-calculator",
+    category: "Retirement",
+    complexity: "Simple",
+    description:
+      "Calculate fixed-period annuity payments from principal, rate, and term.",
+    features: ["Monthly/Annual", "Schedule", "Charts", "Export"],
+    popularity: 68,
+    componentType: "annuityPayout",
+    iconKey: "CircleDollarSign",
+  },
+  {
+    title: "Compound Interest Calculator",
+    slug: "compound-interest-calculator",
+    category: "Investing",
+    complexity: "Simple",
+    description:
+      "Project growth with compound interest and optional monthly contributions.",
+    features: ["Contributions", "Charts", "Export"],
+    popularity: 90,
+    componentType: "compoundInterest",
+    iconKey: "TrendingUp",
+  },
+  {
+    title: "Investment Return Calculator",
+    slug: "investment-return-calculator",
+    category: "Investing",
+    complexity: "Simple",
+    description:
+      "Project investment growth with initial amount and monthly contributions.",
+    features: ["Contributions", "Charts", "Export"],
+    popularity: 88,
+    componentType: "investmentReturn",
+    iconKey: "TrendingUp",
+  },
+  {
+    title: "Dividend Calculator",
+    slug: "dividend-calculator",
+    category: "Investing",
+    complexity: "Simple",
+    description:
+      "Estimate dividend income over time with optional reinvestment.",
+    features: ["Reinvest", "Charts", "Export"],
+    popularity: 75,
+    componentType: "dividend",
+    iconKey: "Percent",
+  },
 ];
 
 /** Returns all calculators (only those implemented and in registry). */

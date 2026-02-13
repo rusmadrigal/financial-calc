@@ -18,6 +18,9 @@ import {
   GraduationCap,
   PiggyBank,
   TrendingUp,
+  Landmark,
+  CircleDollarSign,
+  Percent,
 } from "lucide-react";
 import { CalculatorCard } from "@/components/CalculatorCard";
 import { Button } from "@/components/ui/button";
@@ -60,6 +63,9 @@ const ICON_MAP: Record<string, LucideIcon> = {
   GraduationCap,
   PiggyBank,
   TrendingUp,
+  Landmark,
+  CircleDollarSign,
+  Percent,
 };
 
 const categories = ["All", ...CALCULATOR_CATEGORIES];

@@ -32,11 +32,17 @@ export interface RetirementOutput {
 export function calculateRetirement(input: RetirementInput): RetirementOutput {
   const currentSavings = Math.max(0, input.currentSavings);
   const monthlyContribution = Math.max(0, input.monthlyContribution);
-  const yearsToRetirement = Math.max(1, Math.min(50, Math.round(input.yearsToRetirement)));
+  const yearsToRetirement = Math.max(
+    1,
+    Math.min(50, Math.round(input.yearsToRetirement)),
+  );
   const annualReturn = Math.max(0, input.expectedReturnPercent) / 100;
   const monthlyReturn = annualReturn / 12;
   const annualIncomeNeeded = Math.max(0, input.annualIncomeNeeded);
-  const yearsInRetirement = Math.max(1, Math.min(50, Math.round(input.yearsInRetirement)));
+  const yearsInRetirement = Math.max(
+    1,
+    Math.min(50, Math.round(input.yearsInRetirement)),
+  );
   const retirementReturn = Math.max(0, input.retirementReturnPercent) / 100;
   const monthlyRetReturn = retirementReturn / 12;
 

@@ -14,6 +14,11 @@ import { Calculator401k } from "../financial/Calculator401k";
 import { IRACalculator } from "../financial/IRACalculator";
 import { RothIRACalculator } from "../financial/RothIRACalculator";
 import { RetirementCalculator } from "../financial/RetirementCalculator";
+import { SocialSecurityCalculator } from "../financial/SocialSecurityCalculator";
+import { AnnuityPayoutCalculator } from "../financial/AnnuityPayoutCalculator";
+import { CompoundInterestCalculator } from "../financial/CompoundInterestCalculator";
+import { InvestmentReturnCalculator } from "../financial/InvestmentReturnCalculator";
+import { DividendCalculator } from "../financial/DividendCalculator";
 
 export type CalculatorType =
   | "mortgage"
@@ -30,7 +35,12 @@ export type CalculatorType =
   | "calculator401k"
   | "ira"
   | "rothIra"
-  | "retirement";
+  | "retirement"
+  | "socialSecurity"
+  | "annuityPayout"
+  | "compoundInterest"
+  | "investmentReturn"
+  | "dividend";
 
 const registry: Record<string, ComponentType<object>> = {
   mortgage: MortgageCalculator as ComponentType<object>,
@@ -48,6 +58,11 @@ const registry: Record<string, ComponentType<object>> = {
   ira: IRACalculator as ComponentType<object>,
   rothIra: RothIRACalculator as ComponentType<object>,
   retirement: RetirementCalculator as ComponentType<object>,
+  socialSecurity: SocialSecurityCalculator as ComponentType<object>,
+  annuityPayout: AnnuityPayoutCalculator as ComponentType<object>,
+  compoundInterest: CompoundInterestCalculator as ComponentType<object>,
+  investmentReturn: InvestmentReturnCalculator as ComponentType<object>,
+  dividend: DividendCalculator as ComponentType<object>,
 };
 
 export function getCalculatorComponent(

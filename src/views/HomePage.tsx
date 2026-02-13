@@ -15,6 +15,9 @@ import {
   GraduationCap,
   PiggyBank,
   TrendingUp,
+  Landmark,
+  CircleDollarSign,
+  Percent,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -46,6 +49,9 @@ const CALCULATOR_ICON_MAP: Record<string, LucideIcon> = {
   GraduationCap,
   PiggyBank,
   TrendingUp,
+  Landmark,
+  CircleDollarSign,
+  Percent,
 };
 
 export function HomePage() {

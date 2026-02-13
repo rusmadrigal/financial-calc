@@ -42,7 +42,8 @@ export function calculateRothIRA(input: RothIRAInput): RothIRAOutput {
       balance *= 1 + monthlyReturn;
     }
     totalContributions += annualContribution;
-    const startBalance = y === 1 ? currentBalance : yearlyBreakdown[y - 2].balance;
+    const startBalance =
+      y === 1 ? currentBalance : yearlyBreakdown[y - 2].balance;
     const earnings = balance - startBalance - annualContribution;
     yearlyBreakdown.push({
       year: y,
@@ -52,7 +53,10 @@ export function calculateRothIRA(input: RothIRAInput): RothIRAOutput {
     });
   }
 
-  const totalEarnings = Math.max(0, balance - currentBalance - totalContributions);
+  const totalEarnings = Math.max(
+    0,
+    balance - currentBalance - totalContributions,
+  );
 
   return {
     finalBalance: balance,
