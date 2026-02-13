@@ -1,48 +1,32 @@
 import { useState, useRef, useEffect } from "react";
-import {
-  Search,
-  Calculator,
-  TrendingUp,
-  Home,
-  CreditCard,
-  PiggyBank,
-  Clock,
-} from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "./ui/input";
 import { Card } from "./ui/card";
+import type { LucideIcon } from "lucide-react";
 
-interface SearchBarProps {
-  onSelect?: (calculator: string) => void;
+export interface SearchCalculatorItem {
+  name: string;
+  slug: string;
+  category: string;
+  icon: LucideIcon;
 }
 
-const popularCalculators = [
-  { name: "Mortgage Calculator", icon: Home, category: "Loans" },
-  { name: "401(k) Calculator", icon: PiggyBank, category: "Retirement" },
-  {
-    name: "Investment Return Calculator",
-    icon: TrendingUp,
-    category: "Investing",
-  },
-  { name: "Credit Card Payoff Calculator", icon: CreditCard, category: "Debt" },
-  { name: "Loan Amortization Calculator", icon: Calculator, category: "Loans" },
-  {
-    name: "Retirement Savings Calculator",
-    icon: Clock,
-    category: "Retirement",
-  },
-  {
-    name: "Compound Interest Calculator",
-    icon: TrendingUp,
-    category: "Investing",
-  },
-  { name: "Debt Consolidation Calculator", icon: CreditCard, category: "Debt" },
-];
+interface SearchBarProps {
+  /** Only calculators that exist (from central dataset). When empty, search shows no results. */
+  calculators: SearchCalculatorItem[];
+  /** Called with slug when user selects a calculator */
+  onSelect?: (slug: string) => void;
+}
 
-export function SearchBar({ onSelect }: SearchBarProps) {
+export function SearchBar({ calculators, onSelect }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [filteredResults, setFilteredResults] = useState(popularCalculators);
+  const [filteredResults, setFilteredResults] = useState(calculators);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setFilteredResults(calculators);
+  }, [calculators]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -60,21 +44,21 @@ export function SearchBar({ onSelect }: SearchBarProps) {
 
   useEffect(() => {
     if (query.trim() === "") {
-      setFilteredResults(popularCalculators);
+      setFilteredResults(calculators);
     } else {
-      const filtered = popularCalculators.filter(
+      const filtered = calculators.filter(
         (calc) =>
           calc.name.toLowerCase().includes(query.toLowerCase()) ||
           calc.category.toLowerCase().includes(query.toLowerCase()),
       );
       setFilteredResults(filtered);
     }
-  }, [query]);
+  }, [query, calculators]);
 
-  const handleSelect = (calculatorName: string) => {
+  const handleSelect = (slug: string) => {
     setQuery("");
     setIsFocused(false);
-    onSelect?.(calculatorName);
+    onSelect?.(slug);
   };
 
   return (
@@ -89,23 +73,23 @@ export function SearchBar({ onSelect }: SearchBarProps) {
           onFocus={() => setIsFocused(true)}
           className="h-14 rounded-xl border-2 bg-card pl-12 pr-4 text-base shadow-sm transition-all focus:border-accent focus:shadow-md"
         />
-        {!isFocused && !query && (
+        {!isFocused && !query && calculators.length > 0 && (
           <div className="pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 sm:block">
             <p className="text-xs text-muted-foreground">
               Try: <span className="font-medium">mortgage</span>,{" "}
-              <span className="font-medium">401k</span>,{" "}
-              <span className="font-medium">debt payoff</span>
+              <span className="font-medium">debt</span>,{" "}
+              <span className="font-medium">loan</span>
             </p>
           </div>
         )}
       </div>
 
       {/* Helper text for mobile */}
-      {!isFocused && !query && (
+      {!isFocused && !query && calculators.length > 0 && (
         <p className="mt-2 text-center text-xs text-muted-foreground sm:hidden">
           Try: <span className="font-medium">mortgage</span>,{" "}
-          <span className="font-medium">401k</span>,{" "}
-          <span className="font-medium">debt payoff</span>
+          <span className="font-medium">debt</span>,{" "}
+          <span className="font-medium">loan</span>
         </p>
       )}
 
@@ -118,7 +102,7 @@ export function SearchBar({ onSelect }: SearchBarProps) {
                 {query.trim() === "" && (
                   <div className="px-4 pb-2 pt-3">
                     <p className="text-xs font-medium text-muted-foreground">
-                      POPULAR CALCULATORS
+                      CALCULATORS
                     </p>
                   </div>
                 )}
@@ -126,8 +110,8 @@ export function SearchBar({ onSelect }: SearchBarProps) {
                   const Icon = calc.icon;
                   return (
                     <button
-                      key={index}
-                      onClick={() => handleSelect(calc.name)}
+                      key={calc.slug}
+                      onClick={() => handleSelect(calc.slug)}
                       className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors hover:bg-accent/10 focus:bg-accent/10 focus:outline-none"
                     >
                       <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
@@ -148,7 +132,7 @@ export function SearchBar({ onSelect }: SearchBarProps) {
             ) : (
               <div className="p-8 text-center">
                 <p className="text-sm text-muted-foreground">
-                  No calculators found for "{query}"
+                  No calculators found for &quot;{query}&quot;
                 </p>
               </div>
             )}

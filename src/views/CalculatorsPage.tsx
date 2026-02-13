@@ -1,22 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import type { LucideIcon } from "lucide-react";
 import {
-  Calculator,
-  TrendingUp,
   Home,
   CreditCard,
-  PiggyBank,
   DollarSign,
-  Calendar,
-  Banknote,
   Building2,
-  Target,
-  LineChart,
   Receipt,
+  Car,
   SlidersHorizontal,
   X,
+  RefreshCw,
+  Snowflake,
+  TrendingDown,
 } from "lucide-react";
 import { CalculatorCard } from "@/components/CalculatorCard";
 import { Button } from "@/components/ui/button";
@@ -38,125 +36,32 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { nameToSlug } from "@/lib/slugs";
+import {
+  getCalculatorsList,
+  CALCULATOR_CATEGORIES,
+  COMPLEXITY_LEVELS,
+  type CalculatorEntry,
+} from "@/lib/calculators/calculatorDataset";
+
+/** Map iconKey from dataset to Lucide icon component */
+const ICON_MAP: Record<string, LucideIcon> = {
+  Home,
+  CreditCard,
+  DollarSign,
+  Building2,
+  Receipt,
+  Car,
+  RefreshCw,
+  Snowflake,
+  TrendingDown,
+};
+
+const categories = ["All", ...CALCULATOR_CATEGORIES];
+const complexityLevels = ["All", ...COMPLEXITY_LEVELS];
 
 interface CalculatorsPageProps {
   initialCategory?: string;
 }
-
-const allCalculators = [
-  {
-    title: "Mortgage Calculator",
-    description:
-      "Calculate monthly payments, total interest, and amortization schedules for home loans with customizable terms.",
-    icon: Home,
-    category: "Loans",
-    complexity: "Simple",
-    badges: ["Amortization Table", "Export PDF", "Charts"],
-  },
-  {
-    title: "401(k) Calculator",
-    description:
-      "Estimate retirement savings growth with employer matching, contribution limits, and tax-deferred benefits.",
-    icon: PiggyBank,
-    category: "Retirement",
-    complexity: "Advanced",
-    badges: ["Tax Scenarios", "Projections", "Employer Match"],
-  },
-  {
-    title: "Investment Return Calculator",
-    description:
-      "Calculate compound returns, ROI, and future value with monthly contributions and dividend reinvestment.",
-    icon: TrendingUp,
-    category: "Investing",
-    complexity: "Simple",
-    badges: ["Compound Interest", "Charts", "Export Excel"],
-  },
-  {
-    title: "Credit Card Payoff Calculator",
-    description:
-      "Determine payoff timeline and total interest with minimum payments vs. accelerated strategies.",
-    icon: CreditCard,
-    category: "Debt",
-    complexity: "Simple",
-    badges: ["Payoff Strategy", "Interest Savings"],
-  },
-  {
-    title: "Auto Loan Calculator",
-    description:
-      "Compare auto financing options with trade-in values, down payments, and APR calculations.",
-    icon: Building2,
-    category: "Loans",
-    complexity: "Simple",
-    badges: ["Trade-in Value", "APR Comparison"],
-  },
-  {
-    title: "Retirement Savings Calculator",
-    description:
-      "Plan comprehensive retirement with Social Security, pensions, IRA, and investment income projections.",
-    icon: Calendar,
-    category: "Retirement",
-    complexity: "Advanced",
-    badges: ["Multiple Income", "Inflation Adjusted", "Longevity"],
-  },
-  {
-    title: "Loan Amortization Calculator",
-    description:
-      "Generate detailed payment schedules showing principal and interest breakdown for any loan type.",
-    icon: Receipt,
-    category: "Loans",
-    complexity: "Simple",
-    badges: ["Payment Schedule", "Extra Payments"],
-  },
-  {
-    title: "Compound Interest Calculator",
-    description:
-      "Calculate compound growth with various compounding frequencies and additional contributions.",
-    icon: LineChart,
-    category: "Investing",
-    complexity: "Simple",
-    badges: ["Multiple Frequencies", "Charts"],
-  },
-  {
-    title: "Debt Consolidation Calculator",
-    description:
-      "Compare consolidating multiple debts into a single loan to analyze savings and payoff timeline.",
-    icon: Banknote,
-    category: "Debt",
-    complexity: "Advanced",
-    badges: ["Multiple Debts", "Comparison", "Savings Analysis"],
-  },
-  {
-    title: "Roth IRA Calculator",
-    description:
-      "Project Roth IRA growth with contribution limits, tax-free withdrawals, and income phase-outs.",
-    icon: Target,
-    category: "Retirement",
-    complexity: "Advanced",
-    badges: ["Tax-Free Growth", "Contribution Limits"],
-  },
-  {
-    title: "Personal Loan Calculator",
-    description:
-      "Calculate monthly payments and total interest for personal loans with fixed or variable rates.",
-    icon: DollarSign,
-    category: "Loans",
-    complexity: "Simple",
-    badges: ["Fixed/Variable Rates", "APR"],
-  },
-  {
-    title: "Student Loan Calculator",
-    description:
-      "Estimate payments for federal and private student loans with various repayment plans and forgiveness options.",
-    icon: Calculator,
-    category: "Debt",
-    complexity: "Advanced",
-    badges: ["Repayment Plans", "Forgiveness Options"],
-  },
-];
-
-const categories = ["All", "Investing", "Debt", "Loans", "Retirement", "Taxes"];
-const complexityLevels = ["All", "Simple", "Advanced"];
 
 export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
   const router = useRouter();
@@ -164,8 +69,10 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
     initialCategory ? [initialCategory] : [],
   );
   const [selectedComplexity, setSelectedComplexity] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState("popular");
+  const [sortBy, setSortBy] = useState<"popular" | "name">("popular");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const allCalculators = useMemo(() => getCalculatorsList(), []);
 
   const toggleCategory = (category: string) => {
     if (category === "All") {
@@ -191,25 +98,34 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
     }
   };
 
-  const filteredCalculators = allCalculators.filter((calc) => {
-    const categoryMatch =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(calc.category);
-    const complexityMatch =
-      selectedComplexity.length === 0 ||
-      selectedComplexity.includes(calc.complexity);
-    return categoryMatch && complexityMatch;
-  });
+  const filteredCalculators = useMemo(
+    () =>
+      allCalculators.filter((calc) => {
+        const categoryMatch =
+          selectedCategories.length === 0 ||
+          selectedCategories.includes(calc.category);
+        const complexityMatch =
+          selectedComplexity.length === 0 ||
+          selectedComplexity.includes(calc.complexity);
+        return categoryMatch && complexityMatch;
+      }),
+    [allCalculators, selectedCategories, selectedComplexity],
+  );
 
-  const sortedCalculators = [...filteredCalculators].sort((a, b) => {
-    if (sortBy === "popular") return 0; // Keep original order
-    if (sortBy === "name") return a.title.localeCompare(b.title);
-    return 0;
-  });
+  const sortedCalculators = useMemo(() => {
+    const list = [...filteredCalculators];
+    if (sortBy === "popular") {
+      list.sort(
+        (a, b) => b.popularity - a.popularity || a.title.localeCompare(b.title),
+      );
+    } else {
+      list.sort((a, b) => a.title.localeCompare(b.title));
+    }
+    return list;
+  }, [filteredCalculators, sortBy]);
 
   const FilterContent = () => (
     <div className="space-y-8">
-      {/* Category Filter */}
       <div>
         <Label className="mb-4 block text-base">Category</Label>
         <div className="space-y-3">
@@ -235,7 +151,6 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
         </div>
       </div>
 
-      {/* Complexity Filter */}
       <div>
         <Label className="mb-4 block text-base">Complexity</Label>
         <div className="space-y-3">
@@ -261,7 +176,6 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
         </div>
       </div>
 
-      {/* Clear Filters */}
       {(selectedCategories.length > 0 || selectedComplexity.length > 0) && (
         <Button
           variant="outline"
@@ -280,7 +194,6 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 text-foreground">All Calculators</h1>
           <p className="text-muted-foreground">
@@ -289,7 +202,6 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
         </div>
 
         <div className="flex flex-col gap-8 lg:flex-row">
-          {/* Desktop Sidebar */}
           <aside className="hidden w-64 shrink-0 lg:block">
             <Card className="sticky top-24">
               <CardContent className="p-6">
@@ -302,9 +214,7 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
             </Card>
           </aside>
 
-          {/* Main Content */}
           <div className="flex-1">
-            {/* Mobile Filter Button & Sort */}
             <div className="mb-6 flex items-center justify-between gap-4">
               <Sheet
                 open={mobileFiltersOpen}
@@ -336,7 +246,10 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
                 <Label className="text-sm text-muted-foreground">
                   Sort by:
                 </Label>
-                <Select value={sortBy} onValueChange={setSortBy}>
+                <Select
+                  value={sortBy}
+                  onValueChange={(v) => setSortBy(v as "popular" | "name")}
+                >
                   <SelectTrigger className="w-[140px]">
                     <SelectValue />
                   </SelectTrigger>
@@ -348,7 +261,6 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
               </div>
             </div>
 
-            {/* Active Filters */}
             {(selectedCategories.length > 0 ||
               selectedComplexity.length > 0) && (
               <div className="mb-6 flex flex-wrap gap-2">
@@ -377,7 +289,6 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
               </div>
             )}
 
-            {/* Results Count */}
             <div className="mb-6">
               <p className="text-sm text-muted-foreground">
                 Showing {sortedCalculators.length} of {allCalculators.length}{" "}
@@ -385,18 +296,15 @@ export function CalculatorsPage({ initialCategory }: CalculatorsPageProps) {
               </p>
             </div>
 
-            {/* Calculators Grid */}
             <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-              {sortedCalculators.map((calc) => (
+              {sortedCalculators.map((calc: CalculatorEntry) => (
                 <CalculatorCard
-                  key={calc.title}
+                  key={calc.slug}
                   title={calc.title}
                   description={calc.description}
-                  icon={calc.icon}
-                  badges={calc.badges}
-                  onOpen={() =>
-                    router.push(`/calculators/${nameToSlug(calc.title)}`)
-                  }
+                  icon={ICON_MAP[calc.iconKey] ?? Building2}
+                  badges={calc.features}
+                  onOpen={() => router.push(`/calculators/${calc.slug}`)}
                 />
               ))}
             </div>
