@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import {
+  Copy,
   Download,
   FileSpreadsheet,
   Plus,
@@ -198,6 +199,16 @@ export function DebtSnowballCalculator() {
 
   const hasResults = result.schedule.length > 0;
 
+  const handleCopyResults = () => {
+    if (!hasResults) return;
+    const text = Object.entries(summaryData)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("\n");
+    void navigator.clipboard.writeText(text).then(() => {
+      toast.success("Results copied to clipboard!");
+    });
+  };
+
   const addDebt = () =>
     setDebts((d) => [
       ...d,
@@ -334,6 +345,15 @@ export function DebtSnowballCalculator() {
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
+                  <Copy className="mr-2 size-4" />
+                  Copy
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"

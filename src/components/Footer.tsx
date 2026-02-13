@@ -103,6 +103,18 @@ export function Footer() {
           </p>
           <div className="flex flex-wrap items-center gap-4">
             <Link
+              href="/overview"
+              className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Overview
+            </Link>
+            <Link
+              href="/design-system"
+              className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Design System
+            </Link>
+            <Link
               href="/privacy"
               className="text-xs text-muted-foreground transition-colors hover:text-foreground"
             >

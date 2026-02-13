@@ -132,7 +132,12 @@ export function MortgageCalculator() {
   );
 
   const handleCopyResults = () => {
-    toast.success("Results copied to clipboard!");
+    const text = Object.entries(summaryData)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("\n");
+    void navigator.clipboard.writeText(text).then(() => {
+      toast.success("Results copied to clipboard!");
+    });
   };
 
   const handleExportPDF = () => {

@@ -20,7 +20,6 @@ import {
   Percent,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { getCalculatorsList } from "@/lib/calculators/calculatorDataset";
 import {
   HomeHero,
@@ -80,25 +79,6 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Demo Notice Banner */}
-      <div className="border-b border-border bg-accent/10">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-center gap-3 text-center sm:flex-row sm:justify-between">
-            <p className="text-sm font-medium text-foreground">
-              🎨 Complete SmartCalcLab Design System Demo
-            </p>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => router.push("/overview")}
-              className="shrink-0"
-            >
-              View All Pages →
-            </Button>
-          </div>
-        </div>
-      </div>
-
       <HomeHero
         headline="Financial Calculators, Built for Clarity."
         subheadline="Fast, accurate, and easy-to-understand tools for smarter money decisions in the US."

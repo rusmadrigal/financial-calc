@@ -128,6 +128,15 @@ export function RefinanceCalculator() {
     [result],
   );
 
+  const handleCopyResults = () => {
+    const text = Object.entries(summaryData)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("\n");
+    void navigator.clipboard.writeText(text).then(() => {
+      toast.success("Results copied to clipboard!");
+    });
+  };
+
   const handleExportPDF = () => {
     exportToPDF("Refinance Calculator", summaryData, tableHeaders, tableRows);
     toast.success("PDF downloaded");
@@ -295,6 +304,10 @@ export function RefinanceCalculator() {
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={handleCopyResults}>
+                  <Copy className="mr-2 size-4" />
+                  Copy
+                </Button>
                 <Button variant="outline" size="sm" onClick={handleExportPDF}>
                   <Download className="mr-2 size-4" />
                   Export PDF

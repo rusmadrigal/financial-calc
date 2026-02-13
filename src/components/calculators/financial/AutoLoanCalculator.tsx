@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -94,6 +94,15 @@ export function AutoLoanCalculator() {
     }),
     [result],
   );
+
+  const handleCopyResults = () => {
+    const text = Object.entries(summaryData)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("\n");
+    void navigator.clipboard.writeText(text).then(() => {
+      toast.success("Results copied to clipboard!");
+    });
+  };
 
   const handleExportPDF = () => {
     exportToPDF("Auto Loan Calculator", summaryData, tableHeaders, tableRows);
@@ -279,6 +288,10 @@ export function AutoLoanCalculator() {
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={handleCopyResults}>
+                  <Copy className="mr-2 size-4" />
+                  Copy
+                </Button>
                 <Button variant="outline" size="sm" onClick={handleExportPDF}>
                   <Download className="mr-2 size-4" />
                   Export PDF

@@ -13,10 +13,8 @@ interface NavigationProps {
 }
 
 const navItems = [
-  { label: "Overview", href: "/overview" },
   { label: "Calculators", href: "/calculators" },
   { label: "About", href: "/about" },
-  { label: "Design System", href: "/design-system" },
 ];
 
 function isActive(pathname: string, href: string): boolean {
