@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Copy, Check, Code2, Palette, Settings } from "lucide-react";
 import {
   Card,
@@ -22,23 +22,36 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { getCalculatorsList } from "@/lib/calculators/calculatorDataset";
 
-export function EmbedPage() {
-  const [selectedCalculator, setSelectedCalculator] = useState("mortgage");
+export function EmbedPage({ baseUrl = "https://smartcalclab.com" }) {
+  const list = useMemo(() => getCalculatorsList(), []);
+  const calculators = useMemo(
+    () => list.map((c) => ({ value: c.slug, label: c.title })),
+    [list],
+  );
+  const defaultSlug = calculators[0]?.value ?? "mortgage-calculator";
+
+  const [selectedCalculator, setSelectedCalculator] = useState(defaultSlug);
   const [theme, setTheme] = useState("light");
   const [width, setWidth] = useState("100%");
   const [height, setHeight] = useState("800px");
   const [showBranding, setShowBranding] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [origin, setOrigin] = useState(baseUrl);
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
-  const calculators = [
-    { value: "mortgage", label: "Mortgage Calculator" },
-    { value: "401k", label: "401(k) Calculator" },
-    { value: "investment", label: "Investment Return Calculator" },
-    { value: "credit-card", label: "Credit Card Payoff Calculator" },
-    { value: "loan", label: "Loan Calculator" },
-    { value: "retirement", label: "Retirement Savings Calculator" },
-  ];
+  const selectedLabel =
+    calculators.find((c) => c.value === selectedCalculator)?.label ??
+    selectedCalculator;
+
+  const previewSrc = `${origin}/embed?${new URLSearchParams({
+    calc: selectedCalculator,
+    theme,
+    branding: showBranding ? "1" : "0",
+  }).toString()}`;
 
   const generateEmbedCode = () => {
     const params = new URLSearchParams({
@@ -48,12 +61,12 @@ export function EmbedPage() {
     });
 
     return `<iframe
-  src="https://smartcalclab.com/embed?${params.toString()}"
+  src="${baseUrl}/embed?${params.toString()}"
   width="${width}"
   height="${height}"
   frameborder="0"
-  style="border: 1px solid #e2e8f0; border-radius: 8px;"
-  title="${calculators.find((c) => c.value === selectedCalculator)?.label}"
+  style="border: 1px solid #e2e8f0; border-radius: 8px; max-width: 100%;"
+  title="${selectedLabel}"
 ></iframe>`;
   };
 
@@ -194,58 +207,17 @@ export function EmbedPage() {
                   </CardHeader>
                   <CardContent>
                     <div
-                      className="overflow-hidden rounded-lg border-2 border-dashed border-border bg-muted/30 p-8"
+                      className="overflow-hidden rounded-lg border-2 border-dashed border-border bg-muted/30 p-4"
                       style={{ minHeight: "600px" }}
                     >
-                      {/* Mock Preview */}
-                      <div
-                        className={`mx-auto rounded-lg border border-border bg-card shadow-lg ${
-                          theme === "dark" ? "dark" : ""
-                        }`}
-                        style={{ maxWidth: width === "100%" ? "100%" : width }}
-                      >
-                        <div className="space-y-4 p-6">
-                          {/* Header */}
-                          <div>
-                            <h3 className="text-xl font-semibold text-foreground">
-                              {
-                                calculators.find(
-                                  (c) => c.value === selectedCalculator,
-                                )?.label
-                              }
-                            </h3>
-                            <p className="mt-1 text-sm text-muted-foreground">
-                              Calculate your monthly payments and total interest
-                            </p>
-                          </div>
-
-                          {/* Mock Inputs */}
-                          <div className="space-y-4 rounded-lg border border-border bg-muted/50 p-4">
-                            <div className="h-10 rounded bg-input" />
-                            <div className="h-10 rounded bg-input" />
-                            <div className="h-10 rounded bg-input" />
-                            <div className="h-10 rounded bg-primary" />
-                          </div>
-
-                          {/* Mock Results */}
-                          <div className="space-y-3 rounded-lg border border-border bg-accent/10 p-4">
-                            <div className="h-6 w-3/4 rounded bg-muted" />
-                            <div className="h-8 w-1/2 rounded bg-muted" />
-                          </div>
-
-                          {/* Branding */}
-                          {showBranding && (
-                            <div className="border-t border-border pt-4 text-center">
-                              <p className="text-xs text-muted-foreground">
-                                Powered by{" "}
-                                <span className="font-medium text-primary">
-                                  SmartCalcLab
-                                </span>
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      <iframe
+                        src={previewSrc}
+                        title={`Preview: ${selectedLabel}`}
+                        className="h-full min-h-[560px] w-full rounded-lg border-0 bg-background"
+                        style={{
+                          width: width === "100%" ? "100%" : width,
+                        }}
+                      />
                     </div>
                   </CardContent>
                 </Card>

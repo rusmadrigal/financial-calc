@@ -304,6 +304,11 @@ export function getCalculatorsList(): CalculatorEntry[] {
   return [...CALCULATORS];
 }
 
+/** Get a single calculator by slug (for embed viewer). */
+export function getCalculatorBySlug(slug: string): CalculatorEntry | undefined {
+  return CALCULATORS.find((c) => c.slug === slug);
+}
+
 /**
  * Returns the number of registered calculators per category.
  * Server-safe; uses the same source as getCalculatorsList().

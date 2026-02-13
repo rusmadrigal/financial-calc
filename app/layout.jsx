@@ -1,6 +1,6 @@
 import "./globals.css";
 import { Providers } from "./Providers";
-import { AppShell } from "@/components/AppShell";
+import { ShellOrEmbed } from "@/components/ShellOrEmbed";
 
 export const metadata = {
   title: "Financial Calculators Website Design",
@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>
-          <AppShell>{children}</AppShell>
+          <ShellOrEmbed>{children}</ShellOrEmbed>
         </Providers>
       </body>
     </html>
