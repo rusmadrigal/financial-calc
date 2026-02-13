@@ -41,7 +41,10 @@ function HighlightMatch({ text, query }: { text: string; query: string }) {
   );
 }
 
-export function CalculatorSearch({ calculators, onSelect }: CalculatorSearchProps) {
+export function CalculatorSearch({
+  calculators,
+  onSelect,
+}: CalculatorSearchProps) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);

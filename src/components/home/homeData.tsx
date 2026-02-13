@@ -52,11 +52,36 @@ export interface TestimonialItem {
 const categoryCounts = getCategoryCounts();
 
 export const categories: CategoryItem[] = [
-  { name: "Investing", icon: TrendingUp, count: categoryCounts.Investing, color: "text-chart-1" },
-  { name: "Debt", icon: CreditCard, count: categoryCounts.Debt, color: "text-chart-2" },
-  { name: "Loans", icon: Home, count: categoryCounts.Loans, color: "text-chart-3" },
-  { name: "Retirement", icon: PiggyBank, count: categoryCounts.Retirement, color: "text-chart-5" },
-  { name: "Taxes", icon: DollarSign, count: categoryCounts.Taxes, color: "text-chart-4" },
+  {
+    name: "Investing",
+    icon: TrendingUp,
+    count: categoryCounts.Investing,
+    color: "text-chart-1",
+  },
+  {
+    name: "Debt",
+    icon: CreditCard,
+    count: categoryCounts.Debt,
+    color: "text-chart-2",
+  },
+  {
+    name: "Loans",
+    icon: Home,
+    count: categoryCounts.Loans,
+    color: "text-chart-3",
+  },
+  {
+    name: "Retirement",
+    icon: PiggyBank,
+    count: categoryCounts.Retirement,
+    color: "text-chart-5",
+  },
+  {
+    name: "Taxes",
+    icon: DollarSign,
+    count: categoryCounts.Taxes,
+    color: "text-chart-4",
+  },
 ];
 
 export const benefits: BenefitItem[] = [
