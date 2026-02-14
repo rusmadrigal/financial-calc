@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { Navigation } from "./Navigation";
 import { Footer } from "./Footer";
 import { Toaster } from "./ui/sonner";
+import { CookiePrivacyNotice } from "./privacy/CookiePrivacyNotice";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { setTheme, resolvedTheme } = useTheme();
@@ -23,6 +24,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <Navigation isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
       <main className="flex-1">{children}</main>
       <Footer />
+      <CookiePrivacyNotice />
       <Toaster />
     </div>
   );

@@ -6,7 +6,7 @@ Create high-quality, people-first content for a financial calculator page.
 
 The content must prioritize clarity, usefulness, and real human value. Write for real users trying to understand and solve a financial problem — not for search engines.
 
-Calculator Name: Mortgage Calculator
+Calculator Name: 
 
 ────────────────────────────────────────────────────────
 🔎 Custom Calculator Structure (VERY IMPORTANT)
@@ -21,10 +21,6 @@ You must use this information to:
 - Adapt explanations to this exact structure
 
 ⬇️⬇️⬇️ PASTE CALCULATOR STRUCTURE HERE ⬇️⬇️⬇️
-
-
-
-
 
 
 
