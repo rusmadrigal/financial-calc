@@ -28,6 +28,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  LineChart,
+  Line,
   BarChart,
   Bar,
   XAxis,
@@ -84,24 +86,39 @@ export function RefinanceCalculator() {
       result.scheduleNew.length,
     );
     const years = Math.ceil(maxLen / 12);
-    return Array.from({ length: Math.min(years, 10) }, (_, i) => {
+    return Array.from({ length: Math.min(years, 15) }, (_, i) => {
       const y = i + 1;
       const start = i * 12;
       let currInt = 0;
       let newInt = 0;
+      let balanceNew = 0;
       for (let m = 0; m < 12; m++) {
         const rowCurr = result.scheduleCurrent[start + m];
         const rowNew = result.scheduleNew[start + m];
         if (rowCurr) currInt += rowCurr.interest;
-        if (rowNew) newInt += rowNew.interest;
+        if (rowNew) {
+          newInt += rowNew.interest;
+          balanceNew = rowNew.balance;
+        }
       }
       return {
         year: y,
+        balance: Math.round(balanceNew),
         current: Math.round(currInt),
         new: Math.round(newInt),
       };
     });
   }, [result.scheduleCurrent, result.scheduleNew]);
+
+  const chartDataLine = useMemo(
+    () => chartData.map((row) => ({ year: row.year, balance: row.balance })),
+    [chartData],
+  );
+
+  const chartDataBar = useMemo(
+    () => chartData.slice(0, 15).map((row) => ({ year: row.year, current: row.current, new: row.new })),
+    [chartData],
+  );
 
   const tableHeaders = ["Month", "Payment", "Principal", "Interest", "Balance"];
   const tableRows = result.scheduleNew.map(
@@ -329,20 +346,17 @@ export function RefinanceCalculator() {
             </AlertDescription>
           </Alert>
 
-          {chartData.length > 0 && (
+          {chartDataLine.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Interest Comparison by Year</CardTitle>
-                <CardDescription>Current vs new loan interest</CardDescription>
+                <CardTitle>Balance Over Time</CardTitle>
+                <CardDescription>New loan balance by year</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        className="stroke-border"
-                      />
+                    <LineChart data={chartDataLine}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -352,14 +366,71 @@ export function RefinanceCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar
-                        dataKey="current"
-                        fill="var(--chart-2)"
-                        name="Current"
+                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {chartDataBar.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Interest Comparison by Year</CardTitle>
+                <CardDescription>Current vs new loan interest (first 15 years)</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartDataBar}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="year" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
                       />
+                      <Bar dataKey="current" fill="var(--chart-3)" name="Current" />
                       <Bar dataKey="new" fill="var(--chart-1)" name="New" />
                     </BarChart>
                   </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {chartData.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Yearly Breakdown</CardTitle>
+                <CardDescription>First 10 years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Year</TableHead>
+                        <TableHead className="text-right">Current Interest</TableHead>
+                        <TableHead className="text-right">New Interest</TableHead>
+                        <TableHead className="text-right">New Balance</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {chartData.slice(0, 10).map((row) => (
+                        <TableRow key={row.year}>
+                          <TableCell className="font-medium">{row.year}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.current)}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.new)}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </div>
               </CardContent>
             </Card>

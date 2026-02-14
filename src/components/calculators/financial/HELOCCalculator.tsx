@@ -35,6 +35,8 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  BarChart,
+  Bar,
 } from "recharts";
 import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
@@ -64,13 +66,38 @@ export function HELOCCalculator() {
     });
   }, [drawAmount, annualRate, drawPeriodYears, repaymentYears]);
 
-  const chartDataBalance = useMemo(
-    () =>
-      result.schedule.map((row) => ({
-        period: row.period,
-        balance: Math.round(row.balance),
-      })),
-    [result.schedule],
+  const yearlyData = useMemo(() => {
+    const byYear: { year: number; balance: number; principal: number; interest: number }[] = [];
+    let year = 1;
+    let principalSum = 0;
+    let interestSum = 0;
+    result.schedule.forEach((row, i) => {
+      principalSum += row.principal;
+      interestSum += row.interest;
+      const monthInYear = (i % 12) + 1;
+      if (monthInYear === 12 || i === result.schedule.length - 1) {
+        byYear.push({
+          year,
+          balance: Math.round(row.balance),
+          principal: Math.round(principalSum * 100) / 100,
+          interest: Math.round(interestSum * 100) / 100,
+        });
+        principalSum = 0;
+        interestSum = 0;
+        year++;
+      }
+    });
+    return byYear;
+  }, [result.schedule]);
+
+  const chartDataLine = useMemo(
+    () => yearlyData.map((row) => ({ year: row.year, balance: row.balance })),
+    [yearlyData],
+  );
+
+  const chartDataBar = useMemo(
+    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, principal: row.principal, interest: row.interest })),
+    [yearlyData],
   );
 
   const tableHeaders = ["Period", "Payment", "Principal", "Interest", "Balance"];
@@ -96,7 +123,7 @@ export function HELOCCalculator() {
   );
 
   const hasResults = result.schedule.length > 0;
-  const previewRows = result.schedule.slice(0, 12);
+  const previewRows = yearlyData.slice(0, 10);
 
   const handleCopyResults = () => {
     if (!hasResults) return;
@@ -235,18 +262,18 @@ export function HELOCCalculator() {
             </AlertDescription>
           </Alert>
 
-          {chartDataBalance.length > 0 && (
+          {chartDataLine.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle>Balance Over Time</CardTitle>
-                <CardDescription>Outstanding balance by period</CardDescription>
+                <CardDescription>Outstanding balance by year</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartDataBalance}>
+                    <LineChart data={chartDataLine}>
                       <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis dataKey="period" className="text-xs" />
+                      <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
                         contentStyle={{
@@ -263,18 +290,46 @@ export function HELOCCalculator() {
             </Card>
           )}
 
+          {chartDataBar.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Principal vs Interest by Year</CardTitle>
+                <CardDescription>First 15 years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartDataBar}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="year" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Bar dataKey="principal" fill="var(--chart-1)" name="Principal" />
+                      <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           <Card>
             <CardHeader>
-              <CardTitle>Payment Schedule</CardTitle>
-              <CardDescription>First 12 periods</CardDescription>
+              <CardTitle>Yearly Breakdown</CardTitle>
+              <CardDescription>First 10 years</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Period</TableHead>
-                      <TableHead className="text-right">Payment</TableHead>
+                      <TableHead>Year</TableHead>
                       <TableHead className="text-right">Principal</TableHead>
                       <TableHead className="text-right">Interest</TableHead>
                       <TableHead className="text-right">Balance</TableHead>
@@ -282,9 +337,8 @@ export function HELOCCalculator() {
                   </TableHeader>
                   <TableBody>
                     {previewRows.map((row) => (
-                      <TableRow key={row.period}>
-                        <TableCell className="font-medium">{row.period}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.payment)}</TableCell>
+                      <TableRow key={row.year}>
+                        <TableCell className="font-medium">{row.year}</TableCell>
                         <TableCell className="text-right">{usd.format(row.principal)}</TableCell>
                         <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
                         <TableCell className="text-right">{usd.format(row.balance)}</TableCell>

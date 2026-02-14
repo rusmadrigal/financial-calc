@@ -21,6 +21,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
 import { exportToExcel } from "@/lib/exports/exportToExcel";
@@ -71,6 +80,15 @@ export function ClosingCostCalculator() {
   );
 
   const hasResults = result.loanAmount > 0;
+
+  const chartDataBar = useMemo(() => {
+    if (result.items.length === 0) return [];
+    const row: Record<string, number | string> = { year: 1 };
+    result.items.forEach((i) => {
+      row[i.label] = i.amount;
+    });
+    return [row];
+  }, [result.items]);
 
   const handleCopyResults = () => {
     if (!hasResults) return;
@@ -197,6 +215,44 @@ export function ClosingCostCalculator() {
               </div>
             </CardContent>
           </Card>
+
+          {chartDataBar.length > 0 && result.items.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Closing Costs by Category (Year 1)</CardTitle>
+                <CardDescription>One-time closing cost breakdown</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartDataBar}>
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
+                      <XAxis dataKey="year" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      {result.items.map((item, idx) => (
+                        <Bar
+                          key={item.label}
+                          dataKey={item.label}
+                          fill={idx % 2 === 0 ? "var(--chart-1)" : "var(--chart-3)"}
+                          name={item.label}
+                        />
+                      ))}
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {result.items.length > 0 && (
             <Card>

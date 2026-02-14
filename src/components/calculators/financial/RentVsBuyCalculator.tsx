@@ -24,6 +24,8 @@ import {
 import {
   LineChart,
   Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -99,6 +101,16 @@ export function RentVsBuyCalculator() {
         year: row.year,
         Rent: row.rentCumulative,
         Buy: row.buyCumulative,
+      })),
+    [result.yearlyBreakdown],
+  );
+
+  const chartDataBar = useMemo(
+    () =>
+      result.yearlyBreakdown.slice(0, 15).map((row) => ({
+        year: row.year,
+        rentCost: Math.round(row.rentCost),
+        buyCost: Math.round(row.buyCost),
       })),
     [result.yearlyBreakdown],
   );
@@ -430,6 +442,35 @@ export function RentVsBuyCalculator() {
               </div>
             </CardContent>
           </Card>
+
+          {chartDataBar.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Rent Cost vs Buy Cost by Year</CardTitle>
+                <CardDescription>First 15 years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartDataBar}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="year" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Bar dataKey="rentCost" fill="var(--chart-1)" name="Rent Cost" />
+                      <Bar dataKey="buyCost" fill="var(--chart-3)" name="Buy Cost" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <Card>
             <CardHeader>

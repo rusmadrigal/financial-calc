@@ -13,6 +13,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
 import { exportToExcel } from "@/lib/exports/exportToExcel";
@@ -61,6 +80,46 @@ export function DownPaymentCalculator() {
   );
 
   const hasResults = result.homePrice > 0;
+
+  const yearlyData = useMemo(() => {
+    const goal = result.downPaymentAmount;
+    const current = parseFloat(currentSavings) || 0;
+    const monthly = parseFloat(monthlySavings) || 0;
+    const monthlyRate = (parseFloat(savingsRate) || 0) / 100 / 12;
+    const byYear: { year: number; balance: number; contributions: number; interest: number }[] = [];
+    let balance = current;
+    const maxYears = 15;
+    for (let y = 1; y <= maxYears; y++) {
+      const startBalance = balance;
+      let contributions = 0;
+      for (let m = 0; m < 12; m++) {
+        balance += monthly;
+        contributions += monthly;
+        balance *= 1 + monthlyRate;
+      }
+      const interest = Math.round((balance - startBalance - contributions) * 100) / 100;
+      byYear.push({
+        year: y,
+        balance: Math.round(balance * 100) / 100,
+        contributions: Math.round(contributions * 100) / 100,
+        interest,
+      });
+      if (balance >= goal) break;
+    }
+    return byYear;
+  }, [result.downPaymentAmount, currentSavings, monthlySavings, savingsRate]);
+
+  const chartDataLine = useMemo(
+    () => yearlyData.map((row) => ({ year: row.year, balance: row.balance })),
+    [yearlyData],
+  );
+
+  const chartDataBar = useMemo(
+    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, contributions: row.contributions, interest: row.interest })),
+    [yearlyData],
+  );
+
+  const yearlyPreviewRows = yearlyData.slice(0, 10);
 
   const handleCopyResults = () => {
     if (!hasResults) return;
@@ -176,6 +235,96 @@ export function DownPaymentCalculator() {
               </div>
             </CardContent>
           </Card>
+
+          {chartDataLine.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Savings Balance Over Time</CardTitle>
+                <CardDescription>Projected balance by year toward down payment</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartDataLine}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="year" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {chartDataBar.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Contributions vs Interest by Year</CardTitle>
+                <CardDescription>First 15 years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartDataBar}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="year" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Bar dataKey="contributions" fill="var(--chart-1)" name="Contributions" />
+                      <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {yearlyPreviewRows.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Yearly Breakdown</CardTitle>
+                <CardDescription>First 10 years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Year</TableHead>
+                        <TableHead className="text-right">Balance</TableHead>
+                        <TableHead className="text-right">Contributions</TableHead>
+                        <TableHead className="text-right">Interest</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {yearlyPreviewRows.map((row) => (
+                        <TableRow key={row.year}>
+                          <TableCell className="font-medium">{row.year}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.contributions)}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <Alert>
             <Info className="size-4" />

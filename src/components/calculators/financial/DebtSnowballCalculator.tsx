@@ -133,23 +133,39 @@ export function DebtSnowballCalculator() {
     });
   }, [debts, extraMonthly]);
 
-  const chartDataBalance = useMemo(
-    () =>
-      result.schedule.map((row) => ({
-        month: row.period,
-        balance: row.remainingBalance,
-      })),
-    [result.schedule],
+  const yearlyData = useMemo(() => {
+    const years = Math.ceil(result.schedule.length / 12);
+    return Array.from({ length: Math.min(years, 15) }, (_, i) => {
+      const start = i * 12;
+      let paymentSum = 0;
+      let interestSum = 0;
+      let endBalance = 0;
+      for (let m = 0; m < 12 && start + m < result.schedule.length; m++) {
+        const row = result.schedule[start + m];
+        if (row) {
+          paymentSum += row.totalPayment;
+          interestSum += row.totalInterest;
+          endBalance = row.remainingBalance;
+        }
+      }
+      return {
+        year: i + 1,
+        balance: Math.round(endBalance),
+        payment: Math.round(paymentSum),
+        interest: Math.round(interestSum),
+      };
+    });
+  }, [result.schedule]);
+
+  const chartDataLine = useMemo(
+    () => yearlyData.map((row) => ({ year: row.year, balance: row.balance })),
+    [yearlyData],
   );
 
-  const chartDataPayment = useMemo(() => {
-    const slice = result.schedule.slice(0, 24);
-    return slice.map((row) => ({
-      month: row.period,
-      payment: Math.round(row.totalPayment),
-      interest: Math.round(row.totalInterest),
-    }));
-  }, [result.schedule]);
+  const chartDataBar = useMemo(
+    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, payment: row.payment, interest: row.interest })),
+    [yearlyData],
+  );
 
   const tableHeadersSummary = [
     "Month",
@@ -383,24 +399,19 @@ export function DebtSnowballCalculator() {
             </AlertDescription>
           </Alert>
 
-          {hasResults && chartDataBalance.length > 0 && (
+          {hasResults && chartDataLine.length > 0 && (
             <>
               <Card>
                 <CardHeader>
-                  <CardTitle>Remaining Balance Over Time</CardTitle>
-                  <CardDescription>
-                    Total debt remaining by month
-                  </CardDescription>
+                  <CardTitle>Balance Over Time</CardTitle>
+                  <CardDescription>Remaining debt balance by year</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={chartDataBalance}>
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          className="stroke-border"
-                        />
-                        <XAxis dataKey="month" className="text-xs" />
+                      <LineChart data={chartDataLine}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                        <XAxis dataKey="year" className="text-xs" />
                         <YAxis className="text-xs" />
                         <Tooltip
                           contentStyle={{
@@ -409,35 +420,24 @@ export function DebtSnowballCalculator() {
                             borderRadius: "8px",
                           }}
                         />
-                        <Line
-                          type="monotone"
-                          dataKey="balance"
-                          stroke="var(--chart-3)"
-                          strokeWidth={2}
-                          name="Remaining Balance"
-                        />
+                        <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Remaining Balance" />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
                 </CardContent>
               </Card>
-              {chartDataPayment.length > 0 && (
+              {chartDataBar.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Payment Breakdown Over Time</CardTitle>
-                    <CardDescription>
-                      Total payment vs. interest by month (first 24 months)
-                    </CardDescription>
+                    <CardTitle>Payment vs Interest by Year</CardTitle>
+                    <CardDescription>First 15 years</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="h-[300px]">
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={chartDataPayment}>
-                          <CartesianGrid
-                            strokeDasharray="3 3"
-                            className="stroke-border"
-                          />
-                          <XAxis dataKey="month" className="text-xs" />
+                        <BarChart data={chartDataBar}>
+                          <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                          <XAxis dataKey="year" className="text-xs" />
                           <YAxis className="text-xs" />
                           <Tooltip
                             contentStyle={{
@@ -446,18 +446,42 @@ export function DebtSnowballCalculator() {
                               borderRadius: "8px",
                             }}
                           />
-                          <Bar
-                            dataKey="payment"
-                            fill="var(--chart-1)"
-                            name="Total Payment"
-                          />
-                          <Bar
-                            dataKey="interest"
-                            fill="var(--chart-2)"
-                            name="Interest"
-                          />
+                          <Bar dataKey="payment" fill="var(--chart-1)" name="Total Payment" />
+                          <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
                         </BarChart>
                       </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+              {yearlyData.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Yearly Breakdown</CardTitle>
+                    <CardDescription>First 10 years</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Year</TableHead>
+                            <TableHead className="text-right">Payment</TableHead>
+                            <TableHead className="text-right">Interest</TableHead>
+                            <TableHead className="text-right">Balance</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {yearlyData.slice(0, 10).map((row) => (
+                            <TableRow key={row.year}>
+                              <TableCell className="font-medium">{row.year}</TableCell>
+                              <TableCell className="text-right">{usd.format(row.payment)}</TableCell>
+                              <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
+                              <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
                     </div>
                   </CardContent>
                 </Card>

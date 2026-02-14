@@ -330,45 +330,7 @@ export function MortgageCalculator() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Payment Breakdown Over Time</CardTitle>
-              <CardDescription>Principal vs. Interest by year</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData.slice(0, 10)}>
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      className="stroke-border"
-                    />
-                    <XAxis dataKey="year" className="text-xs" />
-                    <YAxis className="text-xs" />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "var(--card)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "8px",
-                      }}
-                    />
-                    <Bar
-                      dataKey="principal"
-                      fill="var(--chart-1)"
-                      name="Principal"
-                    />
-                    <Bar
-                      dataKey="interest"
-                      fill="var(--chart-2)"
-                      name="Interest"
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Loan Balance Over Time</CardTitle>
+              <CardTitle>Balance Over Time</CardTitle>
               <CardDescription>Remaining balance by year</CardDescription>
             </CardHeader>
             <CardContent>
@@ -391,12 +353,81 @@ export function MortgageCalculator() {
                     <Line
                       type="monotone"
                       dataKey="balance"
-                      stroke="var(--chart-3)"
+                      stroke="var(--chart-1)"
                       strokeWidth={2}
                       name="Balance"
                     />
                   </LineChart>
                 </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Principal vs Interest by Year</CardTitle>
+              <CardDescription>First 15 years</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chartData.slice(0, 15)}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      className="stroke-border"
+                    />
+                    <XAxis dataKey="year" className="text-xs" />
+                    <YAxis className="text-xs" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "var(--card)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "8px",
+                      }}
+                    />
+                    <Bar
+                      dataKey="principal"
+                      fill="var(--chart-1)"
+                      name="Principal"
+                    />
+                    <Bar
+                      dataKey="interest"
+                      fill="var(--chart-3)"
+                      name="Interest"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Yearly Breakdown</CardTitle>
+              <CardDescription>First 10 years</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Year</TableHead>
+                      <TableHead className="text-right">Principal</TableHead>
+                      <TableHead className="text-right">Interest</TableHead>
+                      <TableHead className="text-right">Balance</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {chartData.slice(0, 10).map((row) => (
+                      <TableRow key={row.year}>
+                        <TableCell className="font-medium">{row.year}</TableCell>
+                        <TableCell className="text-right">{usd.format(row.principal)}</TableCell>
+                        <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
+                        <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             </CardContent>
           </Card>

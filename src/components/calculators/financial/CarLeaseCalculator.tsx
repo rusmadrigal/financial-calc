@@ -22,6 +22,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  LineChart,
+  Line,
   BarChart,
   Bar,
   XAxis,
@@ -81,15 +83,41 @@ export function CarLeaseCalculator() {
     rebates,
   ]);
 
-  const chartData = useMemo(
-    () =>
-      result.schedule.slice(0, 12).map((row) => ({
-        month: row.period,
-        depreciation: Math.round(row.depreciation),
-        finance: Math.round(row.finance),
-        tax: Math.round(row.tax ?? 0),
-      })),
-    [result.schedule],
+  const yearlyData = useMemo(() => {
+    const years = Math.ceil(result.schedule.length / 12);
+    return Array.from({ length: Math.min(years, 10) }, (_, i) => {
+      const start = i * 12;
+      let depreciation = 0;
+      let finance = 0;
+      let tax = 0;
+      let payments = 0;
+      for (let m = 0; m < 12 && start + m < result.schedule.length; m++) {
+        const row = result.schedule[start + m];
+        if (row) {
+          depreciation += row.depreciation;
+          finance += row.finance;
+          tax += row.tax ?? 0;
+          payments += row.payment;
+        }
+      }
+      return {
+        year: i + 1,
+        depreciation: Math.round(depreciation),
+        finance: Math.round(finance),
+        tax: Math.round(tax),
+        payments: Math.round(payments),
+      };
+    });
+  }, [result.schedule]);
+
+  const chartDataLine = useMemo(
+    () => yearlyData.map((row) => ({ year: row.year, balance: row.payments })),
+    [yearlyData],
+  );
+
+  const chartDataBar = useMemo(
+    () => yearlyData.map((row) => ({ year: row.year, depreciation: row.depreciation, finance: row.finance })),
+    [yearlyData],
   );
 
   const tableHeaders = [
@@ -351,23 +379,18 @@ export function CarLeaseCalculator() {
             </AlertDescription>
           </Alert>
 
-          {chartData.length > 0 && (
+          {chartDataLine.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Payment Breakdown Over Time</CardTitle>
-                <CardDescription>
-                  Depreciation, finance, and tax by month (first 12 months)
-                </CardDescription>
+                <CardTitle>Payments by Year</CardTitle>
+                <CardDescription>Total payments per year</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartData}>
-                      <CartesianGrid
-                        strokeDasharray="3 3"
-                        className="stroke-border"
-                      />
-                      <XAxis dataKey="month" className="text-xs" />
+                    <LineChart data={chartDataLine}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
                         contentStyle={{
@@ -376,19 +399,73 @@ export function CarLeaseCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar
-                        dataKey="depreciation"
-                        fill="var(--chart-1)"
-                        name="Depreciation"
+                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Payments" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {chartDataBar.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Depreciation vs Finance by Year</CardTitle>
+                <CardDescription>First 10 years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartDataBar}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="year" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
                       />
-                      <Bar
-                        dataKey="finance"
-                        fill="var(--chart-2)"
-                        name="Finance"
-                      />
-                      <Bar dataKey="tax" fill="var(--chart-3)" name="Tax" />
+                      <Bar dataKey="depreciation" fill="var(--chart-1)" name="Depreciation" />
+                      <Bar dataKey="finance" fill="var(--chart-3)" name="Finance" />
                     </BarChart>
                   </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {yearlyData.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Yearly Breakdown</CardTitle>
+                <CardDescription>First 10 years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Year</TableHead>
+                        <TableHead className="text-right">Payments</TableHead>
+                        <TableHead className="text-right">Depreciation</TableHead>
+                        <TableHead className="text-right">Finance</TableHead>
+                        <TableHead className="text-right">Tax</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {yearlyData.map((row) => (
+                        <TableRow key={row.year}>
+                          <TableCell className="font-medium">{row.year}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.payments)}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.depreciation)}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.finance)}</TableCell>
+                          <TableCell className="text-right">{usd.format(row.tax)}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </div>
               </CardContent>
             </Card>

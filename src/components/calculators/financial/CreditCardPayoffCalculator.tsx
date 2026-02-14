@@ -68,35 +68,39 @@ export function CreditCardPayoffCalculator() {
     });
   }, [balance, apr, monthlyPayment, additionalPayment, monthlyFees]);
 
-  const chartDataBalance = useMemo(
-    () =>
-      result.schedule.map((row) => ({
-        month: row.period,
-        balance: row.balance,
-      })),
-    [result.schedule],
-  );
-
-  const chartDataPrincipalInterest = useMemo(() => {
+  const yearlyData = useMemo(() => {
     const years = Math.ceil(result.schedule.length / 12);
-    return Array.from({ length: Math.min(years, 10) }, (_, i) => {
+    return Array.from({ length: Math.min(years, 15) }, (_, i) => {
       const start = i * 12;
       let principalSum = 0;
       let interestSum = 0;
+      let endBalance = 0;
       for (let m = 0; m < 12 && start + m < result.schedule.length; m++) {
         const row = result.schedule[start + m];
         if (row) {
           principalSum += row.principal;
           interestSum += row.interest;
+          endBalance = row.balance;
         }
       }
       return {
         year: i + 1,
+        balance: Math.round(endBalance),
         principal: Math.round(principalSum),
         interest: Math.round(interestSum),
       };
     });
   }, [result.schedule]);
+
+  const chartDataLine = useMemo(
+    () => yearlyData.map((row) => ({ year: row.year, balance: row.balance })),
+    [yearlyData],
+  );
+
+  const chartDataBar = useMemo(
+    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, principal: row.principal, interest: row.interest })),
+    [yearlyData],
+  );
 
   const tableHeaders = ["Month", "Payment", "Interest", "Principal", "Balance"];
   const tableRows = result.schedule.map(
@@ -349,22 +353,19 @@ export function CreditCardPayoffCalculator() {
             </AlertDescription>
           </Alert>
 
-          {hasResults && chartDataBalance.length > 0 && (
+          {hasResults && chartDataLine.length > 0 && (
             <>
               <Card>
                 <CardHeader>
                   <CardTitle>Balance Over Time</CardTitle>
-                  <CardDescription>Remaining balance by month</CardDescription>
+                  <CardDescription>Remaining balance by year</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={chartDataBalance}>
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          className="stroke-border"
-                        />
-                        <XAxis dataKey="month" className="text-xs" />
+                      <LineChart data={chartDataLine}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                        <XAxis dataKey="year" className="text-xs" />
                         <YAxis className="text-xs" />
                         <Tooltip
                           contentStyle={{
@@ -373,34 +374,23 @@ export function CreditCardPayoffCalculator() {
                             borderRadius: "8px",
                           }}
                         />
-                        <Line
-                          type="monotone"
-                          dataKey="balance"
-                          stroke="var(--chart-3)"
-                          strokeWidth={2}
-                          name="Balance"
-                        />
+                        <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
                 </CardContent>
               </Card>
-              {chartDataPrincipalInterest.length > 0 && (
+              {chartDataBar.length > 0 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Payment Breakdown Over Time</CardTitle>
-                    <CardDescription>
-                      Principal vs. Interest by year
-                    </CardDescription>
+                    <CardTitle>Principal vs Interest by Year</CardTitle>
+                    <CardDescription>First 15 years</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="h-[300px]">
                       <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={chartDataPrincipalInterest}>
-                          <CartesianGrid
-                            strokeDasharray="3 3"
-                            className="stroke-border"
-                          />
+                        <BarChart data={chartDataBar}>
+                          <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
                           <XAxis dataKey="year" className="text-xs" />
                           <YAxis className="text-xs" />
                           <Tooltip
@@ -410,18 +400,42 @@ export function CreditCardPayoffCalculator() {
                               borderRadius: "8px",
                             }}
                           />
-                          <Bar
-                            dataKey="principal"
-                            fill="var(--chart-1)"
-                            name="Principal"
-                          />
-                          <Bar
-                            dataKey="interest"
-                            fill="var(--chart-2)"
-                            name="Interest"
-                          />
+                          <Bar dataKey="principal" fill="var(--chart-1)" name="Principal" />
+                          <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
                         </BarChart>
                       </ResponsiveContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+              {yearlyData.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Yearly Breakdown</CardTitle>
+                    <CardDescription>First 10 years</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Year</TableHead>
+                            <TableHead className="text-right">Principal</TableHead>
+                            <TableHead className="text-right">Interest</TableHead>
+                            <TableHead className="text-right">Balance</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {yearlyData.slice(0, 10).map((row) => (
+                            <TableRow key={row.year}>
+                              <TableCell className="font-medium">{row.year}</TableCell>
+                              <TableCell className="text-right">{usd.format(row.principal)}</TableCell>
+                              <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
+                              <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
                     </div>
                   </CardContent>
                 </Card>
