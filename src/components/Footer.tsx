@@ -1,17 +1,12 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
 import { Calculator } from "lucide-react";
-import { nameToSlug } from "@/lib/slugs";
+import { getCalculatorsList } from "@/lib/calculators/calculatorDataset";
 
-const popularCalculators = [
-  "Mortgage Calculator",
-  "401(k) Calculator",
-  "Credit Card Payoff",
-  "Investment Return",
-  "Loan Calculator",
-  "Retirement Savings",
-];
+/** Same count as HomePage Featured Calculators (top by popularity). */
+const POPULAR_COUNT = 6;
 
 const companyLinks = [
   { label: "About Us", href: "/about" },
@@ -22,6 +17,14 @@ const companyLinks = [
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+
+  const popularCalculators = useMemo(() => {
+    const list = getCalculatorsList();
+    return [...list]
+      .sort((a, b) => b.popularity - a.popularity)
+      .slice(0, POPULAR_COUNT)
+      .map((c) => ({ title: c.title, slug: c.slug }));
+  }, []);
 
   return (
     <footer className="border-t border-border bg-muted/30">
@@ -51,12 +54,12 @@ export function Footer() {
             </h3>
             <ul className="space-y-3">
               {popularCalculators.map((calc) => (
-                <li key={calc}>
+                <li key={calc.slug}>
                   <Link
-                    href={`/calculators/${nameToSlug(calc)}`}
+                    href={`/calculators/${calc.slug}`}
                     className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
-                    {calc}
+                    {calc.title}
                   </Link>
                 </li>
               ))}
