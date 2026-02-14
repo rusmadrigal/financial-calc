@@ -13,7 +13,9 @@ export type CalculatorCategory =
   | "Debt"
   | "Loans"
   | "Retirement"
-  | "Taxes";
+  | "Taxes"
+  | "Savings"
+  | "Real Estate";
 
 export type CalculatorComplexity = "Simple" | "Advanced";
 
@@ -48,6 +50,8 @@ export const CALCULATOR_CATEGORIES: CalculatorCategory[] = [
   "Loans",
   "Retirement",
   "Taxes",
+  "Savings",
+  "Real Estate",
 ];
 
 export const COMPLEXITY_LEVELS: CalculatorComplexity[] = ["Simple", "Advanced"];
@@ -297,6 +301,126 @@ const CALCULATORS: CalculatorEntry[] = [
     componentType: "dividend",
     iconKey: "Percent",
   },
+  {
+    title: "Stock Profit Calculator",
+    slug: "stock-profit-calculator",
+    category: "Investing",
+    complexity: "Simple",
+    description:
+      "Calculate profit or loss from stock trades with buy/sell price, shares, and commissions.",
+    features: ["Profit/Loss", "Return %", "Export"],
+    popularity: 78,
+    componentType: "stockProfit",
+    iconKey: "TrendingUp",
+  },
+  {
+    title: "Savings Calculator",
+    slug: "savings-calculator",
+    category: "Savings",
+    complexity: "Simple",
+    description:
+      "Project savings growth with initial deposit and regular contributions.",
+    features: ["Contributions", "Charts", "Export"],
+    popularity: 85,
+    componentType: "savings",
+    iconKey: "PiggyBank",
+  },
+  {
+    title: "CD Calculator",
+    slug: "cd-calculator",
+    category: "Savings",
+    complexity: "Simple",
+    description:
+      "Estimate certificate of deposit maturity value and interest earned.",
+    features: ["APY", "Maturity", "Export"],
+    popularity: 72,
+    componentType: "cd",
+    iconKey: "Landmark",
+  },
+  {
+    title: "High Yield Savings Calculator",
+    slug: "high-yield-savings-calculator",
+    category: "Savings",
+    complexity: "Simple",
+    description:
+      "Project growth in a high-yield savings account with compound interest.",
+    features: ["APY", "Charts", "Export"],
+    popularity: 80,
+    componentType: "highYieldSavings",
+    iconKey: "CircleDollarSign",
+  },
+  {
+    title: "HELOC Calculator",
+    slug: "heloc-calculator",
+    category: "Real Estate",
+    complexity: "Simple",
+    description:
+      "Estimate payments and interest for a Home Equity Line of Credit.",
+    features: ["Draw Period", "Repayment", "Export"],
+    popularity: 74,
+    componentType: "heloc",
+    iconKey: "Home",
+  },
+  {
+    title: "Home Affordability Calculator",
+    slug: "home-affordability-calculator",
+    category: "Real Estate",
+    complexity: "Simple",
+    description:
+      "See how much home you can afford based on income, debts, DTI, and loan terms.",
+    features: ["DTI", "Max Home Price", "Export"],
+    popularity: 80,
+    componentType: "homeAffordability",
+    iconKey: "Home",
+  },
+  {
+    title: "Down Payment Calculator",
+    slug: "down-payment-calculator",
+    category: "Real Estate",
+    complexity: "Simple",
+    description:
+      "Calculate down payment amount and how long to save with monthly savings.",
+    features: ["Savings Goal", "Months to Goal", "Export"],
+    popularity: 78,
+    componentType: "downPayment",
+    iconKey: "DollarSign",
+  },
+  {
+    title: "Property Tax Calculator",
+    slug: "property-tax-calculator",
+    category: "Real Estate",
+    complexity: "Simple",
+    description:
+      "Estimate annual and monthly property tax from assessed value and rate.",
+    features: ["Exemptions", "Monthly Equivalent", "Export"],
+    popularity: 72,
+    componentType: "propertyTax",
+    iconKey: "Receipt",
+  },
+  {
+    title: "Closing Cost Calculator",
+    slug: "closing-cost-calculator",
+    category: "Real Estate",
+    complexity: "Simple",
+    description:
+      "Break down closing costs: origination, points, appraisal, title, and more.",
+    features: ["Line Items", "Export PDF", "Export Excel"],
+    popularity: 75,
+    componentType: "closingCosts",
+    iconKey: "Receipt",
+  },
+  {
+    title: "Mortgage APR Calculator",
+    slug: "mortgage-apr-calculator",
+    category: "Real Estate",
+    complexity: "Simple",
+    description:
+      "Compute true APR including closing costs for mortgage comparison.",
+    features: ["APR vs Stated Rate", "Export"],
+    popularity: 76,
+    componentType: "mortgageAPR",
+    iconKey: "Percent",
+  },
 ];
 
 /** Returns all calculators (only those implemented and in registry). */
@@ -321,6 +445,8 @@ export function getCategoryCounts(): Record<CalculatorCategory, number> {
     Loans: 0,
     Retirement: 0,
     Taxes: 0,
+    Savings: 0,
+    "Real Estate": 0,
   };
   for (const entry of list) {
     counts[entry.category] = (counts[entry.category] ?? 0) + 1;

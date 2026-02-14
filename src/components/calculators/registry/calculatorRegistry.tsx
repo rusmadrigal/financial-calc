@@ -19,6 +19,16 @@ import { AnnuityPayoutCalculator } from "../financial/AnnuityPayoutCalculator";
 import { CompoundInterestCalculator } from "../financial/CompoundInterestCalculator";
 import { InvestmentReturnCalculator } from "../financial/InvestmentReturnCalculator";
 import { DividendCalculator } from "../financial/DividendCalculator";
+import { StockProfitCalculator } from "../financial/StockProfitCalculator";
+import { SavingsCalculator } from "../financial/SavingsCalculator";
+import { CDCalculator } from "../financial/CDCalculator";
+import { HighYieldSavingsCalculator } from "../financial/HighYieldSavingsCalculator";
+import { HELOCCalculator } from "../financial/HELOCCalculator";
+import { HomeAffordabilityCalculator } from "../financial/HomeAffordabilityCalculator";
+import { DownPaymentCalculator } from "../financial/DownPaymentCalculator";
+import { PropertyTaxCalculator } from "../financial/PropertyTaxCalculator";
+import { ClosingCostCalculator } from "../financial/ClosingCostCalculator";
+import { MortgageAPRCalculator } from "../financial/MortgageAPRCalculator";
 
 export type CalculatorType =
   | "mortgage"
@@ -40,7 +50,17 @@ export type CalculatorType =
   | "annuityPayout"
   | "compoundInterest"
   | "investmentReturn"
-  | "dividend";
+  | "dividend"
+  | "stockProfit"
+  | "savings"
+  | "cd"
+  | "highYieldSavings"
+  | "heloc"
+  | "homeAffordability"
+  | "downPayment"
+  | "propertyTax"
+  | "closingCosts"
+  | "mortgageAPR";
 
 const registry: Record<string, ComponentType<object>> = {
   mortgage: MortgageCalculator as ComponentType<object>,
@@ -63,6 +83,16 @@ const registry: Record<string, ComponentType<object>> = {
   compoundInterest: CompoundInterestCalculator as ComponentType<object>,
   investmentReturn: InvestmentReturnCalculator as ComponentType<object>,
   dividend: DividendCalculator as ComponentType<object>,
+  stockProfit: StockProfitCalculator as ComponentType<object>,
+  savings: SavingsCalculator as ComponentType<object>,
+  cd: CDCalculator as ComponentType<object>,
+  highYieldSavings: HighYieldSavingsCalculator as ComponentType<object>,
+  heloc: HELOCCalculator as ComponentType<object>,
+  homeAffordability: HomeAffordabilityCalculator as ComponentType<object>,
+  downPayment: DownPaymentCalculator as ComponentType<object>,
+  propertyTax: PropertyTaxCalculator as ComponentType<object>,
+  closingCosts: ClosingCostCalculator as ComponentType<object>,
+  mortgageAPR: MortgageAPRCalculator as ComponentType<object>,
 };
 
 export function getCalculatorComponent(
