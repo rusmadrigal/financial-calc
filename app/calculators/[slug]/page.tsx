@@ -50,6 +50,7 @@ export default async function CalculatorPage({
         howItWorks={page.howItWorks}
         sources={page.sources}
         faqs={page.faqs}
+        content={page.content}
       />
     </>
   );

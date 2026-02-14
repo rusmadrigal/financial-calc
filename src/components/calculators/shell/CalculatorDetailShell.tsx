@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalculatorSlot } from "../registry/calculatorRegistry";
 import { PortableTextRenderer } from "@/components/shared/PortableTextRenderer";
@@ -17,6 +17,7 @@ export interface CalculatorDetailShellProps {
   howItWorks?: PortableTextBlock[] | null;
   sources?: PortableTextBlock[] | null;
   faqs?: CalculatorPageFaq[] | null;
+  content?: PortableTextBlock[] | null;
 }
 
 function hasHowItWorks(
@@ -33,6 +34,12 @@ function hasFaqs(faqs: CalculatorPageFaq[] | null | undefined): boolean {
   return Array.isArray(faqs) && faqs.length > 0;
 }
 
+function hasContent(
+  content: PortableTextBlock[] | null | undefined,
+): boolean {
+  return Array.isArray(content) && content.length > 0;
+}
+
 export function CalculatorDetailShell({
   title,
   shortDescription,
@@ -40,6 +47,7 @@ export function CalculatorDetailShell({
   howItWorks,
   sources,
   faqs,
+  content,
 }: CalculatorDetailShellProps) {
   const showHowItWorks = hasHowItWorks(howItWorks);
   const showSources = hasSources(sources);
@@ -86,10 +94,7 @@ export function CalculatorDetailShell({
               {showHowItWorks && (
                 <TabsContent value="how-it-works" className="mt-6">
                   <Card>
-                    <CardHeader>
-                      <CardTitle>How It Works</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-6">
                       <PortableTextRenderer value={howItWorks} />
                     </CardContent>
                   </Card>
@@ -99,10 +104,7 @@ export function CalculatorDetailShell({
               {showFaqs && (
                 <TabsContent value="faqs" className="mt-6">
                   <Card>
-                    <CardHeader>
-                      <CardTitle>Frequently Asked Questions</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-6">
                       <Accordion type="single" collapsible className="w-full">
                         {faqs!.map((faq, i) => (
                           <AccordionItem key={i} value={`faq-${i}`}>
@@ -121,16 +123,23 @@ export function CalculatorDetailShell({
               {showSources && (
                 <TabsContent value="sources" className="mt-6">
                   <Card>
-                    <CardHeader>
-                      <CardTitle>Sources</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                    <CardContent className="pt-6">
                       <PortableTextRenderer value={sources} />
                     </CardContent>
                   </Card>
                 </TabsContent>
               )}
             </Tabs>
+          </section>
+        )}
+
+        {hasContent(content) && (
+          <section className="mt-12" aria-label="Content">
+            <Card>
+              <CardContent className="pt-6">
+                <PortableTextRenderer value={content} />
+              </CardContent>
+            </Card>
           </section>
         )}
       </div>
