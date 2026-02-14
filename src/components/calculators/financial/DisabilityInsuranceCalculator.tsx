@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -78,7 +84,11 @@ export function DisabilityInsuranceCalculator() {
   };
 
   const handleExportExcel = () => {
-    exportToExcel("Disability Insurance", ["Metric", "Value"], Object.entries(summaryData).map(([k, v]) => [k, String(v)]));
+    exportToExcel(
+      "Disability Insurance",
+      ["Metric", "Value"],
+      Object.entries(summaryData).map(([k, v]) => [k, String(v)]),
+    );
     toast.success("Excel downloaded");
   };
 

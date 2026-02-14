@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -91,11 +97,15 @@ export function SalesTaxCalculator() {
   };
 
   const handleExportExcel = () => {
-    exportToExcel("Sales Tax", ["Metric", "Value"], [
-      ["Subtotal", usd.format(subtotal)],
-      ["Sales Tax", usd.format(tax)],
-      ["Total", usd.format(total)],
-    ]);
+    exportToExcel(
+      "Sales Tax",
+      ["Metric", "Value"],
+      [
+        ["Subtotal", usd.format(subtotal)],
+        ["Sales Tax", usd.format(tax)],
+        ["Total", usd.format(total)],
+      ],
+    );
     toast.success("Excel downloaded");
   };
 

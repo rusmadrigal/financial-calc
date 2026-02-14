@@ -132,13 +132,11 @@ export function DownPaymentCalculator() {
 
   const chartDataBar = useMemo(
     () =>
-      yearlyData
-        .slice(0, 15)
-        .map((row) => ({
-          year: row.year,
-          contributions: row.contributions,
-          interest: row.interest,
-        })),
+      yearlyData.slice(0, 15).map((row) => ({
+        year: row.year,
+        contributions: row.contributions,
+        interest: row.interest,
+      })),
     [yearlyData],
   );
 

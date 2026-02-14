@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -80,12 +86,16 @@ export function SalaryToHourlyCalculator() {
   };
 
   const handleExportExcel = () => {
-    exportToExcel("Salary to Hourly", ["Metric", "Value"], [
-      ["Annual salary", usd.format(annualNum)],
-      ["Hours per week", hoursNum],
-      ["Hourly rate", usd.format(hourly)],
-      ["Monthly equivalent", usd.format(monthly)],
-    ]);
+    exportToExcel(
+      "Salary to Hourly",
+      ["Metric", "Value"],
+      [
+        ["Annual salary", usd.format(annualNum)],
+        ["Hours per week", hoursNum],
+        ["Hourly rate", usd.format(hourly)],
+        ["Monthly equivalent", usd.format(monthly)],
+      ],
+    );
     toast.success("Excel downloaded");
   };
 

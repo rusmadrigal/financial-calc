@@ -74,13 +74,11 @@ export function HSACalculator() {
   );
   const chartDataBar = useMemo(
     () =>
-      result.yearlyBreakdown
-        .slice(0, 15)
-        .map((r) => ({
-          year: r.year,
-          contributions: r.contributions,
-          interest: r.interest,
-        })),
+      result.yearlyBreakdown.slice(0, 15).map((r) => ({
+        year: r.year,
+        contributions: r.contributions,
+        interest: r.interest,
+      })),
     [result.yearlyBreakdown],
   );
 

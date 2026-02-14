@@ -101,13 +101,11 @@ export function PropertyTaxCalculator() {
 
   const chartDataBar = useMemo(
     () =>
-      yearlyData
-        .slice(0, 15)
-        .map((row) => ({
-          year: row.year,
-          annualTax: row.annualTax,
-          cumulative: row.cumulative,
-        })),
+      yearlyData.slice(0, 15).map((row) => ({
+        year: row.year,
+        annualTax: row.annualTax,
+        cumulative: row.cumulative,
+      })),
     [yearlyData],
   );
 

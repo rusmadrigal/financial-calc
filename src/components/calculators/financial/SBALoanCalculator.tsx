@@ -102,13 +102,11 @@ export function SBALoanCalculator() {
 
   const chartDataBar = useMemo(
     () =>
-      yearlyData
-        .slice(0, 15)
-        .map((row) => ({
-          year: row.year,
-          principal: row.principal,
-          interest: row.interest,
-        })),
+      yearlyData.slice(0, 15).map((row) => ({
+        year: row.year,
+        principal: row.principal,
+        interest: row.interest,
+      })),
     [yearlyData],
   );
 

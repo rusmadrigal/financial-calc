@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -86,11 +92,15 @@ export function NetWorthCalculator() {
   };
 
   const handleExportExcel = () => {
-    exportToExcel("Net Worth", ["Metric", "Value"], [
-      ["Assets", usd.format(assetsNum)],
-      ["Liabilities", usd.format(liabilitiesNum)],
-      ["Net worth", usd.format(netWorth)],
-    ]);
+    exportToExcel(
+      "Net Worth",
+      ["Metric", "Value"],
+      [
+        ["Assets", usd.format(assetsNum)],
+        ["Liabilities", usd.format(liabilitiesNum)],
+        ["Net worth", usd.format(netWorth)],
+      ],
+    );
     toast.success("Excel downloaded");
   };
 

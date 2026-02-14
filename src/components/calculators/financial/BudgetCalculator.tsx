@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -113,16 +119,20 @@ export function BudgetCalculator() {
   };
 
   const handleExportExcel = () => {
-    exportToExcel("Budget", ["Category", "Amount"], [
-      ["Income", usd.format(incomeNum)],
-      ["Housing", usd.format(housingNum)],
-      ["Transport", usd.format(transportNum)],
-      ["Food", usd.format(foodNum)],
-      ["Utilities", usd.format(utilitiesNum)],
-      ["Other", usd.format(otherNum)],
-      ["Total expenses", usd.format(totalExpenses)],
-      ["Surplus", usd.format(surplus)],
-    ]);
+    exportToExcel(
+      "Budget",
+      ["Category", "Amount"],
+      [
+        ["Income", usd.format(incomeNum)],
+        ["Housing", usd.format(housingNum)],
+        ["Transport", usd.format(transportNum)],
+        ["Food", usd.format(foodNum)],
+        ["Utilities", usd.format(utilitiesNum)],
+        ["Other", usd.format(otherNum)],
+        ["Total expenses", usd.format(totalExpenses)],
+        ["Surplus", usd.format(surplus)],
+      ],
+    );
     toast.success("Excel downloaded");
   };
 

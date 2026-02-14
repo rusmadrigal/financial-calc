@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -114,15 +120,19 @@ export function PaycheckCalculator() {
   };
 
   const handleExportExcel = () => {
-    exportToExcel("Paycheck", ["Item", "Amount"], [
-      ["Gross", usd.format(result.grossPay)],
-      ["Federal", usd.format(result.federalWithholding)],
-      ["Social Security", usd.format(result.socialSecurity)],
-      ["Medicare", usd.format(result.medicare)],
-      ["State", usd.format(result.stateTax)],
-      ["Net Pay", usd.format(result.netPay)],
-      ["Annual gross", usd.format(result.annualGross)],
-    ]);
+    exportToExcel(
+      "Paycheck",
+      ["Item", "Amount"],
+      [
+        ["Gross", usd.format(result.grossPay)],
+        ["Federal", usd.format(result.federalWithholding)],
+        ["Social Security", usd.format(result.socialSecurity)],
+        ["Medicare", usd.format(result.medicare)],
+        ["State", usd.format(result.stateTax)],
+        ["Net Pay", usd.format(result.netPay)],
+        ["Annual gross", usd.format(result.annualGross)],
+      ],
+    );
     toast.success("Excel downloaded");
   };
 

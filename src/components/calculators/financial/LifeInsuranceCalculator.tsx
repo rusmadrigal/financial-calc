@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -70,16 +76,21 @@ export function LifeInsuranceCalculator() {
   }, [income, years]);
 
   const chartDataLine = useMemo(
-    () => yearlyData.map((row) => ({ year: row.year, balance: row.cumulativeNeed })),
+    () =>
+      yearlyData.map((row) => ({
+        year: row.year,
+        balance: row.cumulativeNeed,
+      })),
     [yearlyData],
   );
 
   const chartDataBar = useMemo(
-    () => yearlyData.slice(0, 15).map((row) => ({
-      year: row.year,
-      annualNeed: row.annualNeed,
-      cumulativeNeed: row.cumulativeNeed,
-    })),
+    () =>
+      yearlyData.slice(0, 15).map((row) => ({
+        year: row.year,
+        annualNeed: row.annualNeed,
+        cumulativeNeed: row.cumulativeNeed,
+      })),
     [yearlyData],
   );
 
@@ -252,7 +263,9 @@ export function LifeInsuranceCalculator() {
             <Card>
               <CardHeader>
                 <CardTitle>Cumulative Need Over Time</CardTitle>
-                <CardDescription>Income replacement need by year</CardDescription>
+                <CardDescription>
+                  Income replacement need by year
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
@@ -343,8 +356,12 @@ export function LifeInsuranceCalculator() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Year</TableHead>
-                        <TableHead className="text-right">Annual need</TableHead>
-                        <TableHead className="text-right">Cumulative need</TableHead>
+                        <TableHead className="text-right">
+                          Annual need
+                        </TableHead>
+                        <TableHead className="text-right">
+                          Cumulative need
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>

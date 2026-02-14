@@ -34,9 +34,7 @@ function hasFaqs(faqs: CalculatorPageFaq[] | null | undefined): boolean {
   return Array.isArray(faqs) && faqs.length > 0;
 }
 
-function hasContent(
-  content: PortableTextBlock[] | null | undefined,
-): boolean {
+function hasContent(content: PortableTextBlock[] | null | undefined): boolean {
   return Array.isArray(content) && content.length > 0;
 }
 

@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -108,7 +114,11 @@ export function FederalIncomeTaxCalculator() {
     exportToExcel(
       "Federal Income Tax",
       ["Bracket", "Rate", "Amount"],
-      result.bracketBreakdown.map((b) => [b.bracket, `${b.rate}%`, usd.format(b.amount)]),
+      result.bracketBreakdown.map((b) => [
+        b.bracket,
+        `${b.rate}%`,
+        usd.format(b.amount),
+      ]),
     );
     toast.success("Excel downloaded");
   };

@@ -96,11 +96,23 @@ export const calculatorPage = defineType({
       name: "metaTitle",
       title: "Meta Title",
       type: "string",
+      description: "SEO title. Required, max 60 characters.",
+      validation: (Rule) =>
+        Rule.required()
+          .max(60)
+          .error("Meta title is required and must be at most 60 characters."),
     }),
     defineField({
       name: "metaDescription",
       title: "Meta Description",
       type: "text",
+      description: "SEO description. Required, max 160 characters.",
+      validation: (Rule) =>
+        Rule.required()
+          .max(160)
+          .error(
+            "Meta description is required and must be at most 160 characters.",
+          ),
     }),
     defineField({
       name: "noindex",

@@ -164,13 +164,11 @@ export function DebtSnowballCalculator() {
 
   const chartDataBar = useMemo(
     () =>
-      yearlyData
-        .slice(0, 15)
-        .map((row) => ({
-          year: row.year,
-          payment: row.payment,
-          interest: row.interest,
-        })),
+      yearlyData.slice(0, 15).map((row) => ({
+        year: row.year,
+        payment: row.payment,
+        interest: row.interest,
+      })),
     [yearlyData],
   );
 
