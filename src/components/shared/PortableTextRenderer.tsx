@@ -1,124 +1,99 @@
-import React from "react";
-import type {
-  PortableTextBlock,
-  PortableTextLinkMark,
-  PortableTextSpan,
-} from "@/lib/sanity/types";
+"use client";
 
-function getBlockTag(style: string | undefined): keyof JSX.IntrinsicElements {
-  switch (style) {
-    case "h2":
-      return "h2";
-    case "h3":
-      return "h3";
-    case "bullet":
-    case "number":
-      return "li";
-    default:
-      return "p";
-  }
+import React, { useMemo } from "react";
+import { PortableText } from "@portabletext/react";
+import type { PortableTextBlock } from "@/lib/sanity/types";
+
+function isExternalHref(href: string | undefined): boolean {
+  if (!href) return false;
+  return href.startsWith("http://") || href.startsWith("https://");
 }
 
-function renderSpans(
-  children: PortableTextSpan[] | undefined,
-  markDefs: PortableTextLinkMark[] | undefined,
-): React.ReactNode {
-  if (!children?.length) return null;
-  const defMap = new Map((markDefs ?? []).map((d) => [d._key, d]));
-  return children.map((span, i) => {
-    let node: React.ReactNode = span.text ?? "";
-    const marks = span.marks ?? [];
-    for (const mark of marks) {
-      const def = defMap.get(mark);
-      if (def != null && "href" in def && def.href) {
-        const target = def.blank ? "_blank" : undefined;
-        const rel = def.blank ? "noopener noreferrer" : undefined;
-        node = (
-          <a
-            key={i}
-            href={def.href}
-            target={target}
-            rel={rel}
-            className="text-primary underline hover:no-underline"
-          >
-            {node}
-          </a>
-        );
-      } else if (mark === "strong") {
-        node = <strong key={i}>{node}</strong>;
-      } else if (mark === "em") {
-        node = <em key={i}>{node}</em>;
-      } else if (mark === "underline") {
-        node = <u key={i}>{node}</u>;
-      }
-    }
-    return <React.Fragment key={span._key ?? i}>{node}</React.Fragment>;
-  });
-}
-
-export function PortableTextRenderer({ value }: { value: unknown }) {
-  const blocks = (Array.isArray(value) ? value : []) as PortableTextBlock[];
-  if (!blocks.length) return null;
-
-  const elements: React.ReactNode[] = [];
-  let listItems: React.ReactNode[] = [];
-  let listKind: "ul" | "ol" | null = null;
-
-  function flushList() {
-    if (listItems.length && listKind) {
-      const ListTag = listKind;
-      elements.push(
-        <ListTag
-          key={`list-${elements.length}`}
-          className={
-            listKind === "ul"
-              ? "list-disc pl-6 space-y-1"
-              : "list-decimal pl-6 space-y-1"
-          }
+const portableTextComponents = {
+  block: {
+    normal: ({ children }: { children?: React.ReactNode }) => (
+      <p className="mb-2 last:mb-0">{children}</p>
+    ),
+    h1: ({ children }: { children?: React.ReactNode }) => (
+      <h1 className="mb-2 mt-4 text-2xl font-semibold first:mt-0">
+        {children}
+      </h1>
+    ),
+    h2: ({ children }: { children?: React.ReactNode }) => (
+      <h2 className="mb-2 mt-4 text-xl font-semibold first:mt-0">{children}</h2>
+    ),
+    h3: ({ children }: { children?: React.ReactNode }) => (
+      <h3 className="mb-2 mt-3 text-lg font-medium first:mt-0">{children}</h3>
+    ),
+    blockquote: ({ children }: { children?: React.ReactNode }) => (
+      <blockquote className="my-3 border-l-4 border-border pl-4">
+        {children}
+      </blockquote>
+    ),
+  },
+  list: {
+    bullet: ({ children }: { children?: React.ReactNode }) => (
+      <ul className="list-disc pl-5 my-3 [&>li]:my-1">{children}</ul>
+    ),
+    number: ({ children }: { children?: React.ReactNode }) => (
+      <ol className="list-decimal pl-5 my-3 [&>li]:my-1">{children}</ol>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }: { children?: React.ReactNode }) => (
+      <li className="pl-1">{children}</li>
+    ),
+    number: ({ children }: { children?: React.ReactNode }) => (
+      <li className="pl-1">{children}</li>
+    ),
+  },
+  marks: {
+    strong: ({ children }: { children?: React.ReactNode }) => (
+      <strong className="font-semibold">{children}</strong>
+    ),
+    em: ({ children }: { children?: React.ReactNode }) => (
+      <em className="italic">{children}</em>
+    ),
+    underline: ({ children }: { children?: React.ReactNode }) => (
+      <u>{children}</u>
+    ),
+    link: ({
+      children,
+      value,
+    }: {
+      children?: React.ReactNode;
+      value?: { href?: string; blank?: boolean };
+    }) => {
+      const href = value?.href ?? "#";
+      const external = isExternalHref(href);
+      return (
+        <a
+          href={href}
+          target={external ? "_blank" : undefined}
+          rel={external ? "noopener noreferrer" : undefined}
+          className="text-primary underline hover:no-underline"
         >
-          {listItems}
-        </ListTag>,
+          {children}
+        </a>
       );
-      listItems = [];
-      listKind = null;
-    }
-  }
+    },
+  },
+  hardBreak: () => <br />,
+};
 
-  for (const block of blocks) {
-    if (block._type !== "block") continue;
-    const style = block.style ?? "normal";
-    const isListItem = style === "bullet" || style === "number";
+export function PortableTextRenderer({
+  value,
+}: {
+  value: PortableTextBlock[] | null | undefined;
+}) {
+  const components = useMemo(() => portableTextComponents, []);
 
-    if (isListItem) {
-      const nextKind = style === "bullet" ? "ul" : "ol";
-      if (listKind && listKind !== nextKind) flushList();
-      listKind = nextKind;
-      listItems.push(
-        <li key={block._key ?? listItems.length}>
-          {renderSpans(block.children, block.markDefs)}
-        </li>,
-      );
-    } else {
-      flushList();
-      const Tag = getBlockTag(style);
-      const className =
-        style === "h2"
-          ? "text-xl font-semibold mt-4"
-          : style === "h3"
-            ? "text-lg font-medium mt-3"
-            : "mb-2";
-      elements.push(
-        <Tag key={block._key ?? elements.length} className={className}>
-          {renderSpans(block.children, block.markDefs)}
-        </Tag>,
-      );
-    }
-  }
-  flushList();
+  const blocks = Array.isArray(value) ? value : [];
+  if (blocks.length === 0) return null;
 
   return (
-    <div className="prose prose-sm max-w-none dark:prose-invert text-muted-foreground">
-      {elements}
+    <div className="rich-text max-w-none text-muted-foreground">
+      <PortableText value={blocks} components={components} />
     </div>
   );
 }

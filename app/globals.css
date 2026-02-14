@@ -7,3 +7,63 @@
 
 @import "tailwindcss";
 @import "tw-animate-css";
+
+/* Rich text (Portable Text) – lists, headings, spacing */
+.rich-text ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin: 0.75rem 0;
+}
+.rich-text ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin: 0.75rem 0;
+}
+.rich-text li {
+  margin: 0.25rem 0;
+}
+.rich-text ul ul,
+.rich-text ol ul,
+.rich-text ul ol,
+.rich-text ol ol {
+  margin: 0.25rem 0;
+  padding-left: 1.5rem;
+}
+.rich-text p {
+  margin: 0.75rem 0;
+}
+.rich-text p:first-child {
+  margin-top: 0;
+}
+.rich-text p:last-child {
+  margin-bottom: 0;
+}
+.rich-text h1 {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.rich-text h2 {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.rich-text h3 {
+  margin: 1rem 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.rich-text a {
+  text-decoration: underline;
+}
+.rich-text blockquote {
+  margin: 0.75rem 0;
+  padding-left: 1rem;
+  border-left: 4px solid var(--border, #e5e7eb);
+}
+.rich-text code {
+  font-size: 0.875em;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  background: var(--muted, #f3f4f6);
+}
