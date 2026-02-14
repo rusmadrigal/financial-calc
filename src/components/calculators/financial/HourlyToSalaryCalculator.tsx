@@ -49,9 +49,10 @@ export function HourlyToSalaryCalculator() {
     [hourlyNum, hoursNum, annual],
   );
 
+  const monthly = Math.round((annual / 12) * 100) / 100;
   const barData = useMemo(
-    () => [{ year: 1, Hourly: hourlyNum * 52 * hoursNum, Annual: annual }],
-    [hourlyNum, hoursNum, annual],
+    () => [{ year: 1, Annual: annual, Monthly: monthly }],
+    [annual, monthly],
   );
 
   const handleCopy = () => {
@@ -162,8 +163,8 @@ export function HourlyToSalaryCalculator() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Comparison</CardTitle>
-              <CardDescription>Hourly equivalent vs annual</CardDescription>
+              <CardTitle>Breakdown (Year 1)</CardTitle>
+              <CardDescription>Annual vs monthly equivalent</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px]">
@@ -190,6 +191,11 @@ export function HourlyToSalaryCalculator() {
                       dataKey="Annual"
                       fill="var(--chart-1)"
                       name="Annual salary"
+                    />
+                    <Bar
+                      dataKey="Monthly"
+                      fill="var(--chart-3)"
+                      name="Monthly (annual ÷ 12)"
                     />
                   </BarChart>
                 </ResponsiveContainer>

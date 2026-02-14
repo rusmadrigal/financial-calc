@@ -268,7 +268,7 @@ export function BudgetCalculator() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Income vs Expenses (Month)</CardTitle>
+              <CardTitle>Income vs Expenses (Year 1)</CardTitle>
               <CardDescription>By category</CardDescription>
             </CardHeader>
             <CardContent>
@@ -282,7 +282,7 @@ export function BudgetCalculator() {
                     <XAxis
                       dataKey="year"
                       className="text-xs"
-                      tickFormatter={() => "Month 1"}
+                      tickFormatter={() => "Year 1"}
                     />
                     <YAxis className="text-xs" />
                     <Tooltip

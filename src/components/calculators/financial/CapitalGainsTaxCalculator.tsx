@@ -222,7 +222,7 @@ export function CapitalGainsTaxCalculator() {
           <Card>
             <CardHeader>
               <CardTitle>Breakdown (Year 1)</CardTitle>
-              <CardDescription>Gain, tax, net</CardDescription>
+              <CardDescription>Gain, tax, and net proceeds by category</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[300px]">

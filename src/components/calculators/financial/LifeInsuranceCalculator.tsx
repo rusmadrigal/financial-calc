@@ -14,6 +14,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  LineChart,
+  Line,
   BarChart,
   Bar,
   XAxis,
@@ -39,7 +49,7 @@ export function LifeInsuranceCalculator() {
   const [debts, setDebts] = useState("200000");
 
   const income = parseFloat(annualIncome) || 0;
-  const years = parseInt(yearsOfCoverage, 10) || 10;
+  const years = Math.max(1, Math.min(30, parseInt(yearsOfCoverage, 10) || 10));
   const existing = parseFloat(existingCoverage) || 0;
   const debt = parseFloat(debts) || 0;
   const incomeReplacement = Math.round(income * years * 100) / 100;
@@ -47,6 +57,29 @@ export function LifeInsuranceCalculator() {
   const recommended = Math.max(
     0,
     Math.round((totalNeed - existing) * 100) / 100,
+  );
+
+  const yearlyData = useMemo(() => {
+    return Array.from({ length: years }, (_, i) => {
+      const year = i + 1;
+      const annualNeed = Math.round(income * 100) / 100;
+      const cumulativeNeed = Math.round(income * year * 100) / 100;
+      return { year, annualNeed, cumulativeNeed };
+    });
+  }, [income, years]);
+
+  const chartDataLine = useMemo(
+    () => yearlyData.map((row) => ({ year: row.year, balance: row.cumulativeNeed })),
+    [yearlyData],
+  );
+
+  const chartDataBar = useMemo(
+    () => yearlyData.slice(0, 15).map((row) => ({
+      year: row.year,
+      annualNeed: row.annualNeed,
+      cumulativeNeed: row.cumulativeNeed,
+    })),
+    [yearlyData],
   );
 
   const summaryData: Record<string, string | number> = useMemo(
@@ -58,19 +91,6 @@ export function LifeInsuranceCalculator() {
       "Recommended additional": usd.format(recommended),
     }),
     [incomeReplacement, debt, totalNeed, existing, recommended],
-  );
-
-  const barData = useMemo(
-    () => [
-      {
-        year: 1,
-        "Income need": incomeReplacement,
-        Debts: debt,
-        Existing: existing,
-        Recommended: recommended,
-      },
-    ],
-    [incomeReplacement, debt, existing, recommended],
   );
 
   const handleCopy = () => {
@@ -214,51 +234,125 @@ export function LifeInsuranceCalculator() {
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Coverage Breakdown</CardTitle>
-              <CardDescription>Year 1</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    key={`${annualIncome}-${yearsOfCoverage}-${existingCoverage}-${debts}`}
-                    data={barData}
-                  >
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      className="stroke-border"
-                    />
-                    <XAxis
-                      dataKey="year"
-                      className="text-xs"
-                      tickFormatter={() => "Year 1"}
-                    />
-                    <YAxis className="text-xs" />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "var(--card)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "8px",
-                      }}
-                    />
-                    <Bar
-                      dataKey="Income need"
-                      fill="var(--chart-1)"
-                      name="Income need"
-                    />
-                    <Bar dataKey="Debts" fill="var(--chart-3)" name="Debts" />
-                    <Bar
-                      dataKey="Recommended"
-                      fill="var(--chart-2)"
-                      name="Recommended"
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
+          {chartDataLine.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Cumulative Need Over Time</CardTitle>
+                <CardDescription>Income replacement need by year</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart
+                      key={`line-${annualIncome}-${yearsOfCoverage}`}
+                      data={chartDataLine}
+                    >
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
+                      <XAxis dataKey="year" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Cumulative need"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {chartDataBar.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Annual vs Cumulative Need by Year</CardTitle>
+                <CardDescription>First 15 years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      key={`bar-${annualIncome}-${yearsOfCoverage}`}
+                      data={chartDataBar}
+                    >
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
+                      <XAxis dataKey="year" className="text-xs" />
+                      <YAxis className="text-xs" />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Bar
+                        dataKey="annualNeed"
+                        fill="var(--chart-1)"
+                        name="Annual need"
+                      />
+                      <Bar
+                        dataKey="cumulativeNeed"
+                        fill="var(--chart-3)"
+                        name="Cumulative need"
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {yearlyData.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Yearly Breakdown</CardTitle>
+                <CardDescription>First 10 years</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Year</TableHead>
+                        <TableHead className="text-right">Annual need</TableHead>
+                        <TableHead className="text-right">Cumulative need</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {yearlyData.slice(0, 10).map((row) => (
+                        <TableRow key={row.year}>
+                          <TableCell className="font-medium">
+                            {row.year}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.annualNeed)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.cumulativeNeed)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           <Alert>
             <Info className="size-4" />
             <AlertDescription>

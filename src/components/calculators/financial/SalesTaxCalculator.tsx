@@ -191,7 +191,7 @@ export function SalesTaxCalculator() {
           {hasResults && (
             <Card>
               <CardHeader>
-                <CardTitle>Breakdown</CardTitle>
+                <CardTitle>Breakdown (Year 1)</CardTitle>
                 <CardDescription>Subtotal, tax, and total</CardDescription>
               </CardHeader>
               <CardContent>

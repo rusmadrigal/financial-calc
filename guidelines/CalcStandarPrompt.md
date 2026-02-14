@@ -24,9 +24,3 @@ Si la serie es la misma cada año (p. ej. impuesto fijo): mostrar evolución acu
 Resumen: Los gráficos deben reflejar datos por año (eje X = año), con LineChart de evolución y BarChart de dos (o más) series por año, más tabla de desglose anual, usando siempre este mismo diseño.
 
 Calculadoras a crear
-
-Business Loan Calculator	/business-loan-calculator	Business
-SBA Loan Calculator	/sba-loan-calculator	Business
-Startup Cost Calculator	/startup-cost-calculator	Business
-Break Even Calculator	/break-even-calculator	Business
-Profit Margin Calculator	/profit-margin-calculator	Business
