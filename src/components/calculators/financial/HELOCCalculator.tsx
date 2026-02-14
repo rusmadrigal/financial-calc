@@ -67,7 +67,12 @@ export function HELOCCalculator() {
   }, [drawAmount, annualRate, drawPeriodYears, repaymentYears]);
 
   const yearlyData = useMemo(() => {
-    const byYear: { year: number; balance: number; principal: number; interest: number }[] = [];
+    const byYear: {
+      year: number;
+      balance: number;
+      principal: number;
+      interest: number;
+    }[] = [];
     let year = 1;
     let principalSum = 0;
     let interestSum = 0;
@@ -96,11 +101,24 @@ export function HELOCCalculator() {
   );
 
   const chartDataBar = useMemo(
-    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, principal: row.principal, interest: row.interest })),
+    () =>
+      yearlyData
+        .slice(0, 15)
+        .map((row) => ({
+          year: row.year,
+          principal: row.principal,
+          interest: row.interest,
+        })),
     [yearlyData],
   );
 
-  const tableHeaders = ["Period", "Payment", "Principal", "Interest", "Balance"];
+  const tableHeaders = [
+    "Period",
+    "Payment",
+    "Principal",
+    "Interest",
+    "Balance",
+  ];
   const tableRows = result.schedule.map(
     (row) =>
       [
@@ -174,7 +192,9 @@ export function HELOCCalculator() {
               <div className="space-y-2">
                 <Label>Draw amount ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
                   <Input
                     type="number"
                     min={0}
@@ -214,7 +234,9 @@ export function HELOCCalculator() {
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
-                <Button onClick={handleReset} variant="outline">Reset</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -229,26 +251,53 @@ export function HELOCCalculator() {
             <CardContent>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
-                  <p className="text-sm text-muted-foreground">Interest-only (draw)</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.drawPeriodInterestOnlyPayment)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Interest-only (draw)
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.drawPeriodInterestOnlyPayment)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Repayment payment</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.repaymentMonthlyPayment)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Repayment payment
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.repaymentMonthlyPayment)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Interest</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.totalInterest)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Interest
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.totalInterest)}
+                  </p>
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopyResults} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
                   <Copy className="mr-2 size-4" /> Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
                   <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
@@ -258,7 +307,8 @@ export function HELOCCalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              Draw period: interest-only payments. Repayment period: principal + interest. Rates may be variable.
+              Draw period: interest-only payments. Repayment period: principal +
+              interest. Rates may be variable.
             </AlertDescription>
           </Alert>
 
@@ -272,7 +322,10 @@ export function HELOCCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -282,7 +335,13 @@ export function HELOCCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Balance"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -300,7 +359,10 @@ export function HELOCCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -310,8 +372,16 @@ export function HELOCCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="principal" fill="var(--chart-1)" name="Principal" />
-                      <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
+                      <Bar
+                        dataKey="principal"
+                        fill="var(--chart-1)"
+                        name="Principal"
+                      />
+                      <Bar
+                        dataKey="interest"
+                        fill="var(--chart-3)"
+                        name="Interest"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -338,17 +408,30 @@ export function HELOCCalculator() {
                   <TableBody>
                     {previewRows.map((row) => (
                       <TableRow key={row.year}>
-                        <TableCell className="font-medium">{row.year}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.principal)}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                        <TableCell className="font-medium">
+                          {row.year}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.principal)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.interest)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.balance)}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </div>
               <div className="mt-4 text-center">
-                <Button variant="outline" size="sm" onClick={handleDownloadFullSchedule} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadFullSchedule}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Download Full Schedule
                 </Button>
               </div>
@@ -360,7 +443,8 @@ export function HELOCCalculator() {
       <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
         <AlertCircle className="size-4" />
         <AlertDescription>
-          HELOC rates are often variable. This uses a fixed rate for illustration.
+          HELOC rates are often variable. This uses a fixed rate for
+          illustration.
         </AlertDescription>
       </Alert>
     </>

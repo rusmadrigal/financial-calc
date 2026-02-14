@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -67,14 +73,18 @@ export function DownPaymentCalculator() {
     ["Down payment %", `${result.downPaymentPercent}%`],
     ["Down payment amount", usd.format(result.downPaymentAmount)],
     ["Loan amount", usd.format(result.loanAmount)],
-    ...(result.monthsToGoal !== null ? [["Months to goal", result.monthsToGoal]] : []),
+    ...(result.monthsToGoal !== null
+      ? [["Months to goal", result.monthsToGoal]]
+      : []),
   ];
 
   const summaryData: Record<string, string | number> = useMemo(
     () => ({
       "Down Payment": usd.format(result.downPaymentAmount),
       "Loan Amount": usd.format(result.loanAmount),
-      ...(result.monthsToGoal !== null ? { "Months to goal": result.monthsToGoal } : {}),
+      ...(result.monthsToGoal !== null
+        ? { "Months to goal": result.monthsToGoal }
+        : {}),
     }),
     [result],
   );
@@ -86,7 +96,12 @@ export function DownPaymentCalculator() {
     const current = parseFloat(currentSavings) || 0;
     const monthly = parseFloat(monthlySavings) || 0;
     const monthlyRate = (parseFloat(savingsRate) || 0) / 100 / 12;
-    const byYear: { year: number; balance: number; contributions: number; interest: number }[] = [];
+    const byYear: {
+      year: number;
+      balance: number;
+      contributions: number;
+      interest: number;
+    }[] = [];
     let balance = current;
     const maxYears = 15;
     for (let y = 1; y <= maxYears; y++) {
@@ -97,7 +112,8 @@ export function DownPaymentCalculator() {
         contributions += monthly;
         balance *= 1 + monthlyRate;
       }
-      const interest = Math.round((balance - startBalance - contributions) * 100) / 100;
+      const interest =
+        Math.round((balance - startBalance - contributions) * 100) / 100;
       byYear.push({
         year: y,
         balance: Math.round(balance * 100) / 100,
@@ -115,7 +131,14 @@ export function DownPaymentCalculator() {
   );
 
   const chartDataBar = useMemo(
-    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, contributions: row.contributions, interest: row.interest })),
+    () =>
+      yearlyData
+        .slice(0, 15)
+        .map((row) => ({
+          year: row.year,
+          contributions: row.contributions,
+          interest: row.interest,
+        })),
     [yearlyData],
   );
 
@@ -133,7 +156,12 @@ export function DownPaymentCalculator() {
 
   const handleExportPDF = () => {
     if (!hasResults) return;
-    exportToPDF("Down Payment Calculator", summaryData, tableHeaders, tableRows);
+    exportToPDF(
+      "Down Payment Calculator",
+      summaryData,
+      tableHeaders,
+      tableRows,
+    );
     toast.success("PDF downloaded");
   };
 
@@ -165,35 +193,73 @@ export function DownPaymentCalculator() {
               <div className="space-y-2">
                 <Label>Home price ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={homePrice} onChange={(e) => setHomePrice(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={homePrice}
+                    onChange={(e) => setHomePrice(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Down payment (%)</Label>
-                <Input type="number" min={0} max={100} value={downPct} onChange={(e) => setDownPct(e.target.value)} />
+                <Input
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={downPct}
+                  onChange={(e) => setDownPct(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Current savings ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={currentSavings} onChange={(e) => setCurrentSavings(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={currentSavings}
+                    onChange={(e) => setCurrentSavings(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Monthly savings ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={monthlySavings} onChange={(e) => setMonthlySavings(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={monthlySavings}
+                    onChange={(e) => setMonthlySavings(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Savings growth rate (% APY)</Label>
-                <Input type="number" min={0} step="0.1" value={savingsRate} onChange={(e) => setSavingsRate(e.target.value)} />
+                <Input
+                  type="number"
+                  min={0}
+                  step="0.1"
+                  value={savingsRate}
+                  onChange={(e) => setSavingsRate(e.target.value)}
+                />
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
-                <Button onClick={handleReset} variant="outline">Reset</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -209,27 +275,50 @@ export function DownPaymentCalculator() {
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                   <p className="text-sm text-muted-foreground">Down payment</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.downPaymentAmount)}</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.downPaymentAmount)}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Loan amount</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.loanAmount)}</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.loanAmount)}
+                  </p>
                 </div>
                 {result.monthsToGoal !== null && (
                   <div>
-                    <p className="text-sm text-muted-foreground">Months to goal</p>
-                    <p className="mt-1 text-2xl font-semibold">{result.monthsToGoal}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Months to goal
+                    </p>
+                    <p className="mt-1 text-2xl font-semibold">
+                      {result.monthsToGoal}
+                    </p>
                   </div>
                 )}
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopyResults} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
                   <Copy className="mr-2 size-4" /> Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
                   <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
@@ -240,13 +329,18 @@ export function DownPaymentCalculator() {
             <Card>
               <CardHeader>
                 <CardTitle>Savings Balance Over Time</CardTitle>
-                <CardDescription>Projected balance by year toward down payment</CardDescription>
+                <CardDescription>
+                  Projected balance by year toward down payment
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -256,7 +350,13 @@ export function DownPaymentCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Balance"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -274,7 +374,10 @@ export function DownPaymentCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -284,8 +387,16 @@ export function DownPaymentCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="contributions" fill="var(--chart-1)" name="Contributions" />
-                      <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
+                      <Bar
+                        dataKey="contributions"
+                        fill="var(--chart-1)"
+                        name="Contributions"
+                      />
+                      <Bar
+                        dataKey="interest"
+                        fill="var(--chart-3)"
+                        name="Interest"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -306,17 +417,27 @@ export function DownPaymentCalculator() {
                       <TableRow>
                         <TableHead>Year</TableHead>
                         <TableHead className="text-right">Balance</TableHead>
-                        <TableHead className="text-right">Contributions</TableHead>
+                        <TableHead className="text-right">
+                          Contributions
+                        </TableHead>
                         <TableHead className="text-right">Interest</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {yearlyPreviewRows.map((row) => (
                         <TableRow key={row.year}>
-                          <TableCell className="font-medium">{row.year}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.contributions)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
+                          <TableCell className="font-medium">
+                            {row.year}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.balance)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.contributions)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.interest)}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -329,7 +450,8 @@ export function DownPaymentCalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              Months to goal assumes you save the monthly amount and earn the given APY. 20% down often avoids PMI.
+              Months to goal assumes you save the monthly amount and earn the
+              given APY. 20% down often avoids PMI.
             </AlertDescription>
           </Alert>
         </div>

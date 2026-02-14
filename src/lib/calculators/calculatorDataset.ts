@@ -15,7 +15,14 @@ export type CalculatorCategory =
   | "Retirement"
   | "Taxes"
   | "Savings"
-  | "Real Estate";
+  | "Real Estate"
+  | "Business"
+  | "Income"
+  | "Economy"
+  | "Personal Finance"
+  | "Education"
+  | "Healthcare"
+  | "Insurance";
 
 export type CalculatorComplexity = "Simple" | "Advanced";
 
@@ -52,6 +59,13 @@ export const CALCULATOR_CATEGORIES: CalculatorCategory[] = [
   "Taxes",
   "Savings",
   "Real Estate",
+  "Business",
+  "Income",
+  "Economy",
+  "Personal Finance",
+  "Education",
+  "Healthcare",
+  "Insurance",
 ];
 
 export const COMPLEXITY_LEVELS: CalculatorComplexity[] = ["Simple", "Advanced"];
@@ -421,6 +435,234 @@ const CALCULATORS: CalculatorEntry[] = [
     componentType: "mortgageAPR",
     iconKey: "Percent",
   },
+  {
+    title: "Business Loan Calculator",
+    slug: "business-loan-calculator",
+    category: "Business",
+    complexity: "Simple",
+    description:
+      "Calculate monthly payments, total interest, and amortization for business term loans.",
+    features: ["Amortization", "Charts", "Export"],
+    popularity: 70,
+    componentType: "businessLoan",
+    iconKey: "DollarSign",
+  },
+  {
+    title: "SBA Loan Calculator",
+    slug: "sba-loan-calculator",
+    category: "Business",
+    complexity: "Simple",
+    description:
+      "Estimate SBA loan payments and schedule; optional guarantee fee.",
+    features: ["Amortization", "Charts", "Export"],
+    popularity: 68,
+    componentType: "sbaLoan",
+    iconKey: "Landmark",
+  },
+  {
+    title: "Startup Cost Calculator",
+    slug: "startup-cost-calculator",
+    category: "Business",
+    complexity: "Simple",
+    description: "Project one-time and recurring startup costs by year.",
+    features: ["Yearly Breakdown", "Charts", "Export"],
+    popularity: 72,
+    componentType: "startupCost",
+    iconKey: "TrendingUp",
+  },
+  {
+    title: "Break Even Calculator",
+    slug: "break-even-calculator",
+    category: "Business",
+    complexity: "Simple",
+    description:
+      "Find break-even quantity and project revenue vs cost by year.",
+    features: ["Break-even Units", "Charts", "Export"],
+    popularity: 75,
+    componentType: "breakEven",
+    iconKey: "Receipt",
+  },
+  {
+    title: "Profit Margin Calculator",
+    slug: "profit-margin-calculator",
+    category: "Business",
+    complexity: "Simple",
+    description:
+      "Calculate profit margin from revenue and costs; view by year.",
+    features: ["Margin %", "Charts", "Export"],
+    popularity: 74,
+    componentType: "profitMargin",
+    iconKey: "Percent",
+  },
+  {
+    title: "Sales Tax Calculator",
+    slug: "sales-tax-calculator",
+    category: "Taxes",
+    complexity: "Simple",
+    description: "Calculate sales tax and total from amount and tax rate.",
+    features: ["Tax Amount", "Total", "Export"],
+    popularity: 80,
+    componentType: "salesTax",
+    iconKey: "Receipt",
+  },
+  {
+    title: "Federal Income Tax Calculator",
+    slug: "federal-income-tax-calculator",
+    category: "Taxes",
+    complexity: "Simple",
+    description: "Estimate federal income tax from income and filing status.",
+    features: ["Tax Bracket", "Effective Rate", "Export"],
+    popularity: 85,
+    componentType: "federalIncomeTax",
+    iconKey: "Landmark",
+  },
+  {
+    title: "Capital Gains Tax Calculator",
+    slug: "capital-gains-tax-calculator",
+    category: "Taxes",
+    complexity: "Simple",
+    description:
+      "Estimate tax on investment gains; short-term vs long-term rates.",
+    features: ["Short/Long Term", "Net Proceeds", "Export"],
+    popularity: 78,
+    componentType: "capitalGainsTax",
+    iconKey: "TrendingUp",
+  },
+  {
+    title: "Paycheck Calculator",
+    slug: "paycheck-calculator",
+    category: "Income",
+    complexity: "Simple",
+    description:
+      "Estimate take-home pay after federal, FICA, and optional state tax.",
+    features: ["Deductions", "Net Pay", "Export"],
+    popularity: 90,
+    componentType: "paycheck",
+    iconKey: "Wallet",
+  },
+  {
+    title: "Hourly to Salary Calculator",
+    slug: "hourly-to-salary-calculator",
+    category: "Income",
+    complexity: "Simple",
+    description: "Convert hourly wage to annual salary by hours per week.",
+    features: ["Annual Salary", "Export"],
+    popularity: 72,
+    componentType: "hourlyToSalary",
+    iconKey: "Clock",
+  },
+  {
+    title: "Salary to Hourly Calculator",
+    slug: "salary-to-hourly-calculator",
+    category: "Income",
+    complexity: "Simple",
+    description: "Convert annual salary to hourly rate by hours per week.",
+    features: ["Hourly Rate", "Export"],
+    popularity: 71,
+    componentType: "salaryToHourly",
+    iconKey: "Clock",
+  },
+  {
+    title: "Inflation Calculator",
+    slug: "inflation-calculator",
+    category: "Economy",
+    complexity: "Simple",
+    description: "See how inflation affects purchasing power over time.",
+    features: ["Purchasing Power", "Charts", "Export"],
+    popularity: 82,
+    componentType: "inflation",
+    iconKey: "TrendingDown",
+  },
+  {
+    title: "Net Worth Calculator",
+    slug: "net-worth-calculator",
+    category: "Personal Finance",
+    complexity: "Simple",
+    description: "Add assets and liabilities to see your net worth.",
+    features: ["Assets vs Liabilities", "Export"],
+    popularity: 88,
+    componentType: "netWorth",
+    iconKey: "PieChart",
+  },
+  {
+    title: "Emergency Fund Calculator",
+    slug: "emergency-fund-calculator",
+    category: "Personal Finance",
+    complexity: "Simple",
+    description:
+      "See how long to reach an emergency fund goal with monthly savings.",
+    features: ["Months to Goal", "Charts", "Export"],
+    popularity: 84,
+    componentType: "emergencyFund",
+    iconKey: "Shield",
+  },
+  {
+    title: "Budget Calculator",
+    slug: "budget-calculator",
+    category: "Personal Finance",
+    complexity: "Simple",
+    description: "Compare income and expenses by category.",
+    features: ["Income vs Expenses", "Export"],
+    popularity: 86,
+    componentType: "budget",
+    iconKey: "PieChart",
+  },
+  {
+    title: "College Savings Calculator",
+    slug: "college-savings-calculator",
+    category: "Education",
+    complexity: "Simple",
+    description:
+      "Project college savings growth to a target with contributions.",
+    features: ["Target Goal", "Charts", "Export"],
+    popularity: 76,
+    componentType: "collegeSavings",
+    iconKey: "GraduationCap",
+  },
+  {
+    title: "529 Plan Calculator",
+    slug: "529-plan-calculator",
+    category: "Education",
+    complexity: "Simple",
+    description: "Project 529 education savings with tax-advantaged growth.",
+    features: ["Tax-Free Growth", "Charts", "Export"],
+    popularity: 74,
+    componentType: "plan529",
+    iconKey: "GraduationCap",
+  },
+  {
+    title: "HSA Calculator",
+    slug: "hsa-calculator",
+    category: "Healthcare",
+    complexity: "Simple",
+    description: "Project HSA balance with contributions and growth.",
+    features: ["Contributions", "Charts", "Export"],
+    popularity: 70,
+    componentType: "hsa",
+    iconKey: "Heart",
+  },
+  {
+    title: "Life Insurance Calculator",
+    slug: "life-insurance-calculator",
+    category: "Insurance",
+    complexity: "Simple",
+    description: "Estimate recommended life insurance coverage.",
+    features: ["Coverage Need", "Export"],
+    popularity: 75,
+    componentType: "lifeInsurance",
+    iconKey: "Shield",
+  },
+  {
+    title: "Disability Insurance Calculator",
+    slug: "disability-insurance-calculator",
+    category: "Insurance",
+    complexity: "Simple",
+    description: "Estimate disability benefit and income replacement.",
+    features: ["Benefit Amount", "Export"],
+    popularity: 68,
+    componentType: "disabilityInsurance",
+    iconKey: "Shield",
+  },
 ];
 
 /** Returns all calculators (only those implemented and in registry). */
@@ -447,6 +689,13 @@ export function getCategoryCounts(): Record<CalculatorCategory, number> {
     Taxes: 0,
     Savings: 0,
     "Real Estate": 0,
+    Business: 0,
+    Income: 0,
+    Economy: 0,
+    "Personal Finance": 0,
+    Education: 0,
+    Healthcare: 0,
+    Insurance: 0,
   };
   for (const entry of list) {
     counts[entry.category] = (counts[entry.category] ?? 0) + 1;

@@ -116,7 +116,10 @@ export function RefinanceCalculator() {
   );
 
   const chartDataBar = useMemo(
-    () => chartData.slice(0, 15).map((row) => ({ year: row.year, current: row.current, new: row.new })),
+    () =>
+      chartData
+        .slice(0, 15)
+        .map((row) => ({ year: row.year, current: row.current, new: row.new })),
     [chartData],
   );
 
@@ -356,7 +359,10 @@ export function RefinanceCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -366,7 +372,13 @@ export function RefinanceCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Balance"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -378,13 +390,18 @@ export function RefinanceCalculator() {
             <Card>
               <CardHeader>
                 <CardTitle>Interest Comparison by Year</CardTitle>
-                <CardDescription>Current vs new loan interest (first 15 years)</CardDescription>
+                <CardDescription>
+                  Current vs new loan interest (first 15 years)
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -394,7 +411,11 @@ export function RefinanceCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="current" fill="var(--chart-3)" name="Current" />
+                      <Bar
+                        dataKey="current"
+                        fill="var(--chart-3)"
+                        name="Current"
+                      />
                       <Bar dataKey="new" fill="var(--chart-1)" name="New" />
                     </BarChart>
                   </ResponsiveContainer>
@@ -415,18 +436,32 @@ export function RefinanceCalculator() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Year</TableHead>
-                        <TableHead className="text-right">Current Interest</TableHead>
-                        <TableHead className="text-right">New Interest</TableHead>
-                        <TableHead className="text-right">New Balance</TableHead>
+                        <TableHead className="text-right">
+                          Current Interest
+                        </TableHead>
+                        <TableHead className="text-right">
+                          New Interest
+                        </TableHead>
+                        <TableHead className="text-right">
+                          New Balance
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {chartData.slice(0, 10).map((row) => (
                         <TableRow key={row.year}>
-                          <TableCell className="font-medium">{row.year}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.current)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.new)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                          <TableCell className="font-medium">
+                            {row.year}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.current)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.new)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.balance)}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

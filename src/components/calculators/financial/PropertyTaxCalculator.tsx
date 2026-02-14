@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -69,7 +75,7 @@ export function PropertyTaxCalculator() {
   const summaryData: Record<string, string | number> = useMemo(
     () => ({
       "Annual Tax": usd.format(result.annualTax),
-      "Monthly": usd.format(result.monthlyEquivalent),
+      Monthly: usd.format(result.monthlyEquivalent),
       "Taxable Value": usd.format(result.taxableValue),
     }),
     [result],
@@ -88,12 +94,20 @@ export function PropertyTaxCalculator() {
   }, [result.annualTax]);
 
   const chartDataLine = useMemo(
-    () => yearlyData.map((row) => ({ year: row.year, balance: row.cumulative })),
+    () =>
+      yearlyData.map((row) => ({ year: row.year, balance: row.cumulative })),
     [yearlyData],
   );
 
   const chartDataBar = useMemo(
-    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, annualTax: row.annualTax, cumulative: row.cumulative })),
+    () =>
+      yearlyData
+        .slice(0, 15)
+        .map((row) => ({
+          year: row.year,
+          annualTax: row.annualTax,
+          cumulative: row.cumulative,
+        })),
     [yearlyData],
   );
 
@@ -111,7 +125,12 @@ export function PropertyTaxCalculator() {
 
   const handleExportPDF = () => {
     if (!hasResults) return;
-    exportToPDF("Property Tax Calculator", summaryData, tableHeaders, tableRows);
+    exportToPDF(
+      "Property Tax Calculator",
+      summaryData,
+      tableHeaders,
+      tableRows,
+    );
     toast.success("PDF downloaded");
   };
 
@@ -141,24 +160,48 @@ export function PropertyTaxCalculator() {
               <div className="space-y-2">
                 <Label>Assessed value ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={assessedValue} onChange={(e) => setAssessedValue(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={assessedValue}
+                    onChange={(e) => setAssessedValue(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Annual tax rate (%)</Label>
-                <Input type="number" min={0} step="0.01" value={ratePercent} onChange={(e) => setRatePercent(e.target.value)} />
+                <Input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={ratePercent}
+                  onChange={(e) => setRatePercent(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Exemption ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={exemption} onChange={(e) => setExemption(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={exemption}
+                    onChange={(e) => setExemption(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
-                <Button onClick={handleReset} variant="outline">Reset</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -174,25 +217,48 @@ export function PropertyTaxCalculator() {
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                   <p className="text-sm text-muted-foreground">Annual tax</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.annualTax)}</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.annualTax)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Monthly equivalent</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.monthlyEquivalent)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Monthly equivalent
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.monthlyEquivalent)}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Taxable value</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.taxableValue)}</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.taxableValue)}
+                  </p>
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopyResults} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
                   <Copy className="mr-2 size-4" /> Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
                   <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
@@ -209,7 +275,10 @@ export function PropertyTaxCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -219,7 +288,13 @@ export function PropertyTaxCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Cumulative" />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Cumulative"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -237,7 +312,10 @@ export function PropertyTaxCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -247,8 +325,16 @@ export function PropertyTaxCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="annualTax" fill="var(--chart-1)" name="Annual Tax" />
-                      <Bar dataKey="cumulative" fill="var(--chart-3)" name="Cumulative" />
+                      <Bar
+                        dataKey="annualTax"
+                        fill="var(--chart-1)"
+                        name="Annual Tax"
+                      />
+                      <Bar
+                        dataKey="cumulative"
+                        fill="var(--chart-3)"
+                        name="Cumulative"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -275,9 +361,15 @@ export function PropertyTaxCalculator() {
                     <TableBody>
                       {yearlyPreviewRows.map((row) => (
                         <TableRow key={row.year}>
-                          <TableCell className="font-medium">{row.year}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.annualTax)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.cumulative)}</TableCell>
+                          <TableCell className="font-medium">
+                            {row.year}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.annualTax)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.cumulative)}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -290,7 +382,8 @@ export function PropertyTaxCalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              Rates vary by location. Some areas use mill rates; convert to percent (e.g. 12 mills = 1.2%).
+              Rates vary by location. Some areas use mill rates; convert to
+              percent (e.g. 12 mills = 1.2%).
             </AlertDescription>
           </Alert>
         </div>

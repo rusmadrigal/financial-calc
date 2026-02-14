@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -99,7 +105,9 @@ export function CDCalculator() {
               <div className="space-y-2">
                 <Label>Principal ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
                   <Input
                     type="number"
                     min={0}
@@ -130,7 +138,9 @@ export function CDCalculator() {
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
-                <Button onClick={handleReset} variant="outline">Reset</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -145,26 +155,53 @@ export function CDCalculator() {
             <CardContent>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
-                  <p className="text-sm text-muted-foreground">Maturity Value</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.maturityValue)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Maturity Value
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.maturityValue)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Interest Earned</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.interestEarned)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Interest Earned
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.interestEarned)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Effective Rate</p>
-                  <p className="mt-1 text-2xl font-semibold">{result.effectiveRate}%</p>
+                  <p className="text-sm text-muted-foreground">
+                    Effective Rate
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {result.effectiveRate}%
+                  </p>
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopyResults} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
                   <Copy className="mr-2 size-4" /> Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
                   <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
@@ -174,7 +211,8 @@ export function CDCalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              APY assumes interest compounded to maturity. Early withdrawal may incur penalties.
+              APY assumes interest compounded to maturity. Early withdrawal may
+              incur penalties.
             </AlertDescription>
           </Alert>
         </div>

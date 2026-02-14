@@ -1,0 +1,225 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import { Copy, Download, Info, AlertCircle } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { toast } from "sonner";
+import { exportToPDF } from "@/lib/exports/exportToPDF";
+
+const usd = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 2,
+});
+
+export function SalaryToHourlyCalculator() {
+  const [annual, setAnnual] = useState("52000");
+  const [hoursPerWeek, setHoursPerWeek] = useState("40");
+
+  const annualNum = parseFloat(annual) || 0;
+  const hoursNum = parseFloat(hoursPerWeek) || 0;
+  const hourly =
+    hoursNum > 0 ? Math.round((annualNum / 52 / hoursNum) * 100) / 100 : 0;
+
+  const summaryData: Record<string, string | number> = useMemo(
+    () => ({
+      "Annual salary": usd.format(annualNum),
+      "Hours/week": hoursNum,
+      "Hourly rate": usd.format(hourly),
+    }),
+    [annualNum, hoursNum, hourly],
+  );
+
+  const barData = useMemo(
+    () => [{ year: 1, "Hourly rate": hourly, Annual: annualNum }],
+    [hourly, annualNum],
+  );
+
+  const handleCopy = () => {
+    void navigator.clipboard
+      .writeText(
+        `Annual: ${usd.format(annualNum)} | Hourly: ${usd.format(hourly)}`,
+      )
+      .then(() => toast.success("Copied!"));
+  };
+
+  const handleExportPDF = () => {
+    exportToPDF(
+      "Salary to Hourly",
+      summaryData,
+      ["Metric", "Value"],
+      [
+        ["Annual salary", usd.format(annualNum)],
+        ["Hours per week", hoursNum],
+        ["Hourly rate", usd.format(hourly)],
+      ],
+    );
+    toast.success("PDF downloaded");
+  };
+
+  const handleReset = () => {
+    setAnnual("52000");
+    setHoursPerWeek("40");
+    toast.info("Reset");
+  };
+
+  return (
+    <>
+      <div className="grid gap-8 lg:grid-cols-3">
+        <div className="lg:col-span-1">
+          <Card className="sticky top-24">
+            <CardHeader>
+              <CardTitle>Inputs</CardTitle>
+              <CardDescription>
+                Annual salary and hours per week
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <Label>Annual salary ($)</Label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={annual}
+                    onChange={(e) => setAnnual(e.target.value)}
+                    className="pl-7"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Hours per week</Label>
+                <Input
+                  type="number"
+                  min={0.1}
+                  max={168}
+                  step="0.5"
+                  value={hoursPerWeek}
+                  onChange={(e) => setHoursPerWeek(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-3 pt-4">
+                <Button className="flex-1">Calculate</Button>
+                <Button variant="outline" onClick={handleReset}>
+                  Reset
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="space-y-6 lg:col-span-2">
+          <Card className="border-2">
+            <CardHeader>
+              <CardTitle>Results</CardTitle>
+              <CardDescription>
+                Equivalent hourly rate (52 weeks)
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6 sm:grid-cols-2">
+                <div>
+                  <p className="text-sm text-muted-foreground">Annual salary</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(annualNum)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Hourly rate</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(hourly)}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-6 flex gap-2">
+                <Button variant="outline" size="sm" onClick={handleCopy}>
+                  <Copy className="mr-2 size-4" /> Copy
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleExportPDF}>
+                  <Download className="mr-2 size-4" /> Export PDF
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Comparison</CardTitle>
+              <CardDescription>Hourly vs annual</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart key={`${annual}-${hoursPerWeek}`} data={barData}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      className="stroke-border"
+                    />
+                    <XAxis
+                      dataKey="year"
+                      className="text-xs"
+                      tickFormatter={() => "Year 1"}
+                    />
+                    <YAxis className="text-xs" />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "var(--card)",
+                        border: "1px solid var(--border)",
+                        borderRadius: "8px",
+                      }}
+                    />
+                    <Bar
+                      dataKey="Hourly rate"
+                      fill="var(--chart-1)"
+                      name="Hourly rate"
+                    />
+                    <Bar
+                      dataKey="Annual"
+                      fill="var(--chart-3)"
+                      name="Annual salary"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Alert>
+            <Info className="size-4" />
+            <AlertDescription>
+              Assumes 52 weeks per year. No overtime or benefits included.
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+      <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
+        <AlertCircle className="size-4" />
+        <AlertDescription>
+          For comparison only. Actual pay may vary.
+        </AlertDescription>
+      </Alert>
+    </>
+  );
+}

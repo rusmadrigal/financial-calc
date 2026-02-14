@@ -21,7 +21,11 @@ export interface HomeAffordabilityOutput {
   monthlyPayment: number;
 }
 
-function pmt(principal: number, monthlyRate: number, numMonths: number): number {
+function pmt(
+  principal: number,
+  monthlyRate: number,
+  numMonths: number,
+): number {
   if (principal <= 0 || numMonths < 1) return 0;
   if (monthlyRate <= 0) return principal / numMonths;
   const factor = Math.pow(1 + monthlyRate, numMonths);
@@ -54,11 +58,17 @@ export function calculateHomeAffordability(
 
   const numMonths = Math.round(termYears * 12);
   const monthlyRate = apr / 100 / 12;
-  const maxLoanAmount = loanAmountFromPayment(maxMonthlyPandI, monthlyRate, numMonths);
-  const maxHomePrice = downPct >= 1 ? maxLoanAmount : maxLoanAmount / (1 - downPct);
+  const maxLoanAmount = loanAmountFromPayment(
+    maxMonthlyPandI,
+    monthlyRate,
+    numMonths,
+  );
+  const maxHomePrice =
+    downPct >= 1 ? maxLoanAmount : maxLoanAmount / (1 - downPct);
   const downPaymentAmount = maxHomePrice * downPct;
   const actualLoan = maxHomePrice - downPaymentAmount;
-  const monthlyPayment = actualLoan > 0 ? pmt(actualLoan, monthlyRate, numMonths) : 0;
+  const monthlyPayment =
+    actualLoan > 0 ? pmt(actualLoan, monthlyRate, numMonths) : 0;
 
   return {
     maxMonthlyPandI: Math.round(maxMonthlyPandI * 100) / 100,

@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -56,7 +62,7 @@ export function StockProfitCalculator() {
   const summaryData: Record<string, string | number> = useMemo(
     () => ({
       "Cost Basis": usd.format(result.costBasis),
-      "Proceeds": usd.format(result.proceeds),
+      Proceeds: usd.format(result.proceeds),
       "Net Profit": usd.format(result.netProfit),
       "Return %": `${result.returnPercent}%`,
     }),
@@ -77,7 +83,12 @@ export function StockProfitCalculator() {
 
   const handleExportPDF = () => {
     if (!hasResults) return;
-    exportToPDF("Stock Profit Calculator", summaryData, tableHeaders, tableRows);
+    exportToPDF(
+      "Stock Profit Calculator",
+      summaryData,
+      tableHeaders,
+      tableRows,
+    );
     toast.success("PDF downloaded");
   };
 
@@ -109,7 +120,9 @@ export function StockProfitCalculator() {
               <div className="space-y-2">
                 <Label>Buy price per share ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
                   <Input
                     type="number"
                     min={0}
@@ -123,7 +136,9 @@ export function StockProfitCalculator() {
               <div className="space-y-2">
                 <Label>Sell price per share ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
                   <Input
                     type="number"
                     min={0}
@@ -146,7 +161,9 @@ export function StockProfitCalculator() {
               <div className="space-y-2">
                 <Label>Buy commission ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
                   <Input
                     type="number"
                     min={0}
@@ -160,7 +177,9 @@ export function StockProfitCalculator() {
               <div className="space-y-2">
                 <Label>Sell commission ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
                   <Input
                     type="number"
                     min={0}
@@ -173,7 +192,9 @@ export function StockProfitCalculator() {
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
-                <Button onClick={handleReset} variant="outline">Reset</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -189,29 +210,50 @@ export function StockProfitCalculator() {
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                   <p className="text-sm text-muted-foreground">Net Profit</p>
-                  <p className={`mt-1 text-2xl font-semibold ${result.netProfit >= 0 ? "text-foreground" : "text-destructive"}`}>
+                  <p
+                    className={`mt-1 text-2xl font-semibold ${result.netProfit >= 0 ? "text-foreground" : "text-destructive"}`}
+                  >
                     {usd.format(result.netProfit)}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Return %</p>
-                  <p className={`mt-1 text-2xl font-semibold ${result.returnPercent >= 0 ? "text-foreground" : "text-destructive"}`}>
+                  <p
+                    className={`mt-1 text-2xl font-semibold ${result.returnPercent >= 0 ? "text-foreground" : "text-destructive"}`}
+                  >
                     {result.returnPercent}%
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Cost Basis</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.costBasis)}</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.costBasis)}
+                  </p>
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopyResults} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
                   <Copy className="mr-2 size-4" /> Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
                   <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
@@ -221,7 +263,8 @@ export function StockProfitCalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              Does not account for taxes (e.g. short-term vs long-term capital gains).
+              Does not account for taxes (e.g. short-term vs long-term capital
+              gains).
             </AlertDescription>
           </Alert>
         </div>

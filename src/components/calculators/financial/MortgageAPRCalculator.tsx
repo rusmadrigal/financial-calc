@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -95,7 +101,12 @@ export function MortgageAPRCalculator() {
 
   const yearlyData = useMemo(() => {
     if (!mortgageSchedule?.schedule.length) return [];
-    const byYear: { year: number; balance: number; principal: number; interest: number }[] = [];
+    const byYear: {
+      year: number;
+      balance: number;
+      principal: number;
+      interest: number;
+    }[] = [];
     const schedule = mortgageSchedule.schedule;
     for (let y = 1; y <= Math.ceil(schedule.length / 12); y++) {
       const start = (y - 1) * 12;
@@ -127,7 +138,14 @@ export function MortgageAPRCalculator() {
   );
 
   const chartDataBar = useMemo(
-    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, principal: row.principal, interest: row.interest })),
+    () =>
+      yearlyData
+        .slice(0, 15)
+        .map((row) => ({
+          year: row.year,
+          principal: row.principal,
+          interest: row.interest,
+        })),
     [yearlyData],
   );
 
@@ -145,7 +163,12 @@ export function MortgageAPRCalculator() {
 
   const handleExportPDF = () => {
     if (!hasResults) return;
-    exportToPDF("Mortgage APR Calculator", summaryData, tableHeaders, tableRows);
+    exportToPDF(
+      "Mortgage APR Calculator",
+      summaryData,
+      tableHeaders,
+      tableRows,
+    );
     toast.success("PDF downloaded");
   };
 
@@ -176,28 +199,57 @@ export function MortgageAPRCalculator() {
               <div className="space-y-2">
                 <Label>Loan amount ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={loanAmount} onChange={(e) => setLoanAmount(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={loanAmount}
+                    onChange={(e) => setLoanAmount(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Stated rate (APR %)</Label>
-                <Input type="number" min={0} step="0.01" value={statedRate} onChange={(e) => setStatedRate(e.target.value)} />
+                <Input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={statedRate}
+                  onChange={(e) => setStatedRate(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Term (years)</Label>
-                <Input type="number" min={1} value={termYears} onChange={(e) => setTermYears(e.target.value)} />
+                <Input
+                  type="number"
+                  min={1}
+                  value={termYears}
+                  onChange={(e) => setTermYears(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Closing costs ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={closingCosts} onChange={(e) => setClosingCosts(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={closingCosts}
+                    onChange={(e) => setClosingCosts(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
-                <Button onClick={handleReset} variant="outline">Reset</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -213,25 +265,50 @@ export function MortgageAPRCalculator() {
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                   <p className="text-sm text-muted-foreground">APR (%)</p>
-                  <p className="mt-1 text-2xl font-semibold">{result.aprPercent}%</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {result.aprPercent}%
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Monthly payment</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.monthlyPayment)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Monthly payment
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.monthlyPayment)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total interest</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.totalInterest)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total interest
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.totalInterest)}
+                  </p>
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopyResults} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
                   <Copy className="mr-2 size-4" /> Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
                   <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
@@ -248,7 +325,10 @@ export function MortgageAPRCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -258,7 +338,13 @@ export function MortgageAPRCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Balance"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -276,7 +362,10 @@ export function MortgageAPRCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -286,8 +375,16 @@ export function MortgageAPRCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="principal" fill="var(--chart-1)" name="Principal" />
-                      <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
+                      <Bar
+                        dataKey="principal"
+                        fill="var(--chart-1)"
+                        name="Principal"
+                      />
+                      <Bar
+                        dataKey="interest"
+                        fill="var(--chart-3)"
+                        name="Interest"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -315,10 +412,18 @@ export function MortgageAPRCalculator() {
                     <TableBody>
                       {yearlyPreviewRows.map((row) => (
                         <TableRow key={row.year}>
-                          <TableCell className="font-medium">{row.year}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.principal)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                          <TableCell className="font-medium">
+                            {row.year}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.principal)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.interest)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.balance)}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -331,7 +436,8 @@ export function MortgageAPRCalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              APR reflects the true annual cost including closing costs. Higher than the stated rate when fees are included.
+              APR reflects the true annual cost including closing costs. Higher
+              than the stated rate when fees are included.
             </AlertDescription>
           </Alert>
         </div>
@@ -339,7 +445,9 @@ export function MortgageAPRCalculator() {
 
       <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
         <AlertCircle className="size-4" />
-        <AlertDescription>APR is an estimate. Lenders must disclose APR on loan estimates.</AlertDescription>
+        <AlertDescription>
+          APR is an estimate. Lenders must disclose APR on loan estimates.
+        </AlertDescription>
       </Alert>
     </>
   );

@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -453,7 +459,10 @@ export function RentVsBuyCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -463,8 +472,16 @@ export function RentVsBuyCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="rentCost" fill="var(--chart-1)" name="Rent Cost" />
-                      <Bar dataKey="buyCost" fill="var(--chart-3)" name="Buy Cost" />
+                      <Bar
+                        dataKey="rentCost"
+                        fill="var(--chart-1)"
+                        name="Rent Cost"
+                      />
+                      <Bar
+                        dataKey="buyCost"
+                        fill="var(--chart-3)"
+                        name="Buy Cost"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

@@ -22,3 +22,11 @@ Casos especiales
 Si no hay serie temporal (p. ej. costes de cierre únicos): un BarChart con “año” fijo (p. ej. Year 1) y varias barras por categoría.
 Si la serie es la misma cada año (p. ej. impuesto fijo): mostrar evolución acumulada en el LineChart y en el BarChart dos series por año (p. ej. anual vs acumulado).
 Resumen: Los gráficos deben reflejar datos por año (eje X = año), con LineChart de evolución y BarChart de dos (o más) series por año, más tabla de desglose anual, usando siempre este mismo diseño.
+
+Calculadoras a crear
+
+Business Loan Calculator	/business-loan-calculator	Business
+SBA Loan Calculator	/sba-loan-calculator	Business
+Startup Cost Calculator	/startup-cost-calculator	Business
+Break Even Calculator	/break-even-calculator	Business
+Profit Margin Calculator	/profit-margin-calculator	Business

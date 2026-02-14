@@ -20,7 +20,9 @@ export interface StockProfitOutput {
   returnPercent: number;
 }
 
-export function calculateStockProfit(input: StockProfitInput): StockProfitOutput {
+export function calculateStockProfit(
+  input: StockProfitInput,
+): StockProfitOutput {
   const buy = Math.max(0, input.buyPrice);
   const sell = Math.max(0, input.sellPrice);
   const shares = Math.max(0, Math.round(input.shares));
@@ -33,8 +35,7 @@ export function calculateStockProfit(input: StockProfitInput): StockProfitOutput
   const totalCommission = buyComm + sellComm;
   const netProfit = grossProfit;
 
-  const returnPercent =
-    costBasis > 0 ? (netProfit / costBasis) * 100 : 0;
+  const returnPercent = costBasis > 0 ? (netProfit / costBasis) * 100 : 0;
 
   return {
     costBasis: Math.round(costBasis * 100) / 100,

@@ -44,7 +44,9 @@ function pvOfPayments(
   return (payment * (factor - 1)) / (monthlyRate * factor);
 }
 
-export function calculateMortgageAPR(input: MortgageAPRInput): MortgageAPROutput {
+export function calculateMortgageAPR(
+  input: MortgageAPRInput,
+): MortgageAPROutput {
   const loanAmount = Math.max(0, input.loanAmount);
   const statedRate = Math.max(0, input.statedRatePercent) / 100;
   const termYears = Math.max(1 / 12, Math.min(50, input.termYears));
@@ -64,7 +66,8 @@ export function calculateMortgageAPR(input: MortgageAPRInput): MortgageAPROutput
       monthlyPayment: Math.round(monthlyPayment * 100) / 100,
       aprPercent: input.statedRatePercent,
       totalPayments: Math.round(monthlyPayment * numMonths * 100) / 100,
-      totalInterest: Math.round((monthlyPayment * numMonths - loanAmount) * 100) / 100,
+      totalInterest:
+        Math.round((monthlyPayment * numMonths - loanAmount) * 100) / 100,
     };
   }
 
@@ -80,7 +83,7 @@ export function calculateMortgageAPR(input: MortgageAPRInput): MortgageAPROutput
     if (pv < netLoanAmount) high = mid;
     else low = mid;
   }
-  const aprPercent = (low + high) / 2 * 100;
+  const aprPercent = ((low + high) / 2) * 100;
   const totalPayments = monthlyPayment * numMonths;
   const totalInterest = Math.max(0, totalPayments - loanAmount);
 

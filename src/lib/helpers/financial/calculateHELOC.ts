@@ -87,7 +87,8 @@ export function calculateHELOC(input: HELOCInput): HELOCOutput {
     repaymentMonthlyPayment: Math.round(repayPayment * 100) / 100,
     totalInterestDraw: Math.round(totalInterestDraw * 100) / 100,
     totalInterestRepayment: Math.round(totalInterestRepayment * 100) / 100,
-    totalInterest: Math.round((totalInterestDraw + totalInterestRepayment) * 100) / 100,
+    totalInterest:
+      Math.round((totalInterestDraw + totalInterestRepayment) * 100) / 100,
     schedule,
   };
 }

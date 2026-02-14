@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -88,7 +94,14 @@ export function PersonalLoanCalculator() {
   );
 
   const chartDataBar = useMemo(
-    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, principal: row.principal, interest: row.interest })),
+    () =>
+      yearlyData
+        .slice(0, 15)
+        .map((row) => ({
+          year: row.year,
+          principal: row.principal,
+          interest: row.interest,
+        })),
     [yearlyData],
   );
 
@@ -294,7 +307,10 @@ export function PersonalLoanCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -304,7 +320,13 @@ export function PersonalLoanCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Balance"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -322,7 +344,10 @@ export function PersonalLoanCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -332,8 +357,16 @@ export function PersonalLoanCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="principal" fill="var(--chart-1)" name="Principal" />
-                      <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
+                      <Bar
+                        dataKey="principal"
+                        fill="var(--chart-1)"
+                        name="Principal"
+                      />
+                      <Bar
+                        dataKey="interest"
+                        fill="var(--chart-3)"
+                        name="Interest"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -361,10 +394,18 @@ export function PersonalLoanCalculator() {
                     <TableBody>
                       {yearlyData.slice(0, 10).map((row) => (
                         <TableRow key={row.year}>
-                          <TableCell className="font-medium">{row.year}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.principal)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                          <TableCell className="font-medium">
+                            {row.year}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.principal)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.interest)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.balance)}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

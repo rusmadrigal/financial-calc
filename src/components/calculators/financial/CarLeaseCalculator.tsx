@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -116,7 +122,12 @@ export function CarLeaseCalculator() {
   );
 
   const chartDataBar = useMemo(
-    () => yearlyData.map((row) => ({ year: row.year, depreciation: row.depreciation, finance: row.finance })),
+    () =>
+      yearlyData.map((row) => ({
+        year: row.year,
+        depreciation: row.depreciation,
+        finance: row.finance,
+      })),
     [yearlyData],
   );
 
@@ -389,7 +400,10 @@ export function CarLeaseCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -399,7 +413,13 @@ export function CarLeaseCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Payments" />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Payments"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -417,7 +437,10 @@ export function CarLeaseCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -427,8 +450,16 @@ export function CarLeaseCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="depreciation" fill="var(--chart-1)" name="Depreciation" />
-                      <Bar dataKey="finance" fill="var(--chart-3)" name="Finance" />
+                      <Bar
+                        dataKey="depreciation"
+                        fill="var(--chart-1)"
+                        name="Depreciation"
+                      />
+                      <Bar
+                        dataKey="finance"
+                        fill="var(--chart-3)"
+                        name="Finance"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -449,7 +480,9 @@ export function CarLeaseCalculator() {
                       <TableRow>
                         <TableHead>Year</TableHead>
                         <TableHead className="text-right">Payments</TableHead>
-                        <TableHead className="text-right">Depreciation</TableHead>
+                        <TableHead className="text-right">
+                          Depreciation
+                        </TableHead>
                         <TableHead className="text-right">Finance</TableHead>
                         <TableHead className="text-right">Tax</TableHead>
                       </TableRow>
@@ -457,11 +490,21 @@ export function CarLeaseCalculator() {
                     <TableBody>
                       {yearlyData.map((row) => (
                         <TableRow key={row.year}>
-                          <TableCell className="font-medium">{row.year}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.payments)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.depreciation)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.finance)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.tax)}</TableCell>
+                          <TableCell className="font-medium">
+                            {row.year}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.payments)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.depreciation)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.finance)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.tax)}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

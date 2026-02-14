@@ -30,7 +30,9 @@ export interface ClosingCostOutput {
   totalClosingCosts: number;
 }
 
-export function calculateClosingCosts(input: ClosingCostInput): ClosingCostOutput {
+export function calculateClosingCosts(
+  input: ClosingCostInput,
+): ClosingCostOutput {
   const loan = Math.max(0, input.loanAmount);
   const items: ClosingCostItem[] = [];
 
@@ -58,17 +60,32 @@ export function calculateClosingCosts(input: ClosingCostInput): ClosingCostOutpu
 
   const appraisal = Math.max(0, input.appraisalFee ?? 0);
   if (appraisal > 0) {
-    items.push({ label: "Appraisal", amount: appraisal, isPercent: false, value: appraisal });
+    items.push({
+      label: "Appraisal",
+      amount: appraisal,
+      isPercent: false,
+      value: appraisal,
+    });
   }
 
   const title = Math.max(0, input.titleInsurance ?? 0);
   if (title > 0) {
-    items.push({ label: "Title insurance", amount: title, isPercent: false, value: title });
+    items.push({
+      label: "Title insurance",
+      amount: title,
+      isPercent: false,
+      value: title,
+    });
   }
 
   const other = Math.max(0, input.otherFees ?? 0);
   if (other > 0) {
-    items.push({ label: "Other fees", amount: other, isPercent: false, value: other });
+    items.push({
+      label: "Other fees",
+      amount: other,
+      isPercent: false,
+      value: other,
+    });
   }
 
   const total = items.reduce((sum, i) => sum + i.amount, 0);

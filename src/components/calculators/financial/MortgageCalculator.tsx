@@ -420,10 +420,18 @@ export function MortgageCalculator() {
                   <TableBody>
                     {chartData.slice(0, 10).map((row) => (
                       <TableRow key={row.year}>
-                        <TableCell className="font-medium">{row.year}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.principal)}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                        <TableCell className="font-medium">
+                          {row.year}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.principal)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.interest)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.balance)}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
+import {
+  Copy,
+  Download,
+  FileSpreadsheet,
+  Info,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -93,11 +99,22 @@ export function HomeAffordabilityCalculator() {
       aprPercent: parseFloat(apr) || 0,
       termYears: parseFloat(termYears) || 30,
     });
-  }, [hasResults, result.maxHomePrice, result.downPaymentAmount, apr, termYears]);
+  }, [
+    hasResults,
+    result.maxHomePrice,
+    result.downPaymentAmount,
+    apr,
+    termYears,
+  ]);
 
   const yearlyData = useMemo(() => {
     if (!mortgageSchedule?.schedule.length) return [];
-    const byYear: { year: number; balance: number; principal: number; interest: number }[] = [];
+    const byYear: {
+      year: number;
+      balance: number;
+      principal: number;
+      interest: number;
+    }[] = [];
     const schedule = mortgageSchedule.schedule;
     for (let y = 1; y <= Math.ceil(schedule.length / 12); y++) {
       const start = (y - 1) * 12;
@@ -129,7 +146,14 @@ export function HomeAffordabilityCalculator() {
   );
 
   const chartDataBar = useMemo(
-    () => yearlyData.slice(0, 15).map((row) => ({ year: row.year, principal: row.principal, interest: row.interest })),
+    () =>
+      yearlyData
+        .slice(0, 15)
+        .map((row) => ({
+          year: row.year,
+          principal: row.principal,
+          interest: row.interest,
+        })),
     [yearlyData],
   );
 
@@ -147,7 +171,12 @@ export function HomeAffordabilityCalculator() {
 
   const handleExportPDF = () => {
     if (!hasResults) return;
-    exportToPDF("Home Affordability Calculator", summaryData, tableHeaders, tableRows);
+    exportToPDF(
+      "Home Affordability Calculator",
+      summaryData,
+      tableHeaders,
+      tableRows,
+    );
     toast.success("PDF downloaded");
   };
 
@@ -180,36 +209,78 @@ export function HomeAffordabilityCalculator() {
               <div className="space-y-2">
                 <Label>Annual income ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={annualIncome} onChange={(e) => setAnnualIncome(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={annualIncome}
+                    onChange={(e) => setAnnualIncome(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Monthly debts ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
-                  <Input type="number" min={0} value={monthlyDebts} onChange={(e) => setMonthlyDebts(e.target.value)} className="pl-7" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={monthlyDebts}
+                    onChange={(e) => setMonthlyDebts(e.target.value)}
+                    className="pl-7"
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Max DTI (%)</Label>
-                <Input type="number" min={0} max={100} step="0.5" value={maxDTI} onChange={(e) => setMaxDTI(e.target.value)} />
+                <Input
+                  type="number"
+                  min={0}
+                  max={100}
+                  step="0.5"
+                  value={maxDTI}
+                  onChange={(e) => setMaxDTI(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Interest rate (APR %)</Label>
-                <Input type="number" min={0} step="0.01" value={apr} onChange={(e) => setApr(e.target.value)} />
+                <Input
+                  type="number"
+                  min={0}
+                  step="0.01"
+                  value={apr}
+                  onChange={(e) => setApr(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Loan term (years)</Label>
-                <Input type="number" min={1} value={termYears} onChange={(e) => setTermYears(e.target.value)} />
+                <Input
+                  type="number"
+                  min={1}
+                  value={termYears}
+                  onChange={(e) => setTermYears(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label>Down payment (%)</Label>
-                <Input type="number" min={0} max={100} value={downPct} onChange={(e) => setDownPct(e.target.value)} />
+                <Input
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={downPct}
+                  onChange={(e) => setDownPct(e.target.value)}
+                />
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
-                <Button onClick={handleReset} variant="outline">Reset</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -224,26 +295,49 @@ export function HomeAffordabilityCalculator() {
             <CardContent>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
-                  <p className="text-sm text-muted-foreground">Max home price</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.maxHomePrice)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Max home price
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.maxHomePrice)}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Down payment</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.downPaymentAmount)}</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.downPaymentAmount)}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Monthly P&I</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.monthlyPayment)}</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.monthlyPayment)}
+                  </p>
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopyResults} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
                   <Copy className="mr-2 size-4" /> Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
                   <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
@@ -254,13 +348,18 @@ export function HomeAffordabilityCalculator() {
             <Card>
               <CardHeader>
                 <CardTitle>Balance Over Time</CardTitle>
-                <CardDescription>Loan balance by year (affordable loan)</CardDescription>
+                <CardDescription>
+                  Loan balance by year (affordable loan)
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -270,7 +369,13 @@ export function HomeAffordabilityCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Balance"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -288,7 +393,10 @@ export function HomeAffordabilityCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -298,8 +406,16 @@ export function HomeAffordabilityCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="principal" fill="var(--chart-1)" name="Principal" />
-                      <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
+                      <Bar
+                        dataKey="principal"
+                        fill="var(--chart-1)"
+                        name="Principal"
+                      />
+                      <Bar
+                        dataKey="interest"
+                        fill="var(--chart-3)"
+                        name="Interest"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -311,7 +427,9 @@ export function HomeAffordabilityCalculator() {
             <Card>
               <CardHeader>
                 <CardTitle>Yearly Breakdown</CardTitle>
-                <CardDescription>First 10 years (affordable loan)</CardDescription>
+                <CardDescription>
+                  First 10 years (affordable loan)
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -327,10 +445,18 @@ export function HomeAffordabilityCalculator() {
                     <TableBody>
                       {yearlyPreviewRows.map((row) => (
                         <TableRow key={row.year}>
-                          <TableCell className="font-medium">{row.year}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.principal)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
-                          <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
+                          <TableCell className="font-medium">
+                            {row.year}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.principal)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.interest)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {usd.format(row.balance)}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -343,7 +469,8 @@ export function HomeAffordabilityCalculator() {
           <Alert>
             <Info className="size-4" />
             <AlertDescription>
-              DTI = debt-to-income. Lenders often use 36% back-end (P&I + debts vs income). Does not include taxes, insurance, or HOA.
+              DTI = debt-to-income. Lenders often use 36% back-end (P&I + debts
+              vs income). Does not include taxes, insurance, or HOA.
             </AlertDescription>
           </Alert>
         </div>
@@ -351,7 +478,10 @@ export function HomeAffordabilityCalculator() {
 
       <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
         <AlertCircle className="size-4" />
-        <AlertDescription>Estimates only. Lenders use their own criteria and may include taxes and insurance.</AlertDescription>
+        <AlertDescription>
+          Estimates only. Lenders use their own criteria and may include taxes
+          and insurance.
+        </AlertDescription>
       </Alert>
     </>
   );

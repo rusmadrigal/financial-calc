@@ -120,7 +120,12 @@ export function HighYieldSavingsCalculator() {
 
   const handleExportPDF = () => {
     if (!hasResults) return;
-    exportToPDF("High Yield Savings Calculator", summaryData, tableHeaders, tableRows);
+    exportToPDF(
+      "High Yield Savings Calculator",
+      summaryData,
+      tableHeaders,
+      tableRows,
+    );
     toast.success("PDF downloaded");
   };
 
@@ -157,7 +162,9 @@ export function HighYieldSavingsCalculator() {
               <div className="space-y-2">
                 <Label>Initial balance ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
                   <Input
                     type="number"
                     min={0}
@@ -170,7 +177,9 @@ export function HighYieldSavingsCalculator() {
               <div className="space-y-2">
                 <Label>Monthly contribution ($)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                    $
+                  </span>
                   <Input
                     type="number"
                     min={0}
@@ -201,7 +210,9 @@ export function HighYieldSavingsCalculator() {
               </div>
               <div className="flex gap-3 pt-4">
                 <Button className="flex-1">Calculate</Button>
-                <Button onClick={handleReset} variant="outline">Reset</Button>
+                <Button onClick={handleReset} variant="outline">
+                  Reset
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -217,25 +228,50 @@ export function HighYieldSavingsCalculator() {
               <div className="grid gap-6 sm:grid-cols-3">
                 <div>
                   <p className="text-sm text-muted-foreground">Final Balance</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.finalBalance)}</p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.finalBalance)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Contributions</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.totalContributions)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Contributions
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.totalContributions)}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Interest</p>
-                  <p className="mt-1 text-2xl font-semibold">{usd.format(result.totalInterest)}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Total Interest
+                  </p>
+                  <p className="mt-1 text-2xl font-semibold">
+                    {usd.format(result.totalInterest)}
+                  </p>
                 </div>
               </div>
               <div className="mt-6 flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={handleCopyResults} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyResults}
+                  disabled={!hasResults}
+                >
                   <Copy className="mr-2 size-4" /> Copy
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportPDF}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Export PDF
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleExportExcel} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
                   <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
@@ -259,7 +295,10 @@ export function HighYieldSavingsCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartDataLine}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -269,7 +308,13 @@ export function HighYieldSavingsCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Line type="monotone" dataKey="balance" stroke="var(--chart-1)" strokeWidth={2} name="Balance" />
+                      <Line
+                        type="monotone"
+                        dataKey="balance"
+                        stroke="var(--chart-1)"
+                        strokeWidth={2}
+                        name="Balance"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -287,7 +332,10 @@ export function HighYieldSavingsCalculator() {
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartDataBar}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <CartesianGrid
+                        strokeDasharray="3 3"
+                        className="stroke-border"
+                      />
                       <XAxis dataKey="year" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip
@@ -297,8 +345,16 @@ export function HighYieldSavingsCalculator() {
                           borderRadius: "8px",
                         }}
                       />
-                      <Bar dataKey="contributions" fill="var(--chart-1)" name="Contributions" />
-                      <Bar dataKey="interest" fill="var(--chart-3)" name="Interest" />
+                      <Bar
+                        dataKey="contributions"
+                        fill="var(--chart-1)"
+                        name="Contributions"
+                      />
+                      <Bar
+                        dataKey="interest"
+                        fill="var(--chart-3)"
+                        name="Interest"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -318,24 +374,39 @@ export function HighYieldSavingsCalculator() {
                     <TableRow>
                       <TableHead>Year</TableHead>
                       <TableHead className="text-right">Balance</TableHead>
-                      <TableHead className="text-right">Contributions</TableHead>
+                      <TableHead className="text-right">
+                        Contributions
+                      </TableHead>
                       <TableHead className="text-right">Interest</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {previewRows.map((row) => (
                       <TableRow key={row.year}>
-                        <TableCell className="font-medium">{row.year}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.balance)}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.contributions)}</TableCell>
-                        <TableCell className="text-right">{usd.format(row.interest)}</TableCell>
+                        <TableCell className="font-medium">
+                          {row.year}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.balance)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.contributions)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {usd.format(row.interest)}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </div>
               <div className="mt-4 text-center">
-                <Button variant="outline" size="sm" onClick={handleDownloadFullSchedule} disabled={!hasResults}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleDownloadFullSchedule}
+                  disabled={!hasResults}
+                >
                   <Download className="mr-2 size-4" /> Download Full Schedule
                 </Button>
               </div>
@@ -346,7 +417,9 @@ export function HighYieldSavingsCalculator() {
 
       <Alert className="mt-8 border-2 border-destructive/50 bg-destructive/5">
         <AlertCircle className="size-4" />
-        <AlertDescription>Estimates only. Rates and terms vary by institution.</AlertDescription>
+        <AlertDescription>
+          Estimates only. Rates and terms vary by institution.
+        </AlertDescription>
       </Alert>
     </>
   );

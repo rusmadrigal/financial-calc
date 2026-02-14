@@ -48,7 +48,10 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
             aria-label="SmartCalcLab home"
           >
             <div className="flex size-8 items-center justify-center rounded-lg bg-primary">
-              <Calculator className="size-5 text-primary-foreground" aria-hidden />
+              <Calculator
+                className="size-5 text-primary-foreground"
+                aria-hidden
+              />
             </div>
             <span className="text-xl font-semibold tracking-tight text-foreground">
               SmartCalcLab
@@ -91,7 +94,9 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
               size="icon"
               onClick={toggleDarkMode}
               className="size-9 shrink-0"
-              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={
+                isDarkMode ? "Switch to light mode" : "Switch to dark mode"
+              }
             >
               {isDarkMode ? (
                 <Sun className="size-4" aria-hidden />
@@ -100,11 +105,7 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
               )}
             </Button>
             <Link href="/embed">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-9 shrink-0"
-              >
+              <Button variant="outline" size="sm" className="h-9 shrink-0">
                 Embed a Calculator
               </Button>
             </Link>
@@ -168,7 +169,11 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
                       toggleDarkMode();
                     }}
                     className="justify-start gap-2 px-4 py-3 h-auto text-base font-medium text-muted-foreground hover:bg-accent/50 hover:text-foreground"
-                    aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+                    aria-label={
+                      isDarkMode
+                        ? "Switch to light mode"
+                        : "Switch to dark mode"
+                    }
                   >
                     {isDarkMode ? (
                       <Sun className="size-4 shrink-0" aria-hidden />
@@ -185,7 +190,10 @@ export function Navigation({ isDarkMode, toggleDarkMode }: NavigationProps) {
                       Embed a Calculator
                     </Button>
                   </Link>
-                  <Link href="/calculators" onClick={() => setMobileMenuOpen(false)}>
+                  <Link
+                    href="/calculators"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     <Button className="w-full justify-start gap-2 px-4 py-3 h-auto text-base font-medium">
                       Open Calculators
                     </Button>

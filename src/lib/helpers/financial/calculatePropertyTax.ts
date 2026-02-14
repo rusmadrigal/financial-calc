@@ -19,7 +19,9 @@ export interface PropertyTaxOutput {
   monthlyEquivalent: number;
 }
 
-export function calculatePropertyTax(input: PropertyTaxInput): PropertyTaxOutput {
+export function calculatePropertyTax(
+  input: PropertyTaxInput,
+): PropertyTaxOutput {
   const assessedValue = Math.max(0, input.assessedValue);
   const ratePct = Math.max(0, input.annualRatePercent) / 100;
   const exemption = Math.max(0, input.annualExemption ?? 0);

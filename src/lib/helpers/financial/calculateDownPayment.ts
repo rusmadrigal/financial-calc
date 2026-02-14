@@ -25,7 +25,9 @@ export interface DownPaymentOutput {
   monthlyNeeded: number | null;
 }
 
-export function calculateDownPayment(input: DownPaymentInput): DownPaymentOutput {
+export function calculateDownPayment(
+  input: DownPaymentInput,
+): DownPaymentOutput {
   const homePrice = Math.max(0, input.homePrice);
   const downPct = Math.max(0, Math.min(100, input.downPaymentPercent)) / 100;
   const downPaymentAmount = Math.round(homePrice * downPct * 100) / 100;

@@ -29,6 +29,26 @@ import { DownPaymentCalculator } from "../financial/DownPaymentCalculator";
 import { PropertyTaxCalculator } from "../financial/PropertyTaxCalculator";
 import { ClosingCostCalculator } from "../financial/ClosingCostCalculator";
 import { MortgageAPRCalculator } from "../financial/MortgageAPRCalculator";
+import { BusinessLoanCalculator } from "../financial/BusinessLoanCalculator";
+import { SBALoanCalculator } from "../financial/SBALoanCalculator";
+import { StartupCostCalculator } from "../financial/StartupCostCalculator";
+import { BreakEvenCalculator } from "../financial/BreakEvenCalculator";
+import { ProfitMarginCalculator } from "../financial/ProfitMarginCalculator";
+import { SalesTaxCalculator } from "../financial/SalesTaxCalculator";
+import { FederalIncomeTaxCalculator } from "../financial/FederalIncomeTaxCalculator";
+import { CapitalGainsTaxCalculator } from "../financial/CapitalGainsTaxCalculator";
+import { PaycheckCalculator } from "../financial/PaycheckCalculator";
+import { HourlyToSalaryCalculator } from "../financial/HourlyToSalaryCalculator";
+import { SalaryToHourlyCalculator } from "../financial/SalaryToHourlyCalculator";
+import { InflationCalculator } from "../financial/InflationCalculator";
+import { NetWorthCalculator } from "../financial/NetWorthCalculator";
+import { EmergencyFundCalculator } from "../financial/EmergencyFundCalculator";
+import { BudgetCalculator } from "../financial/BudgetCalculator";
+import { CollegeSavingsCalculator } from "../financial/CollegeSavingsCalculator";
+import { Plan529Calculator } from "../financial/Plan529Calculator";
+import { HSACalculator } from "../financial/HSACalculator";
+import { LifeInsuranceCalculator } from "../financial/LifeInsuranceCalculator";
+import { DisabilityInsuranceCalculator } from "../financial/DisabilityInsuranceCalculator";
 
 export type CalculatorType =
   | "mortgage"
@@ -60,7 +80,27 @@ export type CalculatorType =
   | "downPayment"
   | "propertyTax"
   | "closingCosts"
-  | "mortgageAPR";
+  | "mortgageAPR"
+  | "businessLoan"
+  | "sbaLoan"
+  | "startupCost"
+  | "breakEven"
+  | "profitMargin"
+  | "salesTax"
+  | "federalIncomeTax"
+  | "capitalGainsTax"
+  | "paycheck"
+  | "hourlyToSalary"
+  | "salaryToHourly"
+  | "inflation"
+  | "netWorth"
+  | "emergencyFund"
+  | "budget"
+  | "collegeSavings"
+  | "plan529"
+  | "hsa"
+  | "lifeInsurance"
+  | "disabilityInsurance";
 
 const registry: Record<string, ComponentType<object>> = {
   mortgage: MortgageCalculator as ComponentType<object>,
@@ -93,6 +133,26 @@ const registry: Record<string, ComponentType<object>> = {
   propertyTax: PropertyTaxCalculator as ComponentType<object>,
   closingCosts: ClosingCostCalculator as ComponentType<object>,
   mortgageAPR: MortgageAPRCalculator as ComponentType<object>,
+  businessLoan: BusinessLoanCalculator as ComponentType<object>,
+  sbaLoan: SBALoanCalculator as ComponentType<object>,
+  startupCost: StartupCostCalculator as ComponentType<object>,
+  breakEven: BreakEvenCalculator as ComponentType<object>,
+  profitMargin: ProfitMarginCalculator as ComponentType<object>,
+  salesTax: SalesTaxCalculator as ComponentType<object>,
+  federalIncomeTax: FederalIncomeTaxCalculator as ComponentType<object>,
+  capitalGainsTax: CapitalGainsTaxCalculator as ComponentType<object>,
+  paycheck: PaycheckCalculator as ComponentType<object>,
+  hourlyToSalary: HourlyToSalaryCalculator as ComponentType<object>,
+  salaryToHourly: SalaryToHourlyCalculator as ComponentType<object>,
+  inflation: InflationCalculator as ComponentType<object>,
+  netWorth: NetWorthCalculator as ComponentType<object>,
+  emergencyFund: EmergencyFundCalculator as ComponentType<object>,
+  budget: BudgetCalculator as ComponentType<object>,
+  collegeSavings: CollegeSavingsCalculator as ComponentType<object>,
+  plan529: Plan529Calculator as ComponentType<object>,
+  hsa: HSACalculator as ComponentType<object>,
+  lifeInsurance: LifeInsuranceCalculator as ComponentType<object>,
+  disabilityInsurance: DisabilityInsuranceCalculator as ComponentType<object>,
 };
 
 export function getCalculatorComponent(
