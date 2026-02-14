@@ -5,8 +5,6 @@ import { buildCalculatorJsonLd } from "@/lib/seo/buildCalculatorJsonLd";
 import { CalculatorDetailShell } from "@/components/calculators/shell/CalculatorDetailShell";
 import { SEOJsonLd } from "@/components/shared/SEOJsonLd";
 
-const CANONICAL_BASE = "https://www.smartcalclab.com";
-
 export async function generateMetadata({
   params,
 }: {
@@ -27,9 +25,7 @@ export async function generateMetadata({
     title,
     description,
     robots,
-    alternates: {
-      canonical: `${CANONICAL_BASE}/calculators/${slug}`,
-    },
+    // Self canonical is set dynamically for all pages in root layout
   };
 }
 

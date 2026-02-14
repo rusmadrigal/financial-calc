@@ -1,6 +1,5 @@
 import type { CalculatorPage, PortableTextBlock } from "@/lib/sanity/types";
-
-const CANONICAL_BASE = "https://www.smartcalclab.com";
+import { CANONICAL_BASE, getCanonicalUrl } from "@/lib/seo/canonical";
 
 /** JSON-LD WebSite schema. */
 interface WebSiteSchema {
@@ -107,13 +106,13 @@ function portableTextToPlainText(
 
 /**
  * Builds an array of JSON-LD schema objects for a calculator page.
- * Dynamic per calculator; uses canonical base https://www.smartcalclab.com
+ * Dynamic per calculator; uses canonical base from @/lib/seo/canonical
  */
 export function buildCalculatorJsonLd(
   page: CalculatorPage,
   slug: string,
 ): CalculatorJsonLdItem[] {
-  const canonical = `${CANONICAL_BASE}/calculators/${slug}`;
+  const canonical = getCanonicalUrl(`/calculators/${slug}`);
   const name = page.metaTitle ?? page.title;
   const description = page.metaDescription ?? page.shortDescription ?? "";
 
