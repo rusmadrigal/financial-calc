@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, Info, AlertCircle } from "lucide-react";
+import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -32,6 +32,7 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
+import { exportToExcel } from "@/lib/exports/exportToExcel";
 import { calculateFederalIncomeTax } from "@/lib/helpers/financial/calculateFederalIncomeTax";
 
 const usd = new Intl.NumberFormat("en-US", {
@@ -101,6 +102,15 @@ export function FederalIncomeTaxCalculator() {
       ]),
     );
     toast.success("PDF downloaded");
+  };
+
+  const handleExportExcel = () => {
+    exportToExcel(
+      "Federal Income Tax",
+      ["Bracket", "Rate", "Amount"],
+      result.bracketBreakdown.map((b) => [b.bracket, `${b.rate}%`, usd.format(b.amount)]),
+    );
+    toast.success("Excel downloaded");
   };
 
   const handleReset = () => {
@@ -211,6 +221,14 @@ export function FederalIncomeTaxCalculator() {
                   disabled={!hasResults}
                 >
                   <Download className="mr-2 size-4" /> Export PDF
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
+                  <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
             </CardContent>

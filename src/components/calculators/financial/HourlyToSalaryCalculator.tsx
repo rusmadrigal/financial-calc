@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, Info, AlertCircle } from "lucide-react";
+import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -24,6 +24,7 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
+import { exportToExcel } from "@/lib/exports/exportToExcel";
 
 const usd = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -75,6 +76,16 @@ export function HourlyToSalaryCalculator() {
       ],
     );
     toast.success("PDF downloaded");
+  };
+
+  const handleExportExcel = () => {
+    exportToExcel("Hourly to Salary", ["Metric", "Value"], [
+      ["Hourly rate", usd.format(hourlyNum)],
+      ["Hours per week", hoursNum],
+      ["Annual salary", usd.format(annual)],
+      ["Monthly equivalent", usd.format(monthly)],
+    ]);
+    toast.success("Excel downloaded");
   };
 
   const handleReset = () => {
@@ -156,6 +167,9 @@ export function HourlyToSalaryCalculator() {
                 </Button>
                 <Button variant="outline" size="sm" onClick={handleExportPDF}>
                   <Download className="mr-2 size-4" /> Export PDF
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleExportExcel}>
+                  <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
             </CardContent>

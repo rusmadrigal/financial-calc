@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, Info, AlertCircle } from "lucide-react";
+import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -32,6 +32,7 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
+import { exportToExcel } from "@/lib/exports/exportToExcel";
 
 const usd = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -87,6 +88,15 @@ export function SalesTaxCalculator() {
       ],
     );
     toast.success("PDF downloaded");
+  };
+
+  const handleExportExcel = () => {
+    exportToExcel("Sales Tax", ["Metric", "Value"], [
+      ["Subtotal", usd.format(subtotal)],
+      ["Sales Tax", usd.format(tax)],
+      ["Total", usd.format(total)],
+    ]);
+    toast.success("Excel downloaded");
   };
 
   const handleReset = () => {
@@ -183,6 +193,14 @@ export function SalesTaxCalculator() {
                   disabled={!hasResults}
                 >
                   <Download className="mr-2 size-4" /> Export PDF
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
+                  <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
             </CardContent>

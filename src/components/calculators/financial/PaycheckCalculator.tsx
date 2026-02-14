@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Copy, Download, Info, AlertCircle } from "lucide-react";
+import { Copy, Download, FileSpreadsheet, Info, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -24,6 +24,7 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 import { exportToPDF } from "@/lib/exports/exportToPDF";
+import { exportToExcel } from "@/lib/exports/exportToExcel";
 import { calculatePaycheck } from "@/lib/helpers/financial/calculatePaycheck";
 
 const usd = new Intl.NumberFormat("en-US", {
@@ -110,6 +111,19 @@ export function PaycheckCalculator() {
       ],
     );
     toast.success("PDF downloaded");
+  };
+
+  const handleExportExcel = () => {
+    exportToExcel("Paycheck", ["Item", "Amount"], [
+      ["Gross", usd.format(result.grossPay)],
+      ["Federal", usd.format(result.federalWithholding)],
+      ["Social Security", usd.format(result.socialSecurity)],
+      ["Medicare", usd.format(result.medicare)],
+      ["State", usd.format(result.stateTax)],
+      ["Net Pay", usd.format(result.netPay)],
+      ["Annual gross", usd.format(result.annualGross)],
+    ]);
+    toast.success("Excel downloaded");
   };
 
   const handleReset = () => {
@@ -249,6 +263,14 @@ export function PaycheckCalculator() {
                   disabled={!hasResults}
                 >
                   <Download className="mr-2 size-4" /> Export PDF
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportExcel}
+                  disabled={!hasResults}
+                >
+                  <FileSpreadsheet className="mr-2 size-4" /> Export Excel
                 </Button>
               </div>
             </CardContent>
