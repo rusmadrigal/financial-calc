@@ -89,9 +89,13 @@ export function CarLeaseCalculator() {
     rebates,
   ]);
 
+  const termMonthsNum = result.schedule.length;
+  const totalYears = Math.ceil(termMonthsNum / 12);
+
   const yearlyData = useMemo(() => {
-    const years = Math.ceil(result.schedule.length / 12);
-    return Array.from({ length: Math.min(years, 10) }, (_, i) => {
+    if (termMonthsNum === 0) return [];
+    const years = totalYears;
+    return Array.from({ length: years }, (_, i) => {
       const start = i * 12;
       let depreciation = 0;
       let finance = 0;
@@ -114,12 +118,15 @@ export function CarLeaseCalculator() {
         payments: Math.round(payments),
       };
     });
-  }, [result.schedule]);
+  }, [result.schedule, termMonthsNum, totalYears]);
 
-  const chartDataLine = useMemo(
-    () => yearlyData.map((row) => ({ year: row.year, balance: row.payments })),
-    [yearlyData],
-  );
+  const chartDataLine = useMemo(() => {
+    let cumulative = 0;
+    return yearlyData.map((row) => {
+      cumulative += row.payments;
+      return { year: row.year, cumulativePayments: cumulative };
+    });
+  }, [yearlyData]);
 
   const chartDataBar = useMemo(
     () =>
@@ -393,8 +400,10 @@ export function CarLeaseCalculator() {
           {chartDataLine.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Payments by Year</CardTitle>
-                <CardDescription>Total payments per year</CardDescription>
+                <CardTitle>Cumulative Payments Over Time</CardTitle>
+                <CardDescription>
+                  Total payments to date by year ({termMonthsNum} months lease)
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
@@ -415,10 +424,10 @@ export function CarLeaseCalculator() {
                       />
                       <Line
                         type="monotone"
-                        dataKey="balance"
+                        dataKey="cumulativePayments"
                         stroke="var(--chart-1)"
                         strokeWidth={2}
-                        name="Payments"
+                        name="Cumulative payments"
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -431,7 +440,9 @@ export function CarLeaseCalculator() {
             <Card>
               <CardHeader>
                 <CardTitle>Depreciation vs Finance by Year</CardTitle>
-                <CardDescription>First 10 years</CardDescription>
+                <CardDescription>
+                  By year over lease term ({termMonthsNum} months)
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
@@ -471,7 +482,9 @@ export function CarLeaseCalculator() {
             <Card>
               <CardHeader>
                 <CardTitle>Yearly Breakdown</CardTitle>
-                <CardDescription>First 10 years</CardDescription>
+                <CardDescription>
+                  By year over lease term ({termMonthsNum} months)
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
